@@ -1,0 +1,30 @@
+{
+    "name": "w4d",
+    "authors": ["KanzakiKino"],
+    "description": "Widgets library for dlang.",
+    "copyright": "Copyright © 2018, KanzakiKino",
+    "license": "LGPL-3.0",
+    "platforms": ["posix"],
+
+    "targetType": "staticLibrary",
+    "targetName": "w4d",
+    "targetPath": "./bin",
+    "sourcePaths": ["./src"],
+    "stringImportPaths": ["./src"],
+
+    "dependencies": {
+        "g4d": "~>1.0.2"
+    },
+
+    "configurations": [
+        {
+            "name": "default"
+        },
+        {
+            "name": "unittest",
+
+            "targetType": "executable",
+            "mainSourceFile": "./src/test.d"
+        }
+    ]
+}
