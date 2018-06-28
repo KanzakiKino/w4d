@@ -1,9 +1,12 @@
 // Written under LGPL-3.0 in the D programming language.
 // Copyright 2018 KanzakiKino
 module w4d.app;
+import w4d.event;
 import std.algorithm;
 import core.thread;
 static import g4d;
+
+alias ExceptionHandler = EventHandler!( bool, Exception );
 
 class App
 {
@@ -14,6 +17,8 @@ class App
 
     uint sleepDuration;
     int  returnCode;
+
+    ExceptionHandler onThrown;
 
     this ( in string[] args )
     {
@@ -32,9 +37,13 @@ class App
     int exec ()
     {
         while ( alive ) {
-            g4d.Window.pollEvents();
-            _tasks = _tasks.remove!( x => x.exec(this) );
-            Thread.sleep( dur!"msecs"( sleepDuration ) );
+            try {
+                g4d.Window.pollEvents();
+                _tasks = _tasks.remove!( x => x.exec(this) );
+                Thread.sleep( dur!"msecs"( sleepDuration ) );
+            } catch ( Exception e ) {
+                if ( !onThrown.call( e ) ) break;
+            }
         }
         return returnCode;
     }
