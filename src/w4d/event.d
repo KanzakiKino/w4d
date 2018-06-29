@@ -29,11 +29,13 @@ struct EventHandler ( ReturnType, Args... )
         _handler = rhs;
     }
 
-    ReturnType call ( Args args )
+    auto call ( Args args )
     {
-        if ( _handler ) {
-            return _handler( args );
+        static if ( is(ReturnType==void) ) {
+            if ( _handler ) _handler( args );
+        } else {
+            if ( _handler ) return _handler( args );
+            return ReturnType.init;
         }
-        return ReturnType.init;
     }
 }
