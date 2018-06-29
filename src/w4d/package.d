@@ -4,6 +4,9 @@ module w4d;
 
 public
 {
+    import w4d.task.window;
     import w4d.app;
     // TODO Import useful modules.
+
+    import g4d.math.vector;
 }
