@@ -2,7 +2,8 @@
 // Copyright 2018 KanzakiKino.
 module w4d.task.window;
 import w4d.app,
-       w4d.event;
+       w4d.event,
+       w4d.exception;
 static import g4d;
 import g4d.math.vector;
 
@@ -10,11 +11,15 @@ alias WindowHint = g4d.WindowHint;
 
 class Window : g4d.Window, Task
 {
-    WindowContent root;
+    protected WindowContent _root;
 
-    this ( vec2i size, string text, WindowHint hint = WindowHint.None )
+    this ( WindowContent root, vec2i size, string text, WindowHint hint = WindowHint.None )
     {
+        enforce(                     root, "Main content is NULL." );
+        enforce( size.x > 0 && size.y > 0, "Window size is invalid." );
+
         super( size, text, hint );
+        _root = root;
 
         handler.onFbResize = delegate ( vec2i sz )
         {
@@ -22,7 +27,11 @@ class Window : g4d.Window, Task
         };
         handler.onMouseEnter = delegate ( bool entered )
         {
-            if ( root ) root.onMouseEnter.call( entered );
+            _root.handleMouseEnter( entered );
+        };
+        handler.onMouseMove = delegate ( vec2 pos )
+        {
+            _root.handleMouseMove( pos );
         };
     }
 
@@ -32,20 +41,19 @@ class Window : g4d.Window, Task
             resetFrame();
             scope(success) applyFrame();
 
-            // Draw something.
+            _root.draw( this );
             return false;
         }
         return true;
     }
 }
 
-// void delegate ( bool entered, vec2i pos );
-alias MouseEnterHandler = EventHandler!( void, bool );
-// void delegate ( vec2i cursorpos );
-alias MouseMoveHandler  = EventHandler!( void, vec2i );
-
-abstract class WindowContent
+interface WindowContent
 {
-    MouseEnterHandler  onMouseEnter;
-    MouseMoveHandler   onMouseMove;;
+    // Be called with true when cursor is entered.
+    void handleMouseEnter ( bool );
+    // Be called when cursor is moved.
+    void handleMouseMove ( vec2 );
+
+    void draw ( Window );
 }
