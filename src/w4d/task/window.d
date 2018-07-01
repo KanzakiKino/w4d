@@ -1,11 +1,13 @@
 // Written under LGPL-3.0 in the D programming language.
 // Copyright 2018 KanzakiKino.
 module w4d.task.window;
-import w4d.app,
+import w4d.util.tuple,
+       w4d.app,
        w4d.event,
        w4d.exception;
 static import g4d;
-import g4d.math.vector;
+import g4d.math.matrix,
+       g4d.math.vector;
 
 alias WindowHint  = g4d.WindowHint;
 alias MouseButton = g4d.MouseButton;
@@ -14,6 +16,9 @@ alias KeyState    = g4d.KeyState;
 
 class Window : g4d.Window, Task
 {
+    protected Shaders _shaders;
+    @property shaders () { return _shaders; }
+
     protected WindowContent _root;
 
     this ( WindowContent root, vec2i size, string text, WindowHint hint = WindowHint.None )
@@ -22,7 +27,8 @@ class Window : g4d.Window, Task
         enforce( size.x > 0 && size.y > 0, "Window size is invalid." );
 
         super( size, text, hint );
-        _root = root;
+        _shaders = new Shaders;
+        _root    = root;
 
         handler.onFbResize = delegate ( vec2i sz )
         {
@@ -53,24 +59,71 @@ class Window : g4d.Window, Task
         {
             _root.handleTextInput( c );
         };
+
+        handler.onFbResize( size );
     }
 
     override void clip ( vec2i pt, vec2i sz )
     {
         super.clip( pt, sz );
-        // TODO
+
+        sz = vec2i( sz.x/2, sz.y/2 );
+        foreach ( s; _shaders.list ) {
+            s.projection =
+                mat4.orthographic( -sz.x,sz.x, -sz.y,sz.y, short.min,short.max )*
+                mat4.translate( -sz.x, -sz.y, 0 );
+        }
     }
 
     override bool exec ( App app )
     {
         if ( alive ) {
             resetFrame();
-            scope(success) applyFrame();
-
             _root.draw( this );
+            applyFrame();
             return false;
         }
         return true;
+    }
+}
+
+// One Shaders class is for only one Window.
+class Shaders
+{
+    @("shader") {
+        protected g4d.RGBA3DShader  _rgba3;
+        protected g4d.Alpha3DShader _alpha3;
+        protected g4d.Fill3DShader  _fill3;
+    }
+
+    static foreach ( name; __traits(allMembers,typeof(this)) ) {
+        static if ( "shader".isIn( __traits(getAttributes,mixin(name)) ) ) {
+            mixin( "@property "~name[1..$]~"() { return "~name~"; }" );
+        }
+    }
+
+    // Call the constructor while a context of the objective window is active.
+    this ()
+    {
+        static foreach ( name; __traits(allMembers,typeof(this)) ) {
+            static if ( "shader".isIn( __traits(getAttributes,mixin(name)) ) ) {
+                mixin( name~"= new typeof("~name~");" );
+            }
+        }
+    }
+
+    // Returns list of all shaders.
+    @property list ()
+    {
+        import g4d.shader.base;
+        Shader[] result;
+
+        static foreach ( name; __traits(allMembers,typeof(this)) ) {
+            static if ( "shader".isIn( __traits(getAttributes,mixin(name)) ) ) {
+                mixin( "result ~= "~name~";" );
+            }
+        }
+        return result;
     }
 }
 
