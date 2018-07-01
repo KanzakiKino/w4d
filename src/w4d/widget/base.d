@@ -6,17 +6,41 @@ import g4d.math.vector;
 
 class Widget : WindowContent
 {
+    protected vec2i _size;
+    const @property size () { return _size; }
+
     override void handleMouseEnter ( bool entered )
     {
     }
-    override void handleMouseMove ( vec2 pos )
+    override bool handleMouseMove ( vec2 pos )
     {
+        return false;
+    }
+    override bool handleMouseButton ( MouseButton btn, bool status )
+    {
+        return false;
+    }
+    override bool handleMouseScroll ( vec2 amount )
+    {
+        return false;
+    }
+
+    override bool handleKey ( Key key, KeyState status )
+    {
+        return false;
+    }
+    override bool handleTextInput ( dchar c )
+    {
+        return false;
     }
 
     this ()
     {
     }
 
+    override void resize ( vec2i newSize )
+    {
+    }
     override void draw ( Window win )
     {
     }

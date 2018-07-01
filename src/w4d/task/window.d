@@ -7,7 +7,10 @@ import w4d.app,
 static import g4d;
 import g4d.math.vector;
 
-alias WindowHint = g4d.WindowHint;
+alias WindowHint  = g4d.WindowHint;
+alias MouseButton = g4d.MouseButton;
+alias Key         = g4d.Key;
+alias KeyState    = g4d.KeyState;
 
 class Window : g4d.Window, Task
 {
@@ -24,6 +27,7 @@ class Window : g4d.Window, Task
         handler.onFbResize = delegate ( vec2i sz )
         {
             clip( vec2i(0,0), sz );
+            _root.resize( sz );
         };
         handler.onMouseEnter = delegate ( bool entered )
         {
@@ -33,6 +37,28 @@ class Window : g4d.Window, Task
         {
             _root.handleMouseMove( pos );
         };
+        handler.onMouseButton = delegate ( MouseButton btn, bool status )
+        {
+            _root.handleMouseButton( btn, status );
+        };
+        handler.onMouseScroll = delegate ( vec2 amount )
+        {
+            _root.handleMouseScroll( amount );
+        };
+        handler.onKey = delegate ( Key key, KeyState state )
+        {
+            _root.handleKey( key, state );
+        };
+        handler.onCharacter = delegate ( dchar c )
+        {
+            _root.handleTextInput( c );
+        };
+    }
+
+    override void clip ( vec2i pt, vec2i sz )
+    {
+        super.clip( pt, sz );
+        // TODO
     }
 
     override bool exec ( App app )
@@ -50,10 +76,22 @@ class Window : g4d.Window, Task
 
 interface WindowContent
 {
+    // Some handlers return whether event was handled.
+
     // Be called with true when cursor is entered.
     void handleMouseEnter ( bool );
     // Be called when cursor is moved.
-    void handleMouseMove ( vec2 );
+    bool handleMouseMove ( vec2 );
+    // Be called when mouse button is clicked.
+    bool handleMouseButton ( MouseButton, bool );
+    // Be called when mouse wheel is rotated.
+    bool handleMouseScroll ( vec2 );
 
-    void draw ( Window );
+    // Be called when key is pressed, repeated or released.
+    bool handleKey ( Key, KeyState );
+    // Be called when focused and text was inputted.
+    bool handleTextInput ( dchar );
+
+    void resize ( vec2i );
+    void draw   ( Window );
 }
