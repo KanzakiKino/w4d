@@ -7,7 +7,7 @@ import g4d.math.vector;
 class Widget : WindowContent
 {
     protected vec2i _size;
-    const @property size () { return _size; }
+    @property size () { return _size; }
 
     override void handleMouseEnter ( bool entered )
     {
@@ -40,6 +40,7 @@ class Widget : WindowContent
 
     override void resize ( vec2i newSize )
     {
+        _size = newSize;
     }
     override void draw ( Window win )
     {

@@ -8,7 +8,7 @@ int main ( string[] args )
 
     auto widget = new Widget;
 
-    auto win = new Window( widget, vec2i(640,480), "TEST" );
+    auto win = new Window( widget, vec2i(640,480), "TEST", WindowHint.Resizable );
     app.addTask( win );
 
     win.show();
