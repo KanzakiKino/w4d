@@ -1,6 +1,8 @@
 // Written under LGPL-3.0 in the D programming language.
 // Copyright 2018 KanzakiKino
 module w4d.style.scalar;
+import w4d.style.exception;
+import std.math;
 
 unittest
 {
@@ -32,7 +34,7 @@ struct Scalar
     protected const float      _value;
     protected const ScalarUnit _unit = ScalarUnit.Pixel;
 
-    protected float _calculated = 0;
+    protected float _calculated;
 
     @property isAbsolute ()
     {
@@ -43,15 +45,20 @@ struct Scalar
         return _unit >= ScalarUnit.Percent;
     }
 
-    float calc ( ScalarUnitBase base )
+    @property isCalced ()
     {
-        if ( _calculated != 0 ) {
-            return _calculated;
+        return !isNaN(_calculated);
+    }
+    @property calced ()
+    {
+        if ( !isCalced ) {
+            throw new StyleException( "The scalar isn't calculated." );
         }
-        if ( _value == 0 && _unit != ScalarUnit.None ) {
-            return _value;
-        }
+        return _calculated;
+    }
 
+    float calc ( ScalarUnitBase base = ScalarUnitBase() )
+    {
         final switch ( _unit ) with ( ScalarUnit )
         {
             case None:
