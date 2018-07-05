@@ -28,6 +28,11 @@ struct Size
 
     mixin AttributesUtilities;
 
+    @property vector ()
+    {
+        return vec2( width.calced, height.calced );
+    }
+
     void calc ( vec2 parentSize, vec2 def = vec2(0,0) )
     {
         width .calc( ScalarUnitBase( def.x, parentSize.x ) );
