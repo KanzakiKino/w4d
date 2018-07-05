@@ -26,22 +26,40 @@ struct BoxStyle
 {
     @("attr") {
         Size size;
+        Rect paddings;
         Rect borderWidth;
         Rect margins;
     }
 
     mixin AttributesUtilities;
 
-    @property border ()
+    @property clientSize ()
     {
-        auto w = size.width .calced + borderWidth.left.calced + borderWidth.right .calced;
-        auto h = size.height.calced + borderWidth.top .calced + borderWidth.bottom.calced;
-        return vec2( w, h );
+        return size.vector;
+    }
+    @property clientLeftTop ()
+    {
+        return vec2( paddings.left.calced, paddings.top.calced );
+    }
+
+    @property borderInsideSize ()
+    {
+        auto result = size.vector;
+        result.x += paddings.left.calced + paddings.right .calced;
+        result.y += paddings.top .calced + paddings.bottom.calced;
+        return result;
+    }
+    @property borderOutsideSize ()
+    {
+        auto result = borderInsideSize;
+        result.x += borderWidth.left.calced + borderWidth.right .calced;
+        result.y += borderWidth.top .calced + borderWidth.bottom.calced;
+        return result;
     }
     // Collision size will be sum of size, borderWidth and margins.
-    @property collision ()
+    @property collisionSize ()
     {
-        auto result = border;
+        auto result = borderOutsideSize;
         result.x += margins.left.calced + margins.right .calced;
         result.y += margins.top .calced + margins.bottom.calced;
         return result;
@@ -50,7 +68,8 @@ struct BoxStyle
     void calc ( vec2 parentSize, vec2 def = vec2(0,0) )
     {
         size       .calc( parentSize, def );
-        borderWidth.calc( size.vector );
-        margins    .calc( border );
+        paddings   .calc( size.vector );
+        borderWidth.calc( borderInsideSize );
+        margins    .calc( borderOutsideSize );
     }
 }
