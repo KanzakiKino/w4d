@@ -3,7 +3,7 @@
 module w4d.style.exception;
 static import w4d.exception;
 
-alias enforce(T=StyleException) = enforce!T;
+alias enforce(T=StyleException) = w4d.exception.enforce!T;
 
 class StyleException : w4d.exception.W4dException
 {
