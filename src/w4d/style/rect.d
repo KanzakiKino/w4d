@@ -2,7 +2,8 @@
 // Copyright 2018 KanzakiKino
 module w4d.style.rect;
 import w4d.style.exception,
-       w4d.style.scalar;
+       w4d.style.scalar,
+       w4d.style.templates;
 import g4d.math.vector;
 
 unittest
@@ -19,10 +20,12 @@ unittest
 
 struct Rect
 {
-    Scalar top    = Scalar.Auto,
-           right  = Scalar.Auto,
-           bottom = Scalar.Auto,
-           left   = Scalar.Auto;
+    @("attr") {
+        Scalar top    = Scalar.Auto,
+               right  = Scalar.Auto,
+               bottom = Scalar.Auto,
+               left   = Scalar.Auto;
+    }
 
     this ( Scalar[] args... )
     {
@@ -51,18 +54,7 @@ struct Rect
         }
     }
 
-    @property isAbsolute ()
-    {
-        return top.isAbsolute && right.isAbsolute && bottom.isAbsolute && left.isAbsolute;
-    }
-    @property isRelative ()
-    {
-        return !isAbsolute;
-    }
-    @property isCalced ()
-    {
-        return top.isCalced && right.isCalced && bottom.isCalced && left.isCalced;
-    }
+    mixin AttributesUtilities;
 
     void calc ( vec2 parentSize, vec2 def = vec2(0,0) )
     {

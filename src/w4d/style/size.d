@@ -1,7 +1,8 @@
 // Written under LGPL-3.0 in the D programming language.
 // Copyright 2018 KanzakiKino
 module w4d.style.size;
-import w4d.style.scalar;
+import w4d.style.scalar,
+       w4d.style.templates;
 import g4d.math.vector;
 
 unittest
@@ -18,21 +19,12 @@ unittest
 
 struct Size
 {
-    Scalar width  = Scalar.Auto,
-           height = Scalar.Auto;
+    @("attr") {
+        Scalar width  = Scalar.Auto,
+               height = Scalar.Auto;
+    }
 
-    @property isAbsolute ()
-    {
-        return width.isAbsolute && height.isAbsolute;
-    }
-    @property isRelative ()
-    {
-        return !isAbsolute;
-    }
-    @property isCalced ()
-    {
-        return width.isCalced && height.isCalced;
-    }
+    mixin AttributesUtilities;
 
     void calc ( vec2 parentSize, vec2 def = vec2(0,0) )
     {
