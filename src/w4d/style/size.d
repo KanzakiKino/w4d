@@ -19,6 +19,8 @@ unittest
 
 struct Size
 {
+    enum Auto = Size();
+
     @("attr") {
         Scalar width  = Scalar.Auto,
                height = Scalar.Auto;

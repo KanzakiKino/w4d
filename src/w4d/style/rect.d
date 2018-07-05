@@ -20,6 +20,8 @@ unittest
 
 struct Rect
 {
+    enum Auto = Rect();
+
     @("attr") {
         Scalar top    = Scalar.Auto,
                right  = Scalar.Auto,
