@@ -31,10 +31,10 @@ struct ScalarUnitBase
 
 struct Scalar
 {
-    enum Auto = Scalar(0,ScalarUnit.None);
+    enum Auto = Scalar();
 
-    protected const float      _value;
-    protected const ScalarUnit _unit = ScalarUnit.Pixel;
+    protected float      _value = 0;
+    protected ScalarUnit _unit  = ScalarUnit.None;
 
     protected float _calculated;
 
