@@ -39,7 +39,10 @@ struct BoxStyle
     }
     @property clientLeftTop ()
     {
-        return vec2( paddings.left.calced, paddings.top.calced );
+        auto result = vec2( margins.left, margins.top );
+        result.x += borderWidth.left + paddings.left;
+        result.y += borderWIdth.top  + paddings.top;
+        return result;
     }
 
     @property borderInsideSize ()
