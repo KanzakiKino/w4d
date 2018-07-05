@@ -31,6 +31,8 @@ struct Rect
 
     this ( Scalar[] args... )
     {
+        enforce( args.length < 4, "Args are too many to initialize Rect." );
+
         if ( args.length == 1 ) {
             top    = args[0];
             right  = args[0];
@@ -51,8 +53,6 @@ struct Rect
             right  = args[1];
             bottom = args[2];
             left   = args[3];
-        } else {
-            throw new StyleException( "Args length is too many to initialize Rect." );
         }
     }
 

@@ -23,9 +23,7 @@ struct EventHandler ( ReturnType, Args... )
 
     void opAssign ( Handler rhs )
     {
-        if ( _handler ) {
-            throw new W4dException( "Tried to overwrite the handler." );
-        }
+        enforce( !_handler, "Tried to overwrite the handler." );
         _handler = rhs;
     }
 

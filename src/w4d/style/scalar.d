@@ -53,9 +53,7 @@ struct Scalar
     }
     @property calced ()
     {
-        if ( !isCalced ) {
-            throw new StyleException( "The scalar isn't calculated." );
-        }
+        enforce( isCalced, "The scalar isn't calculated." );
         return _calculated;
     }
 

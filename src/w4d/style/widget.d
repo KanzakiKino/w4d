@@ -20,12 +20,10 @@ class WidgetStyle
 
     void calc ( WidgetStyle parent, float defHeight = 0 )
     {
-        if ( parent.isCalced ) {
-            auto parentSize = parent.box.size.vector;
-            auto defSize    = vec2( parentSize.x, defHeight );
-            box.calc( parentSize, defSize );
-        } else {
-            throw new StyleException( "Parent style has not been calculated yet." );
-        }
+        enforce( parent.isCalced, "Parent style has not been calculated yet." );
+
+        auto parentSize = parent.box.size.vector;
+        auto defSize    = vec2( parentSize.x, defHeight );
+        box.calc( parentSize, defSize );
     }
 }
