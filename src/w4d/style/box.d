@@ -39,9 +39,9 @@ struct BoxStyle
     }
     @property clientLeftTop ()
     {
-        auto result = vec2( margins.left, margins.top );
-        result.x += borderWidth.left + paddings.left;
-        result.y += borderWIdth.top  + paddings.top;
+        auto result = vec2( margins.left.calced, margins.top.calced );
+        result.x += borderWidth.left.calced + paddings.left.calced;
+        result.y += borderWidth.top .calced + paddings.top .calced;
         return result;
     }
 
