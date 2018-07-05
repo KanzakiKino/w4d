@@ -19,7 +19,10 @@ unittest
 
 struct Rect
 {
-    Scalar top, right, bottom, left;
+    Scalar top    = Scalar.Auto,
+           right  = Scalar.Auto,
+           bottom = Scalar.Auto,
+           left   = Scalar.Auto;
 
     this ( Scalar[] args... )
     {

@@ -18,7 +18,8 @@ unittest
 
 struct Size
 {
-    Scalar width, height;
+    Scalar width  = Scalar.Auto,
+           height = Scalar.Auto;
 
     @property isAbsolute ()
     {
