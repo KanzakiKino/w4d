@@ -1,13 +1,14 @@
 // Written under LGPL-3.0 in the D programming language.
 // Copyright 2018 KanzakiKino
 module w4d.widget.base;
-import w4d.task.window;
+import w4d.style.widget,
+       w4d.task.window;
 import g4d.math.vector;
 
 class Widget : WindowContent
 {
-    protected vec2i _size;
-    @property size () { return _size; }
+    protected WidgetStyle _style;
+    @property style () { return _style; }
 
     override void handleMouseEnter ( bool entered )
     {
@@ -40,7 +41,6 @@ class Widget : WindowContent
 
     override void resize ( vec2i newSize )
     {
-        _size = newSize;
     }
     override void draw ( Window win )
     {
