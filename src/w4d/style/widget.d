@@ -9,18 +9,9 @@ import g4d.math.vector;
 
 struct WidgetStyleCalcContext
 {
-    WidgetStyle parent = null;
-    vec2        pos    = vec2(0,0);
-    vec2        size   = vec2(0,0);
-
-    void fillValues ()
-    {
-        enforce( parent, "Parent is null." );
-        enforce( parent.isCalced, "Parent style has not been calculated yet." );
-
-        if ( size.x <= 0 ) size.x = parent.box.size.width .calced;
-        if ( size.y <= 0 ) size.y = parent.box.size.height.calced;
-    }
+    vec2 parentSize = vec2(0,0);
+    vec2 pos        = vec2(0,0);
+    vec2 size       = vec2(0,0);
 }
 
 class WidgetStyle
@@ -38,11 +29,8 @@ class WidgetStyle
 
     void calc ( WidgetStyleCalcContext ctx )
     {
-        ctx.fillValues();
-        auto parentSize = ctx.parent.box.clientSize;
-
-        x.calc( ScalarUnitBase(ctx.pos.x, parentSize.x) );
-        y.calc( ScalarUnitBase(ctx.pos.y, parentSize.y) );
-        box.calc( parentSize, ctx.size );
+        x.calc( ScalarUnitBase(ctx.pos.x, ctx.parentSize.x) );
+        y.calc( ScalarUnitBase(ctx.pos.y, ctx.parentSize.y) );
+        box.calc( ctx.parentSize, ctx.size );
     }
 }
