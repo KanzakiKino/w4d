@@ -9,7 +9,7 @@ import std.algorithm;
 
 class BoxBorderElement : Element
 {
-    protected vec2 _size;
+    protected vec3 _pos;
 
     // 0:top, 1:right, 2:bottom, 3:left
     protected RectElement[4] _rects;
@@ -17,7 +17,7 @@ class BoxBorderElement : Element
 
     this ()
     {
-        _size = vec2(0,0);
+        _pos = vec3(0,0,0);
 
         foreach ( ref rc; _rects ) {
             rc = new RectElement;
@@ -40,7 +40,7 @@ class BoxBorderElement : Element
         _lates[1] =  (insz.x + width.right .calced)/2;
         _lates[3] = -(insz.x + width.left  .calced)/2;
 
-        _size = box.collisionSize;
+        _pos = vec3(box.collisionSize/2, 0);
     }
 
     override void clear ()
@@ -51,7 +51,7 @@ class BoxBorderElement : Element
 
     override void draw ( Shader s )
     {
-        s.translate += vec3(_size/2,0);
+        s.translate += _pos;
         foreach ( i,rc; _rects ) {
             auto saver = ShaderStateSaver( s );
             (i%2? s.translate.x: s.translate.y) += _lates[i];
