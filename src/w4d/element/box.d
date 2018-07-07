@@ -2,6 +2,7 @@
 // Copyright 2018 KanzakiKino
 module w4d.element.box;
 import w4d.element.background,
+       w4d.element.border,
        w4d.style.box,
        w4d.exception;
 import g4d.element.base,
@@ -12,28 +13,43 @@ import std.conv;
 class BoxElement : Element
 {
     protected vec4              _bgColor;
+    protected vec4              _borderColor;
+
     protected BackgroundElement _bg;
+    protected BoxBorderElement  _border;
 
     this ()
     {
-        _bg = new BackgroundElement;
+        _bg     = new BackgroundElement;
+        _border = new BoxBorderElement;
     }
 
     void resize ( BoxStyle box )
     {
-        _bgColor = box.bgColor;
-        _bg.resize( box );
+        _bgColor     = box.bgColor;
+        _borderColor = box.borderColor;
+
+        _bg    .resize( box );
+        _border.resize( box );
     }
 
     override void clear ()
     {
-        _bg.clear();
+        _bg    .clear();
+        _border.clear();
     }
 
     override void draw ( Shader s )
     {
         auto shader = s.to!Fill3DShader;
-        shader.color = _bgColor;
-        _bg.draw( shader );
+
+        if ( _bgColor.a ) {
+            shader.color = _bgColor;
+            _bg.draw( shader );
+        }
+        if ( _borderColor.a ) {
+            shader.color = _borderColor;
+            _border.draw( shader );
+        }
     }
 }
