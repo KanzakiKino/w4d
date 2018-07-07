@@ -1,13 +1,13 @@
 // Written under LGPL-3.0 in the D programming language.
 // Copyright 2018 KanzakiKino
 module w4d.widget.base;
-import w4d.layout.base,
+import w4d.element.background,
+       w4d.layout.base,
        w4d.layout.fill,
        w4d.style.widget,
        w4d.task.window,
        w4d.exception;
-import g4d.element.shape.rect,
-       g4d.math.vector;
+import g4d.math.vector;
 
 class Widget : WindowContent
 {
@@ -16,7 +16,7 @@ class Widget : WindowContent
 
     protected Layout _layout;
 
-    protected RectElement _background;
+    protected BackgroundElement _background;
 
     override void handleMouseEnter ( bool entered )
     {
@@ -65,22 +65,18 @@ class Widget : WindowContent
         _layout.fix( newSize );
 
         if ( !_background ) {
-            _background = new RectElement;
+            _background = new BackgroundElement;
         }
-        _background.resize( _style.box.borderInsideSize );
+        _background.resize( _style.box );
     }
 
     protected void drawBg ( Window win )
     {
         if ( !_style.box.bgColor.a ) return;
 
-        auto size = _style.box.borderInsideSize;
-        auto pos  = _style.box.borderInsideLeftTop;
-        pos += vec2(size.x/2,size.y/2);
-
         auto shader = win.shaders.fill3;
         shader.use();
-        shader.setVectors( vec3(pos,0) );
+        shader.setVectors( vec3(_style.translate,0) );
         shader.color = _style.box.bgColor;
 
         _background.draw( shader );
