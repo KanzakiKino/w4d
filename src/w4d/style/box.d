@@ -39,10 +39,8 @@ struct BoxStyle
     }
     @property clientLeftTop ()
     {
-        auto result = vec2( margins.left.calced, margins.top.calced );
-        result.x += borderWidth.left.calced + paddings.left.calced;
-        result.y += borderWidth.top .calced + paddings.top .calced;
-        return result;
+        return borderInsideLeftTop +
+            vec2( paddings.left.calced, paddings.top.calced );
     }
 
     @property borderInsideSize ()
@@ -52,6 +50,12 @@ struct BoxStyle
         result.y += paddings.top .calced + paddings.bottom.calced;
         return result;
     }
+    @property borderInsideLeftTop ()
+    {
+        return borderOutsideLeftTop +
+            vec2( borderWidth.left.calced, borderWidth.top.calced );
+    }
+
     @property borderOutsideSize ()
     {
         auto result = borderInsideSize;
@@ -59,6 +63,11 @@ struct BoxStyle
         result.y += borderWidth.top .calced + borderWidth.bottom.calced;
         return result;
     }
+    @property borderOutsideLeftTop ()
+    {
+        return vec2( margins.left.calced, margins.top.calced );
+    }
+
     // Collision size will be sum of size, borderWidth and margins.
     @property collisionSize ()
     {

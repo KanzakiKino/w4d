@@ -27,6 +27,11 @@ class WidgetStyle
 
     mixin AttributesUtilities;
 
+    @property clientLeftTop ()
+    {
+        return vec2( x.calced, y.calced ) + box.clientLeftTop;
+    }
+
     void calc ( WidgetStyleCalcContext ctx )
     {
         x.calc( ScalarUnitBase(ctx.pos.x, ctx.parentSize.x) );
