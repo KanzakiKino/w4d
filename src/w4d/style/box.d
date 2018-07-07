@@ -10,7 +10,7 @@ import g4d.math.vector;
 unittest
 {
     auto box = BoxStyle();
-    box.size        = Size(Scalar(100,ScalarUnit.Percent), Scalar(200));
+    box.size        = Size(Scalar(100,ScalarUnit.Percent), Scalar(200,ScalarUnit.Pixel));
     box.borderWidth = Rect(Scalar(5,ScalarUnit.Percent));
     box.margins     = Rect(Scalar(5,ScalarUnit.Percent));
     box.calc( vec2(300,300) );
@@ -18,8 +18,8 @@ unittest
     assert( box.isRelative );
     assert( box.isCalced );
     assert( box.size.width.calced == 300f );
-    assert( box.borderWidth.left.calced == 15f );
-    assert( box.margins.left.calced == 330/20f );
+    assert( box.borderWidth.left.calced == 300*0.05f );
+    assert( box.margins.left.calced == 300*0.05f );
 }
 
 struct BoxStyle
@@ -44,6 +44,13 @@ struct BoxStyle
         return borderInsideLeftTop +
             vec2( paddings.left.calced, paddings.top.calced );
     }
+    @property clientAdditionalSize ()
+    {
+        auto result = borderInsideAdditionalSize;
+        result.x += paddings.left.calced + paddings.right .calced;
+        result.y += paddings.top .calced + paddings.bottom.calced;
+        return result;
+    }
 
     @property borderInsideSize ()
     {
@@ -57,6 +64,13 @@ struct BoxStyle
         return borderOutsideLeftTop +
             vec2( borderWidth.left.calced, borderWidth.top.calced );
     }
+    @property borderInsideAdditionalSize ()
+    {
+        auto result = borderOutsideAdditionalSize;
+        result.x += borderWidth.left.calced + borderWidth.right .calced;
+        result.y += borderWidth.top .calced + borderWidth.bottom.calced;
+        return result;
+    }
 
     @property borderOutsideSize ()
     {
@@ -68,6 +82,11 @@ struct BoxStyle
     @property borderOutsideLeftTop ()
     {
         return vec2( margins.left.calced, margins.top.calced );
+    }
+    @property borderOutsideAdditionalSize ()
+    {
+        return vec2( margins.left.calced + margins.right.calced,
+               margins.top.calced + margins.bottom.calced );
     }
 
     // Collision size will be sum of size, borderWidth and margins.
@@ -81,9 +100,13 @@ struct BoxStyle
 
     void calc ( vec2 parentSize, vec2 def = vec2(0,0) )
     {
-        size       .calc( parentSize, def );
-        paddings   .calc( size.vector );
-        borderWidth.calc( borderInsideSize );
-        margins    .calc( borderOutsideSize );
+        paddings   .calc( parentSize );
+        borderWidth.calc( parentSize );
+        margins    .calc( parentSize );
+
+        if ( def.x <= 0 ) {
+            def = parentSize - clientAdditionalSize;
+        }
+        size.calc( parentSize, def );
     }
 }

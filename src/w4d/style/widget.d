@@ -27,9 +27,13 @@ class WidgetStyle
 
     mixin AttributesUtilities;
 
+    @property translate ()
+    {
+        return vec2( x.calced, y.calced );
+    }
     @property clientLeftTop ()
     {
-        return vec2( x.calced, y.calced ) + box.clientLeftTop;
+        return translate + box.clientLeftTop;
     }
 
     void calc ( WidgetStyleCalcContext ctx )

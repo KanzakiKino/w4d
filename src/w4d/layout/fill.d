@@ -16,8 +16,6 @@ class FillLayout : Layout
     {
         auto ctx = WidgetStyleCalcContext();
         ctx.parentSize = sz;
-        ctx.pos        = vec2(0,0);
-        ctx.size       = sz;
         _style.calc( ctx );
     }
 }
