@@ -24,9 +24,7 @@ class BackgroundElement : RectElement
 
     override void draw ( Shader s )
     {
-        auto temp = s.translate;
-        scope(exit) s.translate = temp;
-
+        auto saver = ShaderStateSaver( s );
         s.translate += _pos;
         super.draw( s );
     }
