@@ -3,8 +3,8 @@
 module w4d.element.background;
 import w4d.style.box,
        w4d.exception;
-import g4d,
-       g4d.shader.base;
+import g4d.shader.base,
+       g4d;
 
 class BackgroundElement : RectElement
 {
@@ -24,6 +24,9 @@ class BackgroundElement : RectElement
 
     override void draw ( Shader s )
     {
+        auto temp = s.translate;
+        scope(exit) s.translate = temp;
+
         s.translate += _pos;
         super.draw( s );
     }
