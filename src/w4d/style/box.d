@@ -30,6 +30,8 @@ struct BoxStyle
         Rect borderWidth;
         Rect margins;
     }
+    vec4 bgColor     = vec4(0,0,0,0);
+    vec4 borderColor = vec4(0,0,0,1);
 
     mixin AttributesUtilities;
 

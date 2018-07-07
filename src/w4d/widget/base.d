@@ -72,6 +72,8 @@ class Widget : WindowContent
 
     protected void drawBg ( Window win )
     {
+        if ( !_style.box.bgColor.a ) return;
+
         auto size = _style.box.borderInsideSize;
         auto pos  = _style.box.borderInsideLeftTop;
         pos += vec2(size.x/2,size.y/2);
@@ -79,7 +81,7 @@ class Widget : WindowContent
         auto shader = win.shaders.fill3;
         shader.use();
         shader.setVectors( vec3(pos,0) );
-        shader.color = vec4(1,1,1,1);
+        shader.color = _style.box.bgColor;
 
         _background.draw( shader );
     }
