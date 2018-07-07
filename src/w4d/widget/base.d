@@ -78,10 +78,9 @@ class Widget : WindowContent
 
         auto shader = win.shaders.fill3;
         shader.use();
-        shader.transform = vec3(1,1,1);
-        shader.rotation  = vec3(0,0,0);
-        shader.translate = vec3(pos,0);
-        shader.color     = vec4(1,1,1,1);
+        shader.setVectors( vec3(pos,0) );
+        shader.color = vec4(1,1,1,1);
+
         _background.draw( shader );
     }
     override void draw ( Window win )
