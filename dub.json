@@ -13,7 +13,7 @@
     "stringImportPaths": ["./src"],
 
     "dependencies": {
-        "g4d": "~>1.0.2"
+        "g4d": "~>1.0.4"
     },
 
     "configurations": [
