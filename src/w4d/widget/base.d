@@ -18,7 +18,11 @@ class Widget : WindowContent
     protected WindowContext _context;
 
     @property style () { return _style; }
-    @property Widget[] children () { return []; }
+
+    protected Widget _hovered;
+
+    @property Widget[] children     () { return []; }
+    @property Widget   hoveredChild () { return null; }
 
     protected Widget findChildAt ( vec2 pt )
     {
@@ -29,10 +33,19 @@ class Widget : WindowContent
         }
         return null;
     }
+    protected void setHovered ( Widget child, vec2 pos )
+    {
+        auto temp = _hovered;
+        _hovered = child;
+
+        if ( child !is temp ) {
+            if ( temp  ) temp .handleMouseEnter( false, pos );
+            if ( child ) child.handleMouseEnter(  true, pos );
+        }
+    }
 
     override bool handleMouseEnter ( bool entered, vec2 pos )
     {
-        //throw new W4dException( "NotImplemented" );
         return true;
     }
     override bool handleMouseMove ( vec2 pos )
@@ -40,30 +53,35 @@ class Widget : WindowContent
         if ( _context.tracked && _context.tracked !is this ) {
             return _context.tracked.handleMouseMove( pos );
         } else if ( auto target = findChildAt(pos) ) {
-            return target.handleMouseMove( pos );
-        } else {
-            return true;
+            setHovered( target, pos );
+            if ( target.handleMouseMove( pos ) ) {
+                return true;
+            }
         }
+        setHovered( null, pos );
+        return true;
     }
     override bool handleMouseButton ( MouseButton btn, bool status, vec2 pos )
     {
         if ( _context.tracked && _context.tracked !is this ) {
             return _context.tracked.handleMouseButton( btn, status, pos );
         } else if ( auto target = findChildAt(pos) ) {
-            return target.handleMouseButton( btn, status, pos );
-        } else {
-            return true;
+            if ( target.handleMouseButton( btn, status, pos ) ) {
+                return true;
+            }
         }
+        return true;
     }
     override bool handleMouseScroll ( vec2 amount, vec2 pos )
     {
         if ( _context.tracked && _context.tracked !is this ) {
             return _context.tracked.handleMouseScroll( amount, pos );
         } else if ( auto target = findChildAt(pos) ) {
-            return target.handleMouseScroll( amount, pos );
-        } else {
-            return true;
+            if ( target.handleMouseScroll( amount, pos ) ) {
+                return true;
+            }
         }
+        return true;
     }
 
     override bool handleKey ( Key key, KeyState status )
@@ -130,12 +148,14 @@ class Widget : WindowContent
 
 class WindowContext
 {
-    Widget tracked;
-    Widget focused;
+    protected Widget _tracked;
+    @property tracked () { return _tracked; }
+    protected Widget _focused;
+    @property focused () { return _focused; }
 
     this ()
     {
-        tracked = null;
-        focused = null;
+        _tracked = null;
+        _focused = null;
     }
 }
