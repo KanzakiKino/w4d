@@ -7,15 +7,30 @@ class TestWidget : PanelWidget
     this ()
     {
         super();
+        setLayout!HorizontalLayout;
 
-        _style.box.margins     = Rect( Scalar(10,ScalarUnit.Pixel) );
-        _style.box.borderWidth = Rect( Scalar(5,ScalarUnit.Pixel), Scalar(0,ScalarUnit.Pixel) );
-        _style.box.bgColor     = vec4(1,1,1,1);
-        _style.box.borderColor = vec4(1,0,0,1);
+        _style.box.bgColor     = vec4(1,1,1,0.2);
 
-        auto child = addChild( new Widget );
-        child.style.box.size.height = Scalar(50,ScalarUnit.Pixel);
-        child.style.box.bgColor = vec4(0,1,0,1);
+        auto left = addChild( new Widget );
+        left.style.box.size.width  = Scalar(20,ScalarUnit.Percent);
+        left.style.box.size.height = Scalar(95,ScalarUnit.Percent);
+        left.style.box.margins     = Rect( Scalar(2.5,ScalarUnit.Percent) );
+        left.style.box.bgColor     = vec4(1,1,1,0.4);
+
+        auto right = new PanelWidget;
+        right.style.box.size.width  = Scalar(72.5,ScalarUnit.Percent);
+        right.style.box.margins     = Rect( Scalar(2.5,ScalarUnit.Percent) );
+        right.style.box.margins.left = Scalar();
+        right.style.box.bgColor     = vec4(1,1,1,0.4);
+        right.setLayout!VerticalLayout;
+        addChild( right );
+
+        foreach ( i; 0..5 ) {
+            auto child = right.addChild( new Widget );
+            child.style.box.size.height = Scalar(15,ScalarUnit.Percent);
+            child.style.box.margins     = Rect( Scalar(10,ScalarUnit.Pixel) );
+            child.style.box.bgColor     = vec4(1,1,1,0.4);
+        }
     }
 }
 

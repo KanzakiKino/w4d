@@ -4,6 +4,8 @@ module w4d;
 
 public
 {
+    import w4d.layout.fill,
+           w4d.layout.lineup;
     import w4d.task.window;
     import w4d.style.rect,
            w4d.style.scalar,
