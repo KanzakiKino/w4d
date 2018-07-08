@@ -12,11 +12,22 @@ import g4d.math.vector;
 class Widget : WindowContent
 {
     protected WidgetStyle _style;
+    protected Layout      _layout;
+    protected BoxElement  _box;
+
     @property style () { return _style; }
 
-    protected Layout _layout;
+    @property Widget[] children () { return []; }
 
-    protected BoxElement _box;
+    protected Widget findChildAt ( vec2 pt )
+    {
+        foreach ( c; children ) {
+            if ( c.style.isPointInside(pt) ) {
+                return c;
+            }
+        }
+        return null;
+    }
 
     override void handleMouseEnter ( bool entered )
     {

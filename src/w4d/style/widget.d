@@ -42,4 +42,18 @@ class WidgetStyle
         y.calc( ScalarUnitBase(ctx.pos.y, ctx.parentSize.y) );
         box.calc( ctx.parentSize, ctx.size );
     }
+
+    bool isPointInside ( vec2 pt )
+    {
+        pt -= translate + box.borderInsideLeftTop;
+        if ( pt.x < 0 || pt.y < 0 ) {
+            return false;
+        }
+        pt -= box.borderInsideSize;
+        return pt.x > 0 || pt.y > 0;
+    }
+    vec2 relativization ( vec2 pos )
+    {
+        return pos + clientLeftTop;
+    }
 }
