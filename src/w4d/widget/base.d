@@ -194,6 +194,8 @@ class Widget : WindowContent
 
         shader.use( false );
         shader.setVectors( vec3(_style.translate,0) );
+
+        _box.setColor( _style.box );
         _box.draw( shader );
 
         children.each!(x => x.draw(win));

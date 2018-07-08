@@ -26,11 +26,13 @@ class BoxElement : Element
 
     void resize ( BoxStyle box )
     {
-        _bgColor     = box.bgColor;
-        _borderColor = box.borderColor;
-
         _bg    .resize( box );
         _border.resize( box );
+    }
+    void setColor ( BoxStyle box )
+    {
+        _bgColor     = box.bgColor;
+        _borderColor = box.borderColor;
     }
 
     override void clear ()
