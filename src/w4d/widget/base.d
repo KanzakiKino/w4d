@@ -8,6 +8,7 @@ import w4d.element.box,
        w4d.task.window,
        w4d.exception;
 import g4d.math.vector;
+import std.algorithm;
 
 class Widget : WindowContent
 {
@@ -86,22 +87,32 @@ class Widget : WindowContent
         _layout = new L(style);
     }
 
-    override void resize ( vec2i newSize )
-    {
-        move( vec2(0,0), vec2(newSize) );
-    }
-    void move ( vec2 basept, vec2 newSize )
+    override void resize ( vec2i newsz )
     {
         enforce( _layout, "Layout is null." );
-        _layout.fix( basept, newSize );
+
+        _layout.move( vec2(0,0), vec2(newsz) );
+        layout();
+    }
+    void layout ()
+    {
+        enforce( _layout, "Layout is null." );
 
         if ( !_context ) {
             _context = new WindowContext;
         }
+
+        foreach ( c; children ) {
+            c._context = _context;
+            _layout.push( c._layout );
+        }
+        _layout.fix();
+
+        children.each!q{a.layout()};
+
         if ( !_box ) {
             _box = new BoxElement;
         }
-
         _box.resize( _style.box );
     }
 

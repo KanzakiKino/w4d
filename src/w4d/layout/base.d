@@ -15,9 +15,7 @@ abstract class Layout
         _style = style;
     }
 
-    void push ( Layout child )
-    {
-        throw new LayoutException( "This layout doesn't support children." );
-    }
-    void fix ( vec2, vec2 );
+    void move ( vec2, vec2 ); // Calculates style.
+    void push ( Layout );
+    void fix  ();             // Calculates children style.
 }
