@@ -31,7 +31,7 @@ class Window : g4d.Window, Task
         _shaders = new Shaders;
         _root    = root;
 
-        handler.onFbResize = delegate ( vec2i sz )
+        handler.onWindowResize = delegate ( vec2i sz )
         {
             clip( vec2i(0,0), sz );
             _root.resize( sz );
@@ -62,7 +62,7 @@ class Window : g4d.Window, Task
             _root.handleTextInput( c );
         };
 
-        handler.onFbResize( size );
+        handler.onWindowResize( size );
     }
 
     override void clip ( vec2i pt, vec2i sz )
