@@ -11,12 +11,12 @@ import g4d.math.vector;
 
 class Widget : WindowContent
 {
-    protected WidgetStyle _style;
-    protected Layout      _layout;
-    protected BoxElement  _box;
+    protected WidgetStyle   _style;
+    protected Layout        _layout;
+    protected BoxElement    _box;
+    protected WindowContext _context;
 
     @property style () { return _style; }
-
     @property Widget[] children () { return []; }
 
     protected Widget findChildAt ( vec2 pt )
@@ -29,20 +29,40 @@ class Widget : WindowContent
         return null;
     }
 
-    override void handleMouseEnter ( bool entered )
+    override bool handleMouseEnter ( bool entered, vec2 pos )
     {
+        //throw new W4dException( "NotImplemented" );
+        return true;
     }
     override bool handleMouseMove ( vec2 pos )
     {
-        return false;
+        if ( _context.tracked && _context.tracked !is this ) {
+            return _context.tracked.handleMouseMove( pos );
+        } else if ( auto target = findChildAt(pos) ) {
+            return target.handleMouseMove( pos );
+        } else {
+            return true;
+        }
     }
-    override bool handleMouseButton ( MouseButton btn, bool status )
+    override bool handleMouseButton ( MouseButton btn, bool status, vec2 pos )
     {
-        return false;
+        if ( _context.tracked && _context.tracked !is this ) {
+            return _context.tracked.handleMouseButton( btn, status, pos );
+        } else if ( auto target = findChildAt(pos) ) {
+            return target.handleMouseButton( btn, status, pos );
+        } else {
+            return true;
+        }
     }
-    override bool handleMouseScroll ( vec2 amount )
+    override bool handleMouseScroll ( vec2 amount, vec2 pos )
     {
-        return false;
+        if ( _context.tracked && _context.tracked !is this ) {
+            return _context.tracked.handleMouseScroll( amount, pos );
+        } else if ( auto target = findChildAt(pos) ) {
+            return target.handleMouseScroll( amount, pos );
+        } else {
+            return true;
+        }
     }
 
     override bool handleKey ( Key key, KeyState status )
@@ -75,9 +95,13 @@ class Widget : WindowContent
         enforce( _layout, "Layout is null." );
         _layout.fix( newSize );
 
+        if ( !_context ) {
+            _context = new WindowContext;
+        }
         if ( !_box ) {
             _box = new BoxElement;
         }
+
         _box.resize( _style.box );
     }
 
@@ -88,5 +112,17 @@ class Widget : WindowContent
         shader.setVectors( vec3(_style.translate,0) );
 
         _box.draw( shader );
+    }
+}
+
+class WindowContext
+{
+    Widget tracked;
+    Widget focused;
+
+    this ()
+    {
+        tracked = null;
+        focused = null;
     }
 }

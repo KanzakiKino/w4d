@@ -20,6 +20,7 @@ class Window : g4d.Window, Task
     @property shaders () { return _shaders; }
 
     protected WindowContent _root;
+    protected vec2          _cursorPos;
 
     this ( WindowContent root, vec2i size, string text, WindowHint hint = WindowHint.None )
     {
@@ -37,19 +38,20 @@ class Window : g4d.Window, Task
         };
         handler.onMouseEnter = delegate ( bool entered )
         {
-            _root.handleMouseEnter( entered );
+            _root.handleMouseEnter( entered, _cursorPos );
         };
         handler.onMouseMove = delegate ( vec2 pos )
         {
+            _cursorPos = pos;
             _root.handleMouseMove( pos );
         };
         handler.onMouseButton = delegate ( MouseButton btn, bool status )
         {
-            _root.handleMouseButton( btn, status );
+            _root.handleMouseButton( btn, status, _cursorPos );
         };
         handler.onMouseScroll = delegate ( vec2 amount )
         {
-            _root.handleMouseScroll( amount );
+            _root.handleMouseScroll( amount, _cursorPos );
         };
         handler.onKey = delegate ( Key key, KeyState state )
         {
@@ -132,13 +134,13 @@ interface WindowContent
     // Some handlers return whether event was handled.
 
     // Be called with true when cursor is entered.
-    void handleMouseEnter ( bool );
+    bool handleMouseEnter ( bool, vec2 );
     // Be called when cursor is moved.
     bool handleMouseMove ( vec2 );
     // Be called when mouse button is clicked.
-    bool handleMouseButton ( MouseButton, bool );
+    bool handleMouseButton ( MouseButton, bool, vec2 );
     // Be called when mouse wheel is rotated.
-    bool handleMouseScroll ( vec2 );
+    bool handleMouseScroll ( vec2, vec2 );
 
     // Be called when key is pressed, repeated or released.
     bool handleKey ( Key, KeyState );
