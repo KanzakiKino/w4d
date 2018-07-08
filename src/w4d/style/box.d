@@ -104,8 +104,12 @@ struct BoxStyle
         borderWidth.calc( parentSize );
         margins    .calc( parentSize );
 
+        auto expand = parentSize - clientAdditionalSize;
         if ( def.x <= 0 ) {
-            def = parentSize - clientAdditionalSize;
+            def.x = expand.x;
+        }
+        if ( def.y <= 0 ) {
+            def.y = expand.y;
         }
         size.calc( parentSize, def );
     }

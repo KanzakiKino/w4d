@@ -30,7 +30,6 @@ class TestWidget : PanelWidget
             child.style.box.bgColor     = vec4(1,1,1,0.4);
         }
         auto child = right.addChild( new Widget );
-        child.style.box.size.height = Scalar(95,ScalarUnit.Percent);
         child.style.box.margins     = Rect( Scalar(5,ScalarUnit.Pixel) );
         child.style.box.bgColor     = vec4(1,1,1,0.4);
     }
