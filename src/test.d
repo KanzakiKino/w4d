@@ -2,7 +2,7 @@
 // Copyright 2018 KanzakiKino
 import w4d;
 
-class TestWidget : Widget
+class TestWidget : PanelWidget
 {
     this ()
     {
@@ -12,6 +12,10 @@ class TestWidget : Widget
         _style.box.borderWidth = Rect( Scalar(5,ScalarUnit.Pixel), Scalar(0,ScalarUnit.Pixel) );
         _style.box.bgColor     = vec4(1,1,1,1);
         _style.box.borderColor = vec4(1,0,0,1);
+
+        auto child = addChild( new Widget );
+        child.style.box.size.height = Scalar(50,ScalarUnit.Pixel);
+        child.style.box.bgColor = vec4(0,1,0,1);
     }
 }
 

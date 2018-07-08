@@ -123,6 +123,8 @@ class Widget : WindowContent
         shader.use();
         shader.setVectors( vec3(_style.translate,0) );
         _box.draw( shader );
+
+        children.each!(x => x.draw(win));
     }
 }
 

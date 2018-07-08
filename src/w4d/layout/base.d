@@ -11,7 +11,7 @@ abstract class Layout
 
     this ( WidgetStyle style )
     {
-        enforce( style, "style is null." );
+        enforce( style, "Style is null." );
         _style = style;
     }
 
