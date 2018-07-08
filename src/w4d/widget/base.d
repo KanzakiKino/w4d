@@ -16,13 +16,10 @@ class Widget : WindowContent
     protected Layout        _layout;
     protected BoxElement    _box;
     protected WindowContext _context;
-
-    @property style () { return _style; }
+    @property style  () { return _style; }
 
     protected Widget _hovered;
-
     @property Widget[] children     () { return []; }
-    @property Widget   hoveredChild () { return null; }
 
     protected Widget findChildAt ( vec2 pt )
     {
@@ -46,39 +43,59 @@ class Widget : WindowContent
 
     override bool handleMouseEnter ( bool entered, vec2 pos )
     {
+        if ( _context.tracked && !isTracked ) {
+            return false;
+        }
+
+        if ( !entered ) {
+            setHovered( null, pos );
+        }
         return true;
     }
     override bool handleMouseMove ( vec2 pos )
     {
-        if ( _context.tracked && _context.tracked !is this ) {
-            return _context.tracked.handleMouseMove( pos );
-        } else if ( auto target = findChildAt(pos) ) {
-            setHovered( target, pos );
-            if ( target.handleMouseMove( pos ) ) {
-                return true;
+        if ( !isTracked ) {
+            if ( _context.tracked ) {
+                return _context.tracked.handleMouseMove( pos );
+            } else if ( auto target = findChildAt(pos) ) {
+                setHovered( target, pos );
+                if ( target.handleMouseMove( pos ) ) {
+                    return true;
+                }
             }
         }
+
         setHovered( null, pos );
         return true;
     }
     override bool handleMouseButton ( MouseButton btn, bool status, vec2 pos )
     {
-        if ( _context.tracked && _context.tracked !is this ) {
-            return _context.tracked.handleMouseButton( btn, status, pos );
-        } else if ( auto target = findChildAt(pos) ) {
-            if ( target.handleMouseButton( btn, status, pos ) ) {
-                return true;
+        if ( !isTracked ) {
+            if ( _context.tracked ) {
+                return _context.tracked.handleMouseButton( btn, status, pos );
+            } else if ( auto target = findChildAt(pos) ) {
+                if ( target.handleMouseButton( btn, status, pos ) ) {
+                    return true;
+                }
             }
+        }
+
+        if ( btn == MouseButton.Left && status ) {
+            track();
+        } else if ( btn == MouseButton.Left && !status ) {
+            refuseTrack();
         }
         return true;
     }
     override bool handleMouseScroll ( vec2 amount, vec2 pos )
     {
-        if ( _context.tracked && _context.tracked !is this ) {
-            return _context.tracked.handleMouseScroll( amount, pos );
-        } else if ( auto target = findChildAt(pos) ) {
-            if ( target.handleMouseScroll( amount, pos ) ) {
-                return true;
+        if ( !isTracked ) {
+            if ( _context.tracked ) {
+                return _context.tracked.handleMouseScroll( amount, pos );
+            } else if ( auto target = findChildAt(pos) ) {
+                if ( target.handleMouseScroll( amount, pos ) ) {
+                    return true;
+                }
             }
         }
         return true;
@@ -93,6 +110,13 @@ class Widget : WindowContent
         return false;
     }
 
+    void handleTracked ( bool a )
+    {
+    }
+    void handleFocused ( bool )
+    {
+    }
+
     this ()
     {
         _style = new WidgetStyle;
@@ -103,6 +127,36 @@ class Widget : WindowContent
     void setLayout (L) ()
     {
         _layout = new L(style);
+    }
+
+    @property isTracked ()
+    {
+        return _context && _context.tracked is this;
+    }
+    void track ()
+    {
+        enforce( _context, "WindowContext is null." );
+        _context.setTracked( this );
+    }
+    void refuseTrack ()
+    {
+        enforce( isTracked, "The widget has not been tracked." );
+        _context.setTracked( null );
+    }
+
+    @property isFocused ()
+    {
+        return _context && _context.focused is this;
+    }
+    void focus ()
+    {
+        enforce( _context, "WindowContext is null." );
+        _context.setFocused( this );
+    }
+    void dropFocus ()
+    {
+        enforce( isFocused, "The widget has not been focused." );
+        _context.setFocused( null );
     }
 
     override void resize ( vec2i newsz )
@@ -157,5 +211,27 @@ class WindowContext
     {
         _tracked = null;
         _focused = null;
+    }
+
+    void setTracked ( Widget w )
+    {
+        auto temp = _tracked;
+        _tracked = w;
+
+        if ( w !is temp ) {
+            if ( temp ) temp.handleTracked( false );
+            if ( w    ) w   .handleTracked( true  );
+        }
+    }
+
+    void setFocused ( Widget w )
+    {
+        auto temp = _focused;
+        _focused = w;
+
+        if ( w !is temp ) {
+            if ( temp ) temp.handleFocused( false );
+            if ( w    ) w   .handleFocused( true  );
+        }
     }
 }
