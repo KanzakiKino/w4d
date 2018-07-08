@@ -7,13 +7,12 @@ import w4d.layout.base,
        w4d.style.widget;
 import g4d.math.vector;
 
-private class LineupLayout (bool Horizon) : FillLayout
+class LineupLayout (bool Horizon) : FillLayout
 {
     protected float _usedLength;
 
     this ( WidgetStyle style )
     {
-        enforce( style, "Style is null." );
         super( style );
 
         _usedLength = 0;
