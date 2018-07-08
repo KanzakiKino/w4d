@@ -26,4 +26,13 @@ class PanelWidget : Widget
         _children ~= child;
         return child;
     }
+
+    override void track ()
+    {
+        // PanelWidget can't be tracked.
+    }
+    override void focus ()
+    {
+        // PanelWidget can't be focused.
+    }
 }
