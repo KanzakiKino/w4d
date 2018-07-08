@@ -120,7 +120,7 @@ class Widget : WindowContent
     {
         auto shader = win.shaders.fill3;
 
-        shader.use();
+        shader.use( false );
         shader.setVectors( vec3(_style.translate,0) );
         _box.draw( shader );
 
