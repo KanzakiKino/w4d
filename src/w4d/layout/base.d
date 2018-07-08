@@ -8,6 +8,7 @@ import g4d.math.vector;
 abstract class Layout
 {
     protected WidgetStyle _style;
+    @property style () { return _style; }
 
     this ( WidgetStyle style )
     {

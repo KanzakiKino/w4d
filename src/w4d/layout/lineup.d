@@ -38,7 +38,7 @@ private class LineupLayout (bool Horizon) : FillLayout
         getLengthRef(pos) += _usedLength;
 
         l.move( pos, _style.box.clientSize );
-        _usedLength += getLength(_style.box.collisionSize);
+        _usedLength += getLength(l.style.box.collisionSize);
     }
     override void fix ()
     {

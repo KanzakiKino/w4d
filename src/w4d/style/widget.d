@@ -50,6 +50,6 @@ class WidgetStyle
             return false;
         }
         pt -= box.borderInsideSize;
-        return pt.x > 0 || pt.y > 0;
+        return pt.x <= 0 && pt.y <= 0;
     }
 }
