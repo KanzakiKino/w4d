@@ -88,12 +88,12 @@ class Widget : WindowContent
 
     override void resize ( vec2i newSize )
     {
-        resize( vec2(newSize) );
+        move( vec2(0,0), vec2(newSize) );
     }
-    void resize ( vec2 newSize )
+    void move ( vec2 basept, vec2 newSize )
     {
         enforce( _layout, "Layout is null." );
-        _layout.fix( newSize );
+        _layout.fix( basept, newSize );
 
         if ( !_context ) {
             _context = new WindowContext;
@@ -108,9 +108,9 @@ class Widget : WindowContent
     override void draw ( Window win )
     {
         auto shader = win.shaders.fill3;
+
         shader.use();
         shader.setVectors( vec3(_style.translate,0) );
-
         _box.draw( shader );
     }
 }

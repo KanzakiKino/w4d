@@ -12,10 +12,11 @@ class FillLayout : Layout
         super( style );
     }
 
-    override void fix ( vec2 sz )
+    override void fix ( vec2 pt, vec2 sz )
     {
         auto ctx = WidgetStyleCalcContext();
         ctx.parentSize = sz;
+        ctx.pos        = pt;
         _style.calc( ctx );
     }
 }

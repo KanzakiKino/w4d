@@ -52,8 +52,4 @@ class WidgetStyle
         pt -= box.borderInsideSize;
         return pt.x > 0 || pt.y > 0;
     }
-    vec2 relativization ( vec2 pos )
-    {
-        return pos + clientLeftTop;
-    }
 }

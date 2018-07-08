@@ -19,5 +19,5 @@ abstract class Layout
     {
         throw new LayoutException( "This layout doesn't support children." );
     }
-    void fix ( vec2 );
+    void fix ( vec2, vec2 );
 }
