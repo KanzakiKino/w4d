@@ -8,9 +8,6 @@ class TestWidget : Widget
     {
         super();
 
-        import g4d.math.vector;
-        import w4d.style.rect,
-               w4d.style.scalar;
         _style.box.margins     = Rect( Scalar(10,ScalarUnit.Pixel) );
         _style.box.borderWidth = Rect( Scalar(5,ScalarUnit.Pixel), Scalar(0,ScalarUnit.Pixel) );
         _style.box.bgColor     = vec4(1,1,1,1);

@@ -5,6 +5,9 @@ module w4d;
 public
 {
     import w4d.task.window;
+    import w4d.style.rect,
+           w4d.style.scalar,
+           w4d.style.size;
     import w4d.widget.base;
     import w4d.app;
     // TODO Import useful modules.
