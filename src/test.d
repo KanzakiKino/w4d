@@ -2,8 +2,20 @@
 // Copyright 2018 KanzakiKino
 import w4d;
 
-class TestWidget : PanelWidget
+class TestRootWidget : PanelWidget
 {
+    class TestContentWidget : Widget
+    {
+        this ()
+        {
+            super();
+            style.box.size.width  = Scalar(50,ScalarUnit.Pixel);
+            style.box.size.height = Scalar(50,ScalarUnit.Pixel);
+            style.box.bgColor     = vec4(1,1,1,0.4);
+            setLayout!GravityLayout( vec2(0.2,0.5) );
+        }
+    }
+
     this ()
     {
         super();
@@ -29,9 +41,11 @@ class TestWidget : PanelWidget
             child.style.box.margins     = Rect( Scalar(5,ScalarUnit.Pixel) );
             child.style.box.bgColor     = vec4(1,1,1,0.4);
         }
-        auto child = right.addChild( new Widget );
-        child.style.box.margins     = Rect( Scalar(5,ScalarUnit.Pixel) );
-        child.style.box.bgColor     = vec4(1,1,1,0.4);
+        auto gravity = new PanelWidget;
+        gravity.style.box.margins     = Rect( Scalar(5,ScalarUnit.Pixel) );
+        gravity.style.box.bgColor     = vec4(1,1,1,0.4);
+        gravity.addChild( new TestContentWidget );
+        right.addChild( gravity );
     }
 }
 
@@ -39,7 +53,7 @@ int main ( string[] args )
 {
     auto app = new App( args );
 
-    auto widget = new TestWidget;
+    auto widget = new TestRootWidget;
 
     auto win = new Window( widget, vec2i(640,480), "TEST", WindowHint.Resizable );
     app.addTask( win );

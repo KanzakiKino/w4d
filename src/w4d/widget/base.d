@@ -124,9 +124,9 @@ class Widget : WindowContent
         setLayout!FillLayout();
     }
 
-    void setLayout (L) ()
+    void setLayout (L,Args...) ( Args args )
     {
-        _layout = new L(style);
+        _layout = new L(style,args);
     }
 
     @property isTracked ()
