@@ -76,4 +76,9 @@ struct Scalar
         }
         return _calculated;
     }
+
+    void alter ( float v )
+    {
+        _calculated = v;
+    }
 }
