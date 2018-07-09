@@ -44,13 +44,13 @@ class Widget : WindowContent
     override bool handleMouseEnter ( bool entered, vec2 pos )
     {
         if ( _context.tracked && !isTracked ) {
-            return false;
+            return true;
         }
 
         if ( !entered ) {
             setHovered( null, pos );
         }
-        return true;
+        return false;
     }
     override bool handleMouseMove ( vec2 pos )
     {
@@ -66,7 +66,7 @@ class Widget : WindowContent
         }
 
         setHovered( null, pos );
-        return true;
+        return false;
     }
     override bool handleMouseButton ( MouseButton btn, bool status, vec2 pos )
     {
@@ -83,9 +83,9 @@ class Widget : WindowContent
         if ( btn == MouseButton.Left && status ) {
             track();
         } else if ( btn == MouseButton.Left && !status ) {
-            refuseTrack();
+            if ( isTracked ) refuseTrack();
         }
-        return true;
+        return false;
     }
     override bool handleMouseScroll ( vec2 amount, vec2 pos )
     {
@@ -98,7 +98,7 @@ class Widget : WindowContent
                 }
             }
         }
-        return true;
+        return false;
     }
 
     override bool handleKey ( Key key, KeyState status )
