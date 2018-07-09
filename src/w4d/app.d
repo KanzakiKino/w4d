@@ -2,7 +2,8 @@
 // Copyright 2018 KanzakiKino
 module w4d.app;
 import w4d.event;
-import std.algorithm;
+import std.algorithm,
+       std.stdio;
 import core.thread;
 static import g4d;
 
@@ -42,7 +43,10 @@ class App
                 _tasks = _tasks.remove!( x => x.exec(this) );
                 Thread.sleep( dur!"msecs"( sleepDuration ) );
             } catch ( Exception e ) {
-                if ( !onThrown.call( e ) ) break;
+                if ( !onThrown.call( e ) ) {
+                    e.writeln;
+                    break;
+                }
             }
         }
         return returnCode;
