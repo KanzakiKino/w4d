@@ -103,10 +103,20 @@ class Widget : WindowContent
 
     override bool handleKey ( Key key, KeyState status )
     {
+        if ( !isFocused ) {
+            if ( _context.focused ) {
+                return _context.focused.handleKey( key, status );
+            } else if ( children.canFind!(x => x.handleKey( key, status )) ) {
+                return true;
+            }
+        }
         return false;
     }
     override bool handleTextInput ( dchar c )
     {
+        if ( _context.focused && !isFocused ) {
+            return _context.focused.handleTextInput( c );
+        }
         return false;
     }
 
