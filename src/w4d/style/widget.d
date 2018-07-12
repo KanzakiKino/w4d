@@ -20,6 +20,7 @@ class WidgetStyle
         Scalar   x, y;
         BoxStyle box;
     }
+    vec4 color = vec4(0,0,0,1);
 
     this ()
     {
