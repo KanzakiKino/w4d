@@ -12,11 +12,14 @@ import std.algorithm;
 
 class Widget : WindowContent
 {
-    protected WidgetStyle   _style;
+    protected uint        _status;
+    protected WidgetStyle _style;
+    @property     style    () { return _style; }
+    @property ref colorset () { return style.getColorSet(_status); }
+
     protected Layout        _layout;
     protected BoxElement    _box;
     protected WindowContext _context;
-    @property style  () { return _style; }
 
     protected Widget _hovered;
     @property Widget[] children     () { return []; }
@@ -47,7 +50,8 @@ class Widget : WindowContent
             return true;
         }
 
-        if ( !entered ) {
+        if ( entered ) {
+        } else {
             setHovered( null, pos );
         }
         return false;
@@ -129,9 +133,19 @@ class Widget : WindowContent
 
     this ()
     {
-        _style = new WidgetStyle;
+        _status = WidgetState.None;
+        _style  = new WidgetStyle;
 
         setLayout!FillLayout();
+    }
+
+    void enableState ( WidgetState state )
+    {
+        _status |= state;
+    }
+    void disableState ( WidgetState state )
+    {
+        _status &= ~state;
     }
 
     void setLayout (L,Args...) ( Args args )
@@ -205,7 +219,7 @@ class Widget : WindowContent
         shader.use( false );
         shader.setVectors( vec3(_style.translate,0) );
 
-        _box.setColor( _style.box );
+        _box.setColor( colorset );
         _box.draw( shader );
 
         children.each!(x => x.draw(win));

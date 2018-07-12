@@ -11,8 +11,9 @@ class TestRootWidget : PanelWidget
             super();
             style.box.size.width  = Scalar(50,ScalarUnit.Pixel);
             style.box.size.height = Scalar(50,ScalarUnit.Pixel);
-            style.box.bgColor     = vec4(1,1,1,0.4);
             setLayout!GravityLayout( vec2(0.2,0.5) );
+
+            style.getColorSet(0).bgColor = vec4(1,1,1,0.4);
         }
     }
 
@@ -21,18 +22,22 @@ class TestRootWidget : PanelWidget
         super();
         setLayout!HorizontalSplitLayout;
 
-        _style.box.bgColor = vec4(1,1,1,0.2);
+        style.getColorSet(0).bgColor = vec4(1,1,1,0.2);
 
         auto left = addChild( new Widget );
         left.style.box.size.width  = Scalar(20,ScalarUnit.Percent);
         left.style.box.size.height = Scalar(300,ScalarUnit.Pixel);
         left.style.box.margins     = Rect( Scalar(5,ScalarUnit.Pixel) );
-        left.style.box.bgColor     = vec4(1,1,1,0.4);
+        left.style.getColorSet(0).bgColor = vec4(1,1,1,0.4);
+
+        import w4d.style.widget, w4d.style.color;
+        left.style.colorsets[WidgetState.Hovered] = ColorSet();
+        left.style.colorsets[WidgetState.Hovered].bgColor = vec4(1,0,1,0.4);
 
         auto right = new PanelWidget;
         right.style.box.margins     = Rect( Scalar(5,ScalarUnit.Pixel) );
-        right.style.box.bgColor     = vec4(1,1,1,0.4);
         right.setLayout!VerticalSplitLayout;
+        right.style.getColorSet(0).bgColor = vec4(1,1,1,0.4);
         addChild( right );
 
         enum Text = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890!?.,<>:;'[]{}\\|"d;
@@ -41,14 +46,14 @@ class TestRootWidget : PanelWidget
             auto child = new TextWidget;
             import g4d.ft.font;
             child.style.box.size.height = Scalar(50,ScalarUnit.Pixel);
-            child.style.box.bgColor = vec4(1,1,1,0.4);
             child.style.box.margins = Rect( Scalar(5, ScalarUnit.Pixel) );
+            child.style.getColorSet(0).bgColor = vec4(1,1,1,0.4);
             child.setText( Text,  new FontFace( new Font("/usr/share/fonts/TTF/Ricty-Regular.ttf"), vec2i(16,0) ));
             right.addChild( child );
         }
         auto gravity = new PanelWidget;
         gravity.style.box.margins     = Rect( Scalar(5,ScalarUnit.Pixel) );
-        gravity.style.box.bgColor     = vec4(1,1,1,0.4);
+        gravity.style.getColorSet(0).bgColor     = vec4(1,1,1,0.4);
         gravity.addChild( new TestContentWidget );
         right.addChild( gravity );
     }

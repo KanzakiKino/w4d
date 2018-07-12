@@ -63,7 +63,7 @@ class TextWidget : Widget
 
         shader.use( false );
         shader.setVectors( vec3(_style.clientLeftTop,0) );
-        shader.color = style.color;
+        shader.color = colorset.fgColor;
         _text.draw( shader );
     }
 }

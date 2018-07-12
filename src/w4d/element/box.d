@@ -4,6 +4,7 @@ module w4d.element.box;
 import w4d.element.background,
        w4d.element.border,
        w4d.style.box,
+       w4d.style.color,
        w4d.exception;
 import g4d.element.base,
        g4d.shader.base,
@@ -29,10 +30,10 @@ class BoxElement : Element
         _bg    .resize( box );
         _border.resize( box );
     }
-    void setColor ( BoxStyle box )
+    void setColor ( ColorSet col )
     {
-        _bgColor     = box.bgColor;
-        _borderColor = box.borderColor;
+        _bgColor     = col.bgColor;
+        _borderColor = col.borderColor;
     }
 
     override void clear ()
