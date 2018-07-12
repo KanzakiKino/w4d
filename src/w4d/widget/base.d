@@ -66,10 +66,10 @@ class Widget : WindowContent
                 if ( target.handleMouseMove( pos ) ) {
                     return true;
                 }
+            } else {
+                setHovered( null, pos );
             }
         }
-
-        setHovered( null, pos );
         return false;
     }
     override bool handleMouseButton ( MouseButton btn, bool status, vec2 pos )
