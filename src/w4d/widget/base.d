@@ -51,8 +51,10 @@ class Widget : WindowContent
         }
 
         if ( entered ) {
+            enableState( WidgetState.Hovered );
         } else {
             setHovered( null, pos );
+            disableState( WidgetState.Hovered );
         }
         return false;
     }
@@ -85,9 +87,11 @@ class Widget : WindowContent
         }
 
         if ( btn == MouseButton.Left && status ) {
+            enableState( WidgetState.Pressed );
             track();
         } else if ( btn == MouseButton.Left && !status ) {
             if ( isTracked ) refuseTrack();
+            disableState( WidgetState.Pressed );
         }
         return false;
     }
@@ -126,9 +130,11 @@ class Widget : WindowContent
 
     void handleTracked ( bool a )
     {
+        (a? &enableState: &disableState)( WidgetState.Tracked );
     }
-    void handleFocused ( bool )
+    void handleFocused ( bool a )
     {
+        (a? &enableState: &disableState)( WidgetState.Focused );
     }
 
     this ()
