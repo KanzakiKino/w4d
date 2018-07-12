@@ -35,13 +35,15 @@ class TestRootWidget : PanelWidget
         right.setLayout!VerticalSplitLayout;
         addChild( right );
 
+        enum Text = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890!?.,<>:;'[]{}\\|"d;
+
         foreach ( i; 0..5 ) {
             auto child = new TextWidget;
             import g4d.ft.font;
             child.style.box.size.height = Scalar(50,ScalarUnit.Pixel);
             child.style.box.bgColor = vec4(1,1,1,0.4);
             child.style.box.margins = Rect( Scalar(5, ScalarUnit.Pixel) );
-            child.setText( "hoge"d,  new FontFace( new Font("/usr/share/fonts/TTF/Ricty-Regular.ttf"), vec2i(16,0) ));
+            child.setText( Text,  new FontFace( new Font("/usr/share/fonts/TTF/Ricty-Regular.ttf"), vec2i(16,0) ));
             right.addChild( child );
         }
         auto gravity = new PanelWidget;

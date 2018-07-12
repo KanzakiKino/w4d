@@ -11,37 +11,45 @@ import std.math;
 class TextWidget : Widget
 {
     protected TextElement _text;
+    protected dstring     _content;
+    protected FontFace    _font;
 
     this ()
     {
-        _text = new TextElement;
+        _text    = new TextElement;
+        _content = null;
+        _font    = null;
     }
 
-    void appendText ( dstring v, FontFace f )
+    void setText ( dstring v, FontFace f = null )
     {
-        _text.appendText( v, f );
+        if ( f ) {
+            _font = f;
+        }
+        _content = v;
+        applyText();
     }
-    void setText ( dstring v, FontFace f )
-    {
-        clearText();
-        appendText( v, f );
-    }
-    void clearText ()
+
+    protected void applyText ()
     {
         _text.clear();
+        if ( _font && _content ) {
+            _text.appendText( _content, _font );
+        }
     }
-
     protected void fixText ()
     {
         if ( _text.isFixed ) {
             return;
         }
+        _text.maxSize.x = style.box.clientSize.x;
+        _text.maxSize.y = 0;
         _text.fix();
-        layout();
     }
 
     override void layout ()
     {
+        applyText();
         super.layout();
     }
 
