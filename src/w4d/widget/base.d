@@ -25,6 +25,7 @@ class Widget : WindowContent
     @property Widget[] children     () { return []; }
 
     protected bool _needRedraw;
+    protected bool _needLayout;
 
     protected Widget findChildAt ( vec2 pt )
     {
@@ -193,6 +194,14 @@ class Widget : WindowContent
         _context.setFocused( null );
     }
 
+    @property bool needLayout ()
+    {
+        return _needLayout || children.canFind!"a.needLayout";
+    }
+    void requestLayout ()
+    {
+        _needLayout = true;
+    }
     override void resize ( vec2i newsz )
     {
         enforce( _layout, "Layout is null." );
@@ -221,12 +230,13 @@ class Widget : WindowContent
         }
         _box.resize( _style.box );
 
+        _needLayout = false;
         requestRedraw();
     }
 
     override @property bool needRedraw ()
     {
-        return _needRedraw || children.canFind!"a.needRedraw";
+        return _needRedraw || children.canFind!"a.needRedraw" || needLayout;
     }
     void requestRedraw ()
     {
@@ -234,6 +244,10 @@ class Widget : WindowContent
     }
     override void draw ( Window win )
     {
+        if ( needLayout ) {
+            layout();
+        }
+
         auto shader = win.shaders.fill3;
 
         shader.use( false );

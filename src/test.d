@@ -40,7 +40,7 @@ class TestRootWidget : PanelWidget
         right.style.getColorSet(0).bgColor = vec4(1,1,1,0.4);
         addChild( right );
 
-        enum Text = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890!?.,<>:;'[]{}\\|"d;
+        enum Text = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890!?.,<>:;'[]{}\\"d;
 
         foreach ( i; 0..5 ) {
             auto child = new TextWidget;
