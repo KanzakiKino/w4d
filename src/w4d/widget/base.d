@@ -24,6 +24,8 @@ class Widget : WindowContent
     protected Widget _hovered;
     @property Widget[] children     () { return []; }
 
+    protected bool _needRedraw;
+
     protected Widget findChildAt ( vec2 pt )
     {
         foreach ( c; children ) {
@@ -148,10 +150,12 @@ class Widget : WindowContent
     void enableState ( WidgetState state )
     {
         _status |= state;
+        requestRedraw();
     }
     void disableState ( WidgetState state )
     {
         _status &= ~state;
+        requestRedraw();
     }
 
     void setLayout (L,Args...) ( Args args )
@@ -216,8 +220,18 @@ class Widget : WindowContent
             _box = new BoxElement;
         }
         _box.resize( _style.box );
+
+        requestRedraw();
     }
 
+    override @property bool needRedraw ()
+    {
+        return _needRedraw || children.canFind!"a.needRedraw";
+    }
+    void requestRedraw ()
+    {
+        _needRedraw = true;
+    }
     override void draw ( Window win )
     {
         auto shader = win.shaders.fill3;
@@ -229,6 +243,8 @@ class Widget : WindowContent
         _box.draw( shader );
 
         children.each!(x => x.draw(win));
+
+        _needRedraw = false;
     }
 }
 

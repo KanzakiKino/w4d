@@ -80,9 +80,11 @@ class Window : g4d.Window, Task
     override bool exec ( App app )
     {
         if ( alive ) {
-            resetFrame();
-            _root.draw( this );
-            applyFrame();
+            if ( _root.needRedraw ) {
+                resetFrame();
+                _root.draw( this );
+                applyFrame();
+            }
             return false;
         }
         return true;
@@ -146,6 +148,8 @@ interface WindowContent
     bool handleKey ( Key, KeyState );
     // Be called when focused and text was inputted.
     bool handleTextInput ( dchar );
+
+    @property bool needRedraw ();
 
     void resize ( vec2i );
     void draw   ( Window );
