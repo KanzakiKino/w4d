@@ -4,19 +4,6 @@ import w4d;
 
 class TestRootWidget : PanelWidget
 {
-    class TestContentWidget : Widget
-    {
-        this ()
-        {
-            super();
-            style.box.size.width  = Scalar(50,ScalarUnit.Pixel);
-            style.box.size.height = Scalar(50,ScalarUnit.Pixel);
-            setLayout!GravityLayout( vec2(0.2,0.5) );
-
-            style.getColorSet(0).bgColor = vec4(1,1,1,0.4);
-        }
-    }
-
     this ()
     {
         super();
@@ -24,40 +11,6 @@ class TestRootWidget : PanelWidget
         auto fontface = new FontFace(new Font("/usr/share/fonts/TTF/Ricty-Regular.ttf"), vec2i(16,0));
 
         style.getColorSet(0).bgColor = vec4(1,1,1,0.2);
-
-        auto left = new ButtonWidget;
-        left.style.box.size.width  = Scalar(20,ScalarUnit.Percent);
-        left.style.box.size.height = Scalar(50,ScalarUnit.Pixel);
-        left.style.box.margins     = Rect( Scalar(5,ScalarUnit.Pixel) );
-        left.setText( "BUTTON"d, fontface );
-        left.style.getColorSet(0).bgColor = vec4(1,1,1,0.4);
-        left.onButtonPressed = delegate ()
-        {
-            import std.stdio; "button pressed".writeln;
-        };
-        addChild( left );
-
-        auto right = new PanelWidget;
-        right.style.box.margins     = Rect( Scalar(5,ScalarUnit.Pixel) );
-        right.setLayout!VerticalSplitLayout;
-        right.style.getColorSet(0).bgColor = vec4(1,1,1,0.4);
-        addChild( right );
-
-        enum Text = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890!?.,<>:;'[]{}\\"d;
-
-        foreach ( i; 0..5 ) {
-            auto child = new TextWidget;
-            child.style.box.size.height = Scalar(50,ScalarUnit.Pixel);
-            child.style.box.margins = Rect( Scalar(5, ScalarUnit.Pixel) );
-            child.style.getColorSet(0).bgColor = vec4(1,1,1,0.4);
-            child.setText( Text, fontface );
-            right.addChild( child );
-        }
-        auto gravity = new PanelWidget;
-        gravity.style.box.margins     = Rect( Scalar(5,ScalarUnit.Pixel) );
-        gravity.style.getColorSet(0).bgColor     = vec4(1,1,1,0.4);
-        gravity.addChild( new TestContentWidget );
-        right.addChild( gravity );
     }
 }
 
