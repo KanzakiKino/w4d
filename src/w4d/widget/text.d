@@ -3,21 +3,25 @@
 module w4d.widget.text;
 import w4d.element.text,
        w4d.task.window,
-       w4d.widget.base;
+       w4d.widget.base,
+       w4d.exception;
 import g4d.ft.font,
        g4d.math.vector;
 import std.math;
 
 class TextWidget : Widget
 {
-    protected TextElement _text;
-    protected dstring     _content;
+    protected TextElement _textElm;
+    protected dstring     _text;
     protected FontFace    _font;
+
+    @property text () { return _text; }
+    @property font () { return _font; }
 
     this ()
     {
-        _text    = new TextElement;
-        _content = null;
+        _textElm = new TextElement;
+        _text    = null;
         _font    = null;
     }
 
@@ -26,30 +30,32 @@ class TextWidget : Widget
         if ( f ) {
             _font = f;
         }
-        _content = v;
+        _text = v;
         applyText();
     }
 
     protected void applyText ()
     {
-        _text.clear();
-        if ( _font && _content ) {
-            _text.appendText( _content, _font );
+        enforce( _font, "FontFace is not specified." );
+
+        _textElm.clear();
+        if ( _text ) {
+            _textElm.appendText( _text, _font );
         }
     }
     protected void fixText ()
     {
-        if ( _text.isFixed ) {
+        if ( _textElm.isFixed ) {
             return;
         }
-        _text.maxSize.x = style.box.clientSize.x;
-        _text.maxSize.y = 0;
-        _text.fix();
+        _textElm.maxSize.x = style.box.clientSize.x;
+        _textElm.maxSize.y = 0;
+        _textElm.fix();
     }
 
     override void layout ()
     {
-        applyText();
+        applyText(); // Recreate char polys to re-layout characters.
         super.layout();
     }
 
@@ -64,6 +70,6 @@ class TextWidget : Widget
         shader.use( false );
         shader.setVectors( vec3(_style.clientLeftTop,0) );
         shader.color = colorset.fgColor;
-        _text.draw( shader );
+        _textElm.draw( shader );
     }
 }
