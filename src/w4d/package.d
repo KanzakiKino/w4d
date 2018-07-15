@@ -13,10 +13,12 @@ public
            w4d.style.scalar,
            w4d.style.size;
     import w4d.widget.base,
+           w4d.widget.button,
            w4d.widget.panel,
            w4d.widget.text;
     import w4d.app;
     // TODO Import useful modules.
 
-    import g4d.math.vector;
+    import g4d.ft.font,
+           g4d.math.vector;
 }
