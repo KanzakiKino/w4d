@@ -18,11 +18,17 @@ class TextWidget : Widget
     @property text () { return _text; }
     @property font () { return _font; }
 
+    vec2 textPosRate;
+    protected vec2 _calcedMargin;
+
     this ()
     {
         _textElm = new TextElement;
         _text    = null;
         _font    = null;
+
+        textPosRate   = vec2(0,0);
+        _calcedMargin = vec2(0,0);
     }
 
     void setText ( dstring v, FontFace f = null )
@@ -45,12 +51,17 @@ class TextWidget : Widget
     }
     protected void fixText ()
     {
+        auto boxSize  = style.box.clientSize;
+
         if ( _textElm.isFixed ) {
             return;
         }
-        _textElm.maxSize.x = style.box.clientSize.x;
+        _textElm.maxSize.x = boxSize.x;
         _textElm.maxSize.y = 0;
-        _textElm.fix();
+
+        auto textSize = _textElm.fix();
+        _calcedMargin.x = (boxSize.x-textSize.x) * textPosRate.x;
+        _calcedMargin.y = (boxSize.y-textSize.y) * textPosRate.y;
     }
 
     override void layout ()
@@ -65,10 +76,11 @@ class TextWidget : Widget
 
         fixText();
 
-        auto shader = win.shaders.alpha3;
+        auto shader    = win.shaders.alpha3;
+        auto translate = _style.clientLeftTop + _calcedMargin;
 
         shader.use( false );
-        shader.setVectors( vec3(_style.clientLeftTop,0) );
+        shader.setVectors( vec3(translate,0) );
         shader.color = colorset.fgColor;
         _textElm.draw( shader );
     }

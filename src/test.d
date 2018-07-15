@@ -11,6 +11,17 @@ class TestRootWidget : PanelWidget
         auto fontface = new FontFace(new Font("/usr/share/fonts/TTF/Ricty-Regular.ttf"), vec2i(16,0));
 
         style.getColorSet(0).bgColor = vec4(1,1,1,0.2);
+
+        auto button = new ButtonWidget;
+        button.setLayout!GravityLayout(vec2(0.5,0.5));
+        button.setText( "PRESS ME!!"d, fontface );
+        button.style.getColorSet(0).bgColor = vec4(1,1,1,0.2);
+        button.style.box.size = Size( Scalar(150,ScalarUnit.Pixel), Scalar(50,ScalarUnit.Pixel) );
+        button.onButtonPressed = delegate ()
+        {
+            button.setText( "Don't touch me!" );
+        };
+        addChild( button );
     }
 }
 

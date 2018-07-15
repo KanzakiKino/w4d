@@ -14,6 +14,7 @@ class ButtonWidget : TextWidget
     this ()
     {
         super();
+        textPosRate = vec2(0.5,0.5);
     }
 
     override bool handleMouseButton ( MouseButton btn, bool status, vec2 pos )
