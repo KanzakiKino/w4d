@@ -21,13 +21,11 @@ private WidgetState toState ( string str )
 {
     switch ( str.toLower ) with ( WidgetState )
     {
-        case "default" : return None;
-        case "disabled": return Disabled;
-        case "enabled" : return Enabled;
-        case "hovered" : return Hovered;
-        case "pressed" : return Pressed;
-        case "tracked" : return Tracked;
         case "focused" : return Focused;
+        case "tracked" : return Tracked;
+        case "pressed" : return Pressed;
+        case "hovered" : return Hovered;
+        case "default" : return None;
 
         default: throw new ParsingException(
                     "WidgetState specification is invalid." );

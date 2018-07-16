@@ -15,17 +15,15 @@ struct WidgetStyleCalcContext
     vec2 size       = vec2(0,0);
 }
 
+// Upper state is rarer to occur.
 enum WidgetState : uint
 {
-    None     = 0b000000,
+    Focused  = 0b0001,
+    Tracked  = 0b0010,
+    Pressed  = 0b0100,
+    Hovered  = 0b1000,
 
-    Disabled = 0b000001,
-    Enabled  = 0b000010,
-
-    Hovered  = 0b000100,
-    Pressed  = 0b001000,
-    Tracked  = 0b010000,
-    Focused  = 0b100000,
+    None     = 0b0000,
 }
 
 class WidgetStyle
@@ -63,10 +61,8 @@ class WidgetStyle
     ref ColorSet getColorSet ( uint status )
     {
         static foreach ( v; __traits(allMembers,WidgetState) ) with (WidgetState) {
-            static if ( mixin(v) != None ) {
-                if ( (status & mixin(v)) && (mixin(v) in colorsets) ) {
-                    return colorsets[mixin(v)];
-                }
+            if ( (status & mixin(v)) && (mixin(v) in colorsets) ) {
+                return colorsets[mixin(v)];
             }
         }
         return colorsets[WidgetState.None];

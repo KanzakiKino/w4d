@@ -1,0 +1,14 @@
+# w4d theme for pressable widgets
+# Written under LGPL-3.0 in YAML.
+# Copyright 2018 KanzakiKino
+
+default:
+    foreground: [0]
+    background: [0.2]
+    border    : [0,0,0,0]
+
+hovered:
+    background: [0.3]
+
+tracked:
+    background: [0.25]
