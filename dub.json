@@ -10,10 +10,11 @@
     "targetName": "w4d",
     "targetPath": "./bin",
     "sourcePaths": ["./src"],
-    "stringImportPaths": ["./src"],
+    "stringImportPaths": ["./src","./view"],
 
     "dependencies": {
-        "g4d": "~master"
+        "g4d": "~master",
+        "dyaml": "~>0.7.0-beta.1"
     },
 
     "configurations": [
