@@ -4,6 +4,7 @@ module w4d.widget.base;
 import w4d.element.box,
        w4d.layout.base,
        w4d.layout.fill,
+       w4d.parser.theme,
        w4d.style.widget,
        w4d.task.window,
        w4d.exception;
@@ -146,6 +147,7 @@ class Widget : WindowContent
         _style  = new WidgetStyle;
 
         setLayout!FillLayout();
+        parseThemeFromFile!"theme/normal.yaml"( style );
     }
 
     void enableState ( WidgetState state )
