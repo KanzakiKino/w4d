@@ -7,6 +7,7 @@ import g4d.element.shape.rect,
        g4d.gl.texture,
        g4d.math.vector,
        g4d.util.bitmap;
+import std.math;
 
 class ImageWidget : Widget
 {
@@ -58,7 +59,7 @@ class ImageWidget : Widget
             auto late   = style.clientLeftTop + style.box.clientSize/2;
 
             shader.use();
-            shader.setVectors( vec3(late,0) );
+            shader.setVectors( vec3(late,0), vec3(PI,0,0) );
             shader.uploadTexture( _texture );
             _imageElm.draw( shader );
         }
