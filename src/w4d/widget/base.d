@@ -198,7 +198,7 @@ class Widget : WindowContent
 
     @property bool needLayout ()
     {
-        return _needLayout || children.canFind!"a.needLayout";
+        return _needLayout || children.canFind!"a.needLayout" || !style.isCalced;
     }
     void requestLayout ()
     {
@@ -253,7 +253,7 @@ class Widget : WindowContent
         auto shader = win.shaders.fill3;
 
         shader.use( false );
-        shader.setVectors( vec3(_style.translate,0) );
+        shader.setVectors( vec3(style.translate,0) );
 
         _box.setColor( colorset );
         _box.draw( shader );
