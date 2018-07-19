@@ -38,6 +38,10 @@ struct Scalar
 
     protected float _calculated;
 
+    @property isSpecified ()
+    {
+        return _unit != ScalarUnit.None;
+    }
     @property isAbsolute ()
     {
         return _unit <= ScalarUnit.Inch && _unit != ScalarUnit.None;
@@ -77,8 +81,13 @@ struct Scalar
         return _calculated;
     }
 
-    void alter ( float v )
+    void alter ( float v, bool force = false )
     {
+        if ( isSpecified && !force ) {
+            import std.stdio;
+            "Tried to alter the specified value.".writeln; // TODO
+            return;
+        }
         _calculated = v;
     }
 }
