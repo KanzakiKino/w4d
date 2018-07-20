@@ -16,6 +16,7 @@ public
            w4d.widget.button,
            w4d.widget.image,
            w4d.widget.panel,
+           w4d.widget.scrollbar,
            w4d.widget.text;
     import w4d.app;
     // TODO Import useful modules.

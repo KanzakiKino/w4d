@@ -1,36 +1,37 @@
 // Written without LICENSE in the D programming language.
 // Copyright 2018 KanzakiKino
 import w4d;
+import std.conv;
 
 class TestRootWidget : PanelWidget
 {
     this ()
     {
         super();
-        setLayout!HorizontalSplitLayout;
+        setLayout!VerticalSplitLayout;
 
         style.getColorSet(0).bgColor = vec4(1,1,1,0.2);
-    }
-
-    protected auto createBitmap ( string path )
-    {
-        import g4d;
-        auto media = new MediaFile( path );
-        return media.decodeNextImage();
     }
 
     void prepare ( string path )
     {
         auto fontface = new FontFace(new Font("/usr/share/fonts/TTF/Ricty-Regular.ttf"), vec2i(16,0));
 
-        auto bmp  = createBitmap( path );
-        auto size = vec2( bmp.width, bmp.rows );
+        auto text = new TextWidget;
+        text.setText( "none"d, fontface );
+        text.style.box.size.height = Scalar(20,ScalarUnit.Pixel);
+        addChild( text );
 
-        auto image = new ImageWidget;
-        image.setLayout!GravityLayout(vec2(0.5,0.5));
-        image.style.box.size = Size( Scalar(size.x,ScalarUnit.Pixel), Scalar(size.y,ScalarUnit.Pixel) );
-        image.setImage( bmp );
-        addChild( image );
+        auto scroll = new ScrollBarWidget!true;
+        scroll.style.box.size.height = Scalar(20,ScalarUnit.Pixel);
+        scroll.setBarLength( 0.1 );
+        scroll.style.getColorSet(0).bgColor = vec4(1,1,1,0.2);
+        scroll.setValue( 0.5 );
+        scroll.onScroll = delegate ( float v )
+        {
+            text.setText( v.to!dstring );
+        };
+        addChild( scroll );
     }
 }
 
