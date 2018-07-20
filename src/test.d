@@ -22,8 +22,8 @@ class TestRootWidget : PanelWidget
         text.style.box.size.height = Scalar(20,ScalarUnit.Pixel);
         addChild( text );
 
-        auto scroll = new ScrollBarWidget!true;
-        scroll.style.box.size.height = Scalar(20,ScalarUnit.Pixel);
+        auto scroll = new ScrollBarWidget!false;
+        scroll.style.box.size.width = Scalar(20,ScalarUnit.Pixel);
         scroll.setBarLength( 0.1 );
         scroll.style.getColorSet(0).bgColor = vec4(1,1,1,0.2);
         scroll.setValue( 0.5 );

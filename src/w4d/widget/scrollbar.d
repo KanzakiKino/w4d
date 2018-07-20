@@ -12,6 +12,8 @@ alias ScrollHandler = EventHandler!( void, float );
 
 class ScrollBarWidget (bool Horizon) : Widget
 {
+    enum WheelMagnification = 0.1;
+
     static ref getLengthRef ( ref vec2 v )
     {
         static if ( Horizon ) {
@@ -78,7 +80,8 @@ class ScrollBarWidget (bool Horizon) : Widget
     {
         if ( super.handleMouseScroll( amount, pos ) ) return true;
 
-        setValue( _value + getLength(amount) );
+        auto add = -getLength(amount) * _barLength * WheelMagnification;
+        setValue( _value + add );
         return true;
     }
 
