@@ -17,19 +17,10 @@ class TestRootWidget : PanelWidget
     {
         auto fontface = new FontFace(new Font("/usr/share/fonts/TTF/Ricty-Regular.ttf"), vec2i(16,0));
 
-        auto text = new TextWidget;
-        text.setText( "none"d, fontface );
-        text.style.box.size.height = Scalar(20,ScalarUnit.Pixel);
-        addChild( text );
-
-        auto scroll = new ScrollBarWidget!false;
+        auto scroll = new VerticalScrollBarWidget;
         scroll.style.box.size.width = Scalar(20,ScalarUnit.Pixel);
         scroll.setBarLength( 0.1 );
         scroll.setValue( 0.5 );
-        scroll.onScroll = delegate ( float v )
-        {
-            text.setText( v.to!dstring );
-        };
         addChild( scroll );
     }
 }

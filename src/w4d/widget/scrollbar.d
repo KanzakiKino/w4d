@@ -169,3 +169,6 @@ class ScrollBarWidget (bool Horizon) : Widget
         _bar.draw( shader );
     }
 }
+
+alias HorizontalScrollBarWidget = ScrollBarWidget!true;
+alias VerticalScrollBarWidget   = ScrollBarWidget!false;
