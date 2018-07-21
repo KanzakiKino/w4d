@@ -13,14 +13,25 @@ class TestRootWidget : PanelWidget
         style.getColorSet(0).bgColor = vec4(0.1,0.1,0.1,1);
     }
 
+    auto createBitmap ( string path )
+    {
+        import g4d.file.media;
+        auto media = new MediaFile( path );
+        return media.decodeNextImage();
+    }
+
     void prepare ( string path )
     {
         auto fontface = new FontFace(new Font("/usr/share/fonts/TTF/Ricty-Regular.ttf"), vec2i(16,0));
 
-        auto scroll = new VerticalScrollBarWidget;
-        scroll.setBarLength( 0.1 );
-        scroll.setValue( 0.5 );
+        auto scroll = new ScrollPanelWidget!false;
+        scroll.style.box.size.height = Scalar(50,ScalarUnit.Percent);
         addChild( scroll );
+
+        auto image = new ImageWidget;
+        image.style.box.size.height = Scalar(500,ScalarUnit.Percent);
+        image.setImage( createBitmap( path ) );
+        scroll.contents.addChild( image );
     }
 }
 

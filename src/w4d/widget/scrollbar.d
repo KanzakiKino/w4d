@@ -88,6 +88,11 @@ class ScrollBarWidget (bool Horizon) : Widget
         return true;
     }
 
+    void handleScroll ( float v )
+    {
+        onScroll.call( v );
+    }
+
     this ()
     {
         super();
@@ -129,7 +134,7 @@ class ScrollBarWidget (bool Horizon) : Widget
 
         if ( temp != _value ) {
             correctBar();
-            onScroll.call( _value );
+            handleScroll( _value );
             requestLayout();
         }
     }
