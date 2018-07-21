@@ -250,7 +250,6 @@ class Widget : WindowContent
         if ( needLayout ) {
             layout();
         }
-        win.clip( vec2i(style.clientLeftTop), vec2i(style.box.clientSize) );
 
         auto shader = win.shaders.fill3;
         auto saver  = ShaderStateSaver( shader );

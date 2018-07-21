@@ -69,8 +69,12 @@ class ScrollPanelWidget(bool Horizon) : PanelWidget
         override void draw ( Window w )
         {
             w.basePoint -= scroll;
+            w.clip( vec2i(style.clientLeftTop), vec2i(style.box.clientSize) );
+
             super.draw( w );
+
             w.basePoint += scroll;
+            w.clip( vec2i(0,0), w.size ); // FIXME: Nested ScrollPanel makes an issue.
         }
     }
 
