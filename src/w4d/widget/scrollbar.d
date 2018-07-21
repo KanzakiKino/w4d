@@ -7,7 +7,8 @@ import w4d.parser.theme,
        w4d.widget.base,
        w4d.event;
 import g4d.element.shape.rect,
-       g4d.math.vector;
+       g4d.math.vector,
+       g4d.shader.base;
 import std.algorithm;
 
 alias ScrollHandler = EventHandler!( void, float );
@@ -170,6 +171,7 @@ class ScrollBarWidget (bool Horizon) : Widget
         auto late = style.clientLeftTop + _translate;
 
         auto shader = w.shaders.fill3;
+        auto saver  = ShaderStateSaver( shader );
         shader.use( false );
         shader.setVectors( vec3(late,0) );
         shader.color = colorset.fgColor;

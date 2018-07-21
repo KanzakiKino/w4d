@@ -6,6 +6,7 @@ import w4d.task.window,
 import g4d.element.shape.rect,
        g4d.gl.texture,
        g4d.math.vector,
+       g4d.shader.base,
        g4d.util.bitmap;
 import std.math;
 
@@ -56,6 +57,7 @@ class ImageWidget : Widget
 
         if ( _texture ) {
             auto shader = w.shaders.rgba3;
+            auto saver  = ShaderStateSaver( shader );
             auto late   = style.clientLeftTop + style.box.clientSize/2;
 
             shader.use();

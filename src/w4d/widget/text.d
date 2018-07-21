@@ -6,7 +6,8 @@ import w4d.element.text,
        w4d.widget.base,
        w4d.exception;
 import g4d.ft.font,
-       g4d.math.vector;
+       g4d.math.vector,
+       g4d.shader.base;
 import std.math;
 
 class TextWidget : Widget
@@ -77,6 +78,7 @@ class TextWidget : Widget
         fixText();
 
         auto shader    = win.shaders.alpha3;
+        auto saver     = ShaderStateSaver( shader );
         auto translate = _style.clientLeftTop + _calcedMargin;
 
         shader.use( false );
