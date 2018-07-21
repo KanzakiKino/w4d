@@ -1,7 +1,8 @@
 // Written under LGPL-3.0 in the D programming language.
 // Copyright 2018 KanzakiKino
 module w4d.widget.scrollbar;
-import w4d.task.window,
+import w4d.parser.theme,
+       w4d.task.window,
        w4d.widget.base,
        w4d.event;
 import g4d.element.shape.rect,
@@ -94,6 +95,8 @@ class ScrollBarWidget (bool Horizon) : Widget
 
         _bar       = null;
         _translate = vec2(0,0);
+
+        parseThemeFromFile!"theme/scrollbar.yaml"( style );
     }
 
     @property needDrawBar ()

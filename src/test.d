@@ -10,7 +10,7 @@ class TestRootWidget : PanelWidget
         super();
         setLayout!VerticalSplitLayout;
 
-        style.getColorSet(0).bgColor = vec4(1,1,1,0.2);
+        style.getColorSet(0).bgColor = vec4(0.1,0.1,0.1,1);
     }
 
     void prepare ( string path )
@@ -25,7 +25,6 @@ class TestRootWidget : PanelWidget
         auto scroll = new ScrollBarWidget!false;
         scroll.style.box.size.width = Scalar(20,ScalarUnit.Pixel);
         scroll.setBarLength( 0.1 );
-        scroll.style.getColorSet(0).bgColor = vec4(1,1,1,0.2);
         scroll.setValue( 0.5 );
         scroll.onScroll = delegate ( float v )
         {
