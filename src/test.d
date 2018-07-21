@@ -29,7 +29,7 @@ class TestRootWidget : PanelWidget
         addChild( scroll );
 
         auto image = new ImageWidget;
-        image.style.box.size.height = Scalar(500,ScalarUnit.Percent);
+        image.style.box.size.height = Scalar(300,ScalarUnit.Percent);
         image.setImage( createBitmap( path ) );
         scroll.contents.addChild( image );
     }

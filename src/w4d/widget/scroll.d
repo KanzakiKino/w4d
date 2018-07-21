@@ -36,6 +36,12 @@ class ScrollPanelWidget(bool Horizon) : PanelWidget
         vec2 scroll;
         vec2 size;
 
+        override bool handleMouseScroll ( vec2 amount, vec2 pos )
+        {
+            if ( super.handleMouseScroll( amount, pos ) ) return true;
+            return _scrollbar.handleMouseScroll( amount, pos );
+        }
+
         this ()
         {
             super();
