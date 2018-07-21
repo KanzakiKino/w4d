@@ -2,6 +2,7 @@
 // Copyright 2018 KanzakiKino
 module w4d.widget.scrollbar;
 import w4d.parser.theme,
+       w4d.style.scalar,
        w4d.task.window,
        w4d.widget.base,
        w4d.event;
@@ -97,6 +98,12 @@ class ScrollBarWidget (bool Horizon) : Widget
         _translate = vec2(0,0);
 
         parseThemeFromFile!"theme/scrollbar.yaml"( style );
+
+        static if ( Horizon ) {
+            style.box.size.height = Scalar(20,ScalarUnit.Pixel);
+        } else {
+            style.box.size.width  = Scalar(20,ScalarUnit.Pixel);
+        }
     }
 
     @property needDrawBar ()

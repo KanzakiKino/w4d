@@ -18,7 +18,6 @@ class TestRootWidget : PanelWidget
         auto fontface = new FontFace(new Font("/usr/share/fonts/TTF/Ricty-Regular.ttf"), vec2i(16,0));
 
         auto scroll = new VerticalScrollBarWidget;
-        scroll.style.box.size.width = Scalar(20,ScalarUnit.Pixel);
         scroll.setBarLength( 0.1 );
         scroll.setValue( 0.5 );
         addChild( scroll );
