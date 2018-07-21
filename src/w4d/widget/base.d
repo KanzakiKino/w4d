@@ -8,7 +8,8 @@ import w4d.element.box,
        w4d.style.widget,
        w4d.task.window,
        w4d.exception;
-import g4d.math.vector;
+import g4d.math.vector,
+       g4d.shader.base;
 import std.algorithm;
 
 class Widget : WindowContent
@@ -249,8 +250,10 @@ class Widget : WindowContent
         if ( needLayout ) {
             layout();
         }
+        win.clip( vec2i(style.clientLeftTop), vec2i(style.box.clientSize) );
 
         auto shader = win.shaders.fill3;
+        auto saver  = ShaderStateSaver( shader );
 
         shader.use( false );
         shader.setVectors( vec3(style.translate,0) );

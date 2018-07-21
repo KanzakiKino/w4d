@@ -69,11 +69,15 @@ class Window : g4d.Window, Task
     {
         super.clip( pt, sz );
 
-        sz = vec2i( sz.x/2, sz.y/2 );
+        auto hsz  = vec2(sz)/2;
+        auto late = (vec2(pt)+hsz)*-1;
+
+        auto mat =
+            mat4.orthographic( -hsz.x,hsz.x, -hsz.y,hsz.y, short.min,short.max )*
+            mat4.translate( late.x, late.y, 0 );
+
         foreach ( s; _shaders.list ) {
-            s.projection =
-                mat4.orthographic( -sz.x,sz.x, -sz.y,sz.y, short.min,short.max )*
-                mat4.translate( -sz.x, -sz.y, 0 );
+            s.projection = mat;
         }
     }
 
