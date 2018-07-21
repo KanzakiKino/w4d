@@ -22,6 +22,8 @@ class Window : g4d.Window, Task
     protected WindowContent _root;
     protected vec2          _cursorPos;
 
+    vec2 basePoint; // Call the clip method to apply basepoint.
+
     this ( WindowContent root, vec2i size, string text, WindowHint hint = WindowHint.None )
     {
         enforce(                     root, "Main content is NULL." );
@@ -30,6 +32,8 @@ class Window : g4d.Window, Task
         super( size, text, hint );
         _shaders = new Shaders;
         _root    = root;
+
+        basePoint = vec2(0,0);
 
         handler.onWindowResize = delegate ( vec2i sz )
         {
@@ -70,7 +74,7 @@ class Window : g4d.Window, Task
         super.clip( pt, sz );
 
         auto hsz  = vec2(sz)/2;
-        auto late = (vec2(pt)+hsz)*-1;
+        auto late = (vec2(pt)+hsz)*-1 + basePoint;
 
         auto mat =
             mat4.orthographic( -hsz.x,hsz.x, -hsz.y,hsz.y, short.min,short.max )*
