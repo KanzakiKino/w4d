@@ -99,12 +99,13 @@ class ScrollPanelWidget(bool Horizon) : PanelWidget
 
         // Order of widgets is different between vertical and horizontal.
         static if ( Horizon ) {
-            addChild( _contents  );
-            addChild( _scrollbar );
+            super.addChild( _contents  );
+            super.addChild( _scrollbar );
         } else {
-            addChild( _scrollbar );
-            addChild( _contents  );
+            super.addChild( _scrollbar );
+            super.addChild( _contents  );
         }
     }
 
+    mixin DisableModifyChildren;
 }

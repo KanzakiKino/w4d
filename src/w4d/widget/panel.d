@@ -8,6 +8,16 @@ import g4d.math.vector;
 
 class PanelWidget : Widget
 {
+    protected static template DisableModifyChildren ()
+    {
+        import w4d.widget.base,
+               w4d.exception;
+        override Widget addChild ( Widget )
+        {
+            throw new W4dException( "Modifying children is not allowed." );
+        }
+    }
+
     protected Widget[] _children;
     override @property Widget[] children ()
     {
