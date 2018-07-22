@@ -27,7 +27,7 @@ class PanelWidget : Widget
     this ()
     {
         super();
-        setLayout!VerticalLayout;
+        setLayout!VerticalLineupLayout;
     }
 
     Widget addChild ( Widget child )

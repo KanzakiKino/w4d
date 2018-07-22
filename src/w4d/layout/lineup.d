@@ -45,5 +45,5 @@ class LineupLayout (bool Horizon) : FillLayout
     }
 }
 
-alias HorizontalLayout = LineupLayout!true;
-alias VerticalLayout   = LineupLayout!false;
+alias HorizontalLineupLayout = LineupLayout!true;
+alias VerticalLineupLayout   = LineupLayout!false;
