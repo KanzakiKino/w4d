@@ -24,14 +24,14 @@ class TestRootWidget : PanelWidget
     {
         auto fontface = new FontFace(new Font("/usr/share/fonts/TTF/Ricty-Regular.ttf"), vec2i(16,0));
 
-        auto scroll = new ScrollPanelWidget!false;
-        scroll.style.box.size.height = Scalar(50,ScalarUnit.Percent);
-        addChild( scroll );
-
         auto image = new ImageWidget;
-        image.style.box.size.height = Scalar(300,ScalarUnit.Percent);
-        image.setImage( createBitmap( path ) );
-        scroll.contents.addChild( image );
+        image.setImage( createBitmap(path) );
+
+        auto tabhost = new TabHostWidget;
+        tabhost.setFontFace( fontface );
+        tabhost.addTab( 0, "hoge1"d, image );
+        tabhost.addTab( 1, "hoge2"d, new Widget );
+        addChild( tabhost );
     }
 }
 

@@ -8,17 +8,10 @@ import w4d.parser.theme,
 import g4d.math.vector;
 
 alias ButtonPressedHandler = EventHandler!( void );
+
 class ButtonWidget : TextWidget
 {
     ButtonPressedHandler onButtonPressed;
-
-    this ()
-    {
-        super();
-        textPosRate = vec2(0.5,0.5);
-
-        parseThemeFromFile!"theme/pressable.yaml"( style );
-    }
 
     override bool handleMouseButton ( MouseButton btn, bool status, vec2 pos )
     {
@@ -29,9 +22,22 @@ class ButtonWidget : TextWidget
             return false;
         }
         if ( btn == MouseButton.Left && !status ) {
-            onButtonPressed.call();
+            handleButtonPress();
             return true;
         }
         return false;
+    }
+
+    void handleButtonPress ()
+    {
+        onButtonPressed.call();
+    }
+
+    this ()
+    {
+        super();
+        textPosRate = vec2(0.5,0.5);
+
+        parseThemeFromFile!"theme/pressable.yaml"( style );
     }
 }
