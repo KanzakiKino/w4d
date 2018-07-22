@@ -25,6 +25,7 @@ private WidgetState toState ( string str )
         case "tracked" : return Tracked;
         case "pressed" : return Pressed;
         case "hovered" : return Hovered;
+        case "selected": return Selected;
         case "default" : return None;
 
         default: throw new ParsingException(
