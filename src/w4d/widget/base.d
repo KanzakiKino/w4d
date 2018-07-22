@@ -81,11 +81,15 @@ class Widget : WindowContent
     }
     override bool handleMouseButton ( MouseButton btn, bool status, vec2 pos )
     {
+
         if ( !isTracked ) {
             if ( _context.tracked ) {
                 return _context.tracked.handleMouseButton( btn, status, pos );
             } else if ( auto target = findChildAt(pos) ) {
                 if ( target.handleMouseButton( btn, status, pos ) ) {
+                    return true;
+                }
+                if ( _context.tracked ) {
                     return true;
                 }
             }
