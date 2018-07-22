@@ -27,10 +27,19 @@ class TestRootWidget : PanelWidget
         auto image = new ImageWidget;
         image.setImage( createBitmap(path) );
 
+        auto panel = new VerticalScrollPanelWidget;
+        foreach ( i; 0..50 )
+        {
+            auto button = new ButtonWidget;
+            button.style.box.size.height = Scalar( 100, ScalarUnit.Pixel );
+            button.setText( i.to!dstring, fontface );
+            panel.contents.addChild( button );
+        }
+
         auto tabhost = new TabHostWidget;
         tabhost.setFontFace( fontface );
         tabhost.addTab( 0, "hoge1"d, image );
-        tabhost.addTab( 1, "hoge2"d, new Widget );
+        tabhost.addTab( 1, "hoge2"d, panel );
         addChild( tabhost );
     }
 }

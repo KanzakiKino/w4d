@@ -4,6 +4,7 @@ module w4d.widget.scroll;
 import w4d.layout.lineup,
        w4d.layout.split,
        w4d.task.window,
+       w4d.widget.base,
        w4d.widget.panel,
        w4d.widget.scrollbar;
 import g4d.math.matrix,
@@ -35,6 +36,11 @@ class ScrollPanelWidget(bool Horizon) : PanelWidget
     {
         vec2 scroll;
         vec2 size;
+
+        override Widget findChildAt ( vec2 pt )
+        {
+            return super.findChildAt( pt + scroll );
+        }
 
         override bool handleMouseScroll ( vec2 amount, vec2 pos )
         {
@@ -109,3 +115,6 @@ class ScrollPanelWidget(bool Horizon) : PanelWidget
 
     mixin DisableModifyChildren;
 }
+
+alias HorizontalScrollPanelWidget = ScrollPanelWidget!true;
+alias VerticalScrollPanelWidget   = ScrollPanelWidget!false;
