@@ -125,7 +125,7 @@ class TabHostWidget : Widget
     @property activatedTab ()
     {
         if ( _activatedIndex >= 0 ) {
-            return _tabs[_activatedIndex];
+            return _tabs[_activatedIndex.to!uint];
         }
         return null;
     }
@@ -133,7 +133,7 @@ class TabHostWidget : Widget
     Tab findTabWithId ( int id )
     {
         auto index = indexOf( id );
-        return index >= 0? _tabs[index]: null;
+        return index >= 0? _tabs[index.to!uint]: null;
     }
 
     void addTab ( int id, dstring title, Widget contents )

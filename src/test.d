@@ -22,7 +22,7 @@ class TestRootWidget : PanelWidget
 
     void prepare ( string path )
     {
-        auto fontface = new FontFace(new Font("/usr/share/fonts/TTF/Ricty-Regular.ttf"), vec2i(16,0));
+        auto fontface = new FontFace(new Font("C:/Windows/Fonts/arial.ttf"), vec2i(16,0));
 
         auto image = new ImageWidget;
         image.setImage( createBitmap(path) );
