@@ -13,7 +13,7 @@
     "stringImportPaths": ["./src","./view"],
 
     "dependencies": {
-        "g4d": "~master",
+        "g4d": "~>1.2.1",
         "dyaml": "~>0.7.0-beta.1"
     },
 
