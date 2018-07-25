@@ -16,11 +16,12 @@ class TextWidget : Widget
     protected dstring     _text;
     protected FontFace    _font;
 
+    @property ref textOriginRate () { return _textElm.originRate; }
+
     @property text () { return _text; }
     @property font () { return _font; }
 
     vec2 textPosRate;
-    protected vec2 _calcedMargin;
 
     this ()
     {
@@ -28,61 +29,31 @@ class TextWidget : Widget
         _text    = null;
         _font    = null;
 
-        textPosRate   = vec2(0,0);
-        _calcedMargin = vec2(0,0);
+        textPosRate = vec2(0,0);
     }
 
-    void setText ( dstring v, FontFace f = null )
+    void loadText ( dstring v, FontFace f = null )
     {
         if ( f ) {
             _font = f;
         }
         _text = v;
-        applyText();
-    }
-
-    protected void applyText ()
-    {
-        enforce( _font, "FontFace is not specified." );
-
-        _textElm.clear();
-        if ( _text ) {
-            _textElm.appendText( _text, _font );
-        }
-    }
-    protected void fixText ()
-    {
-        auto boxSize  = style.box.clientSize;
-
-        if ( _textElm.isFixed ) {
-            return;
-        }
-        _textElm.maxSize.x = boxSize.x;
-        _textElm.maxSize.y = 0;
-
-        auto textSize = _textElm.fix();
-        _calcedMargin.x = (boxSize.x-textSize.x) * textPosRate.x;
-        _calcedMargin.y = (boxSize.y-textSize.y) * textPosRate.y;
-    }
-
-    override void layout ()
-    {
-        applyText(); // Recreate char polys to re-layout characters.
-        super.layout();
+        _textElm.loadText( _font, _text );
     }
 
     override void draw ( Window win )
     {
         super.draw( win );
 
-        fixText();
-
         auto shader    = win.shaders.alpha3;
         auto saver     = ShaderStateSaver( shader );
-        auto translate = _style.clientLeftTop + _calcedMargin;
+
+        auto size = _style.box.clientSize;
+        auto late = _style.clientLeftTop;
+        late += vec2( size.x*textPosRate.x, size.y*textPosRate.y );
 
         shader.use( false );
-        shader.setVectors( vec3(translate,0) );
+        shader.setVectors( vec3(late,0) );
         shader.color = colorset.fgColor;
         _textElm.draw( shader );
     }

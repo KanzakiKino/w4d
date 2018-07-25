@@ -22,7 +22,7 @@ class TestRootWidget : PanelWidget
 
     void prepare ( string path )
     {
-        auto fontface = new FontFace(new Font("C:/Windows/Fonts/arial.ttf"), vec2i(16,0));
+        auto fontface = new FontFace(new Font("/usr/share/fonts/TTF/Ricty-Regular.ttf"), vec2i(16,16));
 
         auto image = new ImageWidget;
         image.setImage( createBitmap(path) );
@@ -32,7 +32,7 @@ class TestRootWidget : PanelWidget
         {
             auto button = new ButtonWidget;
             button.style.box.size.height = Scalar( 100, ScalarUnit.Pixel );
-            button.setText( i.to!dstring, fontface );
+            button.loadText( i.to!dstring, fontface );
             panel.contents.addChild( button );
         }
 

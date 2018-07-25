@@ -79,7 +79,7 @@ class TabHostWidget : Widget
 
         @property title ( dstring v )
         {
-            _header.setText( v, _fontface );
+            _header.loadText( v, _fontface );
         }
     }
 

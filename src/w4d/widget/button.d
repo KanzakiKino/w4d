@@ -36,7 +36,8 @@ class ButtonWidget : TextWidget
     this ()
     {
         super();
-        textPosRate = vec2(0.5,0.5);
+        textOriginRate = vec2(0.5,0.5);
+        textPosRate    = vec2(0.5,0.5);
 
         parseThemeFromFile!"theme/pressable.yaml"( style );
     }
