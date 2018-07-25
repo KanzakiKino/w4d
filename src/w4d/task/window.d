@@ -1,7 +1,8 @@
 // Written under LGPL-3.0 in the D programming language.
 // Copyright 2018 KanzakiKino.
 module w4d.task.window;
-import w4d.util.tuple,
+import w4d.util.clipping,
+       w4d.util.tuple,
        w4d.app,
        w4d.event,
        w4d.exception;
@@ -19,10 +20,14 @@ class Window : g4d.Window, Task
     protected Shaders _shaders;
     @property shaders () { return _shaders; }
 
+    protected ClipRect _clip;
+    @property clip () { return _clip; }
+
+    protected vec2 _origin;
+    @property origin () { return _origin; }
+
     protected WindowContent _root;
     protected vec2          _cursorPos;
-
-    vec2 basePoint; // Call the clip method to apply basepoint.
 
     this ( WindowContent root, vec2i size, string text, WindowHint hint = WindowHint.None )
     {
@@ -30,14 +35,16 @@ class Window : g4d.Window, Task
         enforce( size.x > 0 && size.y > 0, "Window size is invalid." );
 
         super( size, text, hint );
-        _shaders = new Shaders;
-        _root    = root;
 
-        basePoint = vec2(0,0);
+        _shaders   = new Shaders;
+        _clip  = new ClipRect( shaders.fill3 );
+        _origin    = vec2(0,0);
+        _root      = root;
+        _cursorPos = vec2(0,0);
 
         handler.onWindowResize = delegate ( vec2i sz )
         {
-            clip( vec2i(0,0), sz );
+            recalcMatrix();
             _root.resize( sz );
         };
         handler.onMouseEnter = delegate ( bool entered )
@@ -69,20 +76,23 @@ class Window : g4d.Window, Task
         handler.onWindowResize( size );
     }
 
-    override void clip ( vec2i pt, vec2i sz )
+    protected void recalcMatrix ()
     {
-        super.clip( pt, sz );
+        auto half = vec2(size)/2;
+        auto late = origin - half;
 
-        auto hsz  = vec2(sz)/2;
-        auto late = (vec2(pt)+hsz)*-1 + basePoint;
-
-        auto mat =
-            mat4.orthographic( -hsz.x,hsz.x, -hsz.y,hsz.y, short.min,short.max )*
+        auto proj = mat4.orthographic( -half.x,half.x, -half.y,half.y, short.min,short.max )*
             mat4.translate( late.x, late.y, 0 );
 
-        foreach ( s; _shaders.list ) {
-            s.projection = mat;
+        foreach ( s; shaders.list ) {
+            s.projection = proj;
         }
+    }
+
+    void moveOrigin ( vec2 pos )
+    {
+        _origin = pos;
+        recalcMatrix();
     }
 
     override bool exec ( App app )
