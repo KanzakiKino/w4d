@@ -67,6 +67,7 @@ class ScrollPanelWidget(bool Horizon) : PanelWidget
                 auto last = children[$-1];
                 size = last.style.translate +
                     last.style.box.collisionSize;
+                size -= style.clientLeftTop;
             } else {
                 size = clientSize;
             }
