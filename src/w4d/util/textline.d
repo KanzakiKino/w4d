@@ -63,6 +63,14 @@ class TextLine
     {
         moveCursor( 1, selecting );
     }
+    void home ( bool selecting )
+    {
+        moveCursorTo( 0, selecting );
+    }
+    void end ( bool selecting )
+    {
+        moveCursorTo( _text.length, selecting );
+    }
 
     protected @property leftText ()
     {
@@ -128,9 +136,16 @@ class TextLine
 
         moveCursor( cursorMove );
     }
+    void selectAll ()
+    {
+        moveCursorTo( 0 );
+        moveCursorTo( _text.length, true );
+    }
     void deselect ()
     {
-        _selectionIndex = -1;
+        moveCursor( 0 );
+        // This method doesn't call onCursorMove.
+        // So requstRedraw won't be called.
     }
 
     void setText ( dstring v )

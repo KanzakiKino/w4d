@@ -67,9 +67,18 @@ class LineInputWidget : TextWidget
 
         } else if ( key == Key.Left && pressing ) {
             _line.left( _shift );
-
         } else if ( key == Key.Right && pressing ) {
             _line.right( _shift );
+        } else if ( key == Key.Home && pressing ) {
+            _line.home( _shift );
+        } else if ( key == Key.End && pressing ) {
+            _line.end( _shift );
+
+        } else if ( key == Key.A && pressing && _ctrl ) {
+            _line.selectAll();
+        } else if ( key == Key.D && pressing && _ctrl ) {
+            _line.deselect();
+            requestRedraw();
 
         } else {
             return false;
