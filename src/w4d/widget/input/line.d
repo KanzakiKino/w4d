@@ -6,6 +6,7 @@ import w4d.parser.theme,
        w4d.style.scalar,
        w4d.task.window,
        w4d.util.clipping,
+       w4d.util.textline,
        w4d.widget.text,
        w4d.event,
        w4d.exception;
@@ -20,13 +21,13 @@ alias TextChangeHandler = EventHandler!( void, dstring );
 
 class LineInputWidget : TextWidget
 {
-    protected size_t _cursorIndex;
-    protected float  _cursorPos;
-    protected float  _scrollLength;
+    protected TextLine _line;
+    protected float    _cursorPos;
+    protected float    _scrollLength;
 
     protected RectElement _cursorElm;
 
-    TextChangeHandler onTextChanged;
+    TextChangeHandler onTextChange;
 
     override bool handleMouseButton ( MouseButton btn, bool status, vec2 pos )
     {
@@ -36,7 +37,7 @@ class LineInputWidget : TextWidget
         if ( btn == MouseButton.Left && status ) {
             focus();
             auto r_pos = pos.x - style.clientLeftTop.x + _scrollLength;
-            moveCursor( retrieveIndexFromPos( r_pos ) );
+            _line.moveCursorTo( retrieveIndexFromPos( r_pos ) );
             return true;
         }
         return false;
@@ -44,7 +45,7 @@ class LineInputWidget : TextWidget
 
     override bool handleTextInput ( dchar c )
     {
-        appendTextAtCursor( c.to!dstring );
+        _line.insert( c.to!dstring );
         return true;
     }
 
@@ -52,11 +53,19 @@ class LineInputWidget : TextWidget
     {
         super();
 
-        _cursorIndex  = 0;
+        _line         = new TextLine;
         _cursorPos    = 0;
         _scrollLength = 0;
 
         _cursorElm = new RectElement;
+
+        _line.onTextChange = ( dstring v ) {
+            loadText(v);
+        };
+        _line.onCursorMove = ( long i ) {
+            _cursorPos    = retrievePosFromIndex(i);
+            _scrollLength = retrieveScrollLength();
+        };
 
         style.box.borderWidth = Rect( Scalar(1,ScalarUnit.Pixel) );
         style.box.paddings    = Rect( Scalar(5,ScalarUnit.Pixel) );
@@ -68,22 +77,8 @@ class LineInputWidget : TextWidget
         enforce( _font, "Font is not specified." );
         return _font.size.y;
     }
-    protected @property leftText ()
-    {
-        if ( isFocused ) {
-            return _text[0.._cursorIndex];
-        }
-        return _text;
-    }
-    protected @property rightText ()
-    {
-        if ( isFocused ) {
-            return _text[_cursorIndex..$];
-        }
-        return ""d;
-    }
 
-    protected size_t retrieveIndexFromPos ( float pos /+ relative +/ )
+    protected long retrieveIndexFromPos ( float pos /+ relative +/ )
     {
         foreach ( i,poly; _textElm.polys ) {
             auto border = vec2(poly.pos).x + poly.length/2;
@@ -93,9 +88,9 @@ class LineInputWidget : TextWidget
         }
         return _text.length;
     }
-    protected float retrievePosFromIndex ( size_t i )
+    protected float retrievePosFromIndex ( long i )
     {
-        enforce( i <= _text.length, "Index is too big." );
+        i = i.clamp( 0, _line.text.length );
 
         if ( i == _text.length ) {
             auto poly = _textElm.polys[$-1];
@@ -105,17 +100,12 @@ class LineInputWidget : TextWidget
         }
     }
 
-    protected void appendTextAtCursor ( dstring v )
-    {
-        enforce( isFocused, "Currently not focused." );
-        loadText( leftText ~v~ rightText );
-
-        moveCursor( _cursorIndex + v.length );
-    }
     override void loadText ( dstring v, FontFace font = null )
     {
         super.loadText( v, font );
-        onTextChanged.call( v );
+
+        _line.setText( v );
+        onTextChange.call( v );
 
         if ( font ) {
             style.box.size.height = Scalar( lineHeight, ScalarUnit.Pixel );
@@ -123,22 +113,16 @@ class LineInputWidget : TextWidget
         }
     }
 
-    protected void moveCursor ( size_t i )
-    {
-        _cursorIndex  = min( i, _text.length );
-        _cursorPos    = retrievePosFromIndex( _cursorIndex );
-        _scrollLength = retrieveScrollLength();
-    }
     protected float retrieveScrollLength ()
     {
         auto size = style.box.clientSize;
         if ( _scrollLength >= _cursorPos ) {
-            auto index = max( _cursorIndex.to!int-1, 0 ).to!size_t;
+            auto index = max( _line.cursorIndex-1, 0 );
             return retrievePosFromIndex(index);
 
         } else if ( _scrollLength+size.x <= _cursorPos ) {
-            auto index = min( _cursorIndex+1, _text.length );
-            return retrievePosFromIndex(index);
+            auto index = min( _line.cursorIndex+1, _line.text.length );
+            return retrievePosFromIndex(index) - size.x;
         }
         return _scrollLength;
     }
