@@ -16,6 +16,9 @@ class TextLine
     protected dstring _text;
     const @property text () { return _text; }
 
+    protected bool _locked;
+    const @property isLocked () { return _locked; }
+
     protected long _cursorIndex;
     const @property cursorIndex () { return _cursorIndex; }
 
@@ -30,6 +33,7 @@ class TextLine
     this ()
     {
         _text           = ""d;
+        _locked         = false;
         _cursorIndex    = 0;
         _selectionIndex = 0;
     }
@@ -150,10 +154,19 @@ class TextLine
 
     void setText ( dstring v )
     {
-        if ( _text != v ) {
+        if ( !_locked && _text != v ) {
             deselect();
             _text = v;
             onTextChange.call( v );
         }
+    }
+
+    void lock ()
+    {
+        _locked = true;
+    }
+    void unlock ()
+    {
+        _locked = false;
     }
 }

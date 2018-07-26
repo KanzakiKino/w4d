@@ -162,6 +162,15 @@ class LineInputWidget : TextWidget
         }
     }
 
+    void lock ()
+    {
+        _line.lock();
+    }
+    void unlock ()
+    {
+        _line.unlock();
+    }
+
     protected float retrieveScrollLength ()
     {
         auto size = style.box.clientSize;

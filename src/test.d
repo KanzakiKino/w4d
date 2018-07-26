@@ -25,13 +25,18 @@ class TestRootWidget : PanelWidget
         auto fontface = new FontFace(new Font("/usr/share/fonts/TTF/Ricty-Regular.ttf"), vec2i(16,16));
 
         auto panel = new PanelWidget;
-        panel.setLayout!HorizontalLineupLayout;
+        panel.setLayout!VerticalLineupLayout;
 
-        auto input = new LineInputWidget;
-        input.loadText( "hoge"d, fontface );
-        panel.addChild( input );
+        auto input1 = new LineInputWidget;
+        input1.loadText( "default"d, fontface );
+        panel.addChild( input1 );
 
-        addChild( input );
+        auto input2 = new LineInputWidget;
+        input2.loadText( "locked"d, fontface );
+        input2.lock();
+        panel.addChild( input2 );
+
+        addChild( panel );
     }
 }
 
