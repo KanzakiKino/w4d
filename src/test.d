@@ -24,36 +24,25 @@ class TestRootWidget : PanelWidget
     {
         auto fontface = new FontFace(new Font("/usr/share/fonts/TTF/Ricty-Regular.ttf"), vec2i(16,16));
 
-        auto image = new ImageWidget;
-        image.setImage( createBitmap(path) );
+        auto panel = new PanelWidget;
+        panel.setLayout!HorizontalLineupLayout;
 
-        auto panel = new VerticalScrollPanelWidget;
-        foreach ( i; 0..50 )
-        {
-            auto button = new ButtonWidget;
-            button.style.box.size.height = Scalar( 100, ScalarUnit.Pixel );
-            button.loadText( i.to!dstring, fontface );
-            panel.contents.addChild( button );
-        }
+        auto input = new LineInputWidget;
+        input.loadText( "hoge"d, fontface );
+        panel.addChild( input );
 
-        auto tabhost = new TabHostWidget;
-        tabhost.setFontFace( fontface );
-        tabhost.addTab( 0, "hoge1"d, image );
-        tabhost.addTab( 1, "hoge2"d, panel );
-        addChild( tabhost );
+        addChild( input );
     }
 }
 
 int main ( string[] args )
 {
-    assert( args.length == 2 );
-
     auto app = new App( args );
     auto widget = new TestRootWidget;
 
     auto win = new Window( widget, vec2i(640,480), "TEST", WindowHint.Resizable );
     app.addTask( win );
-    widget.prepare( args[1] );
+    widget.prepare( /*args[1]*/"" );
 
     win.show();
     return app.exec();

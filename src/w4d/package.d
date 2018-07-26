@@ -12,7 +12,8 @@ public
     import w4d.style.rect,
            w4d.style.scalar,
            w4d.style.size;
-    import w4d.widget.base,
+    import w4d.widget.input.line,
+           w4d.widget.base,
            w4d.widget.button,
            w4d.widget.image,
            w4d.widget.panel,
