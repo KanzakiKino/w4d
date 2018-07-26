@@ -34,6 +34,17 @@ class LineInputWidget : TextWidget
 
     TextChangeHandler onTextChange;
 
+    override bool handleMouseMove ( vec2 pos )
+    {
+        if ( super.handleMouseMove( pos ) ) {
+            return true;
+        }
+        if ( isTracked ) {
+            _line.moveCursorTo( retrieveIndexFromAbsPos( pos.x ), true );
+            return true;
+        }
+        return false;
+    }
     override bool handleMouseButton ( MouseButton btn, bool status, vec2 pos )
     {
         if ( super.handleMouseButton( btn, status, pos ) ) {
@@ -41,8 +52,7 @@ class LineInputWidget : TextWidget
         }
         if ( btn == MouseButton.Left && status ) {
             auto selecting = _shift && isFocused;
-            auto r_pos     = pos.x - style.clientLeftTop.x + _scrollLength;
-            _line.moveCursorTo( retrieveIndexFromPos( r_pos ), selecting );
+            _line.moveCursorTo( retrieveIndexFromAbsPos( pos.x ), selecting );
             focus();
             return true;
         }
@@ -125,7 +135,12 @@ class LineInputWidget : TextWidget
         return _font.size.y;
     }
 
-    protected long retrieveIndexFromPos ( float pos /+ relative +/ )
+    protected long retrieveIndexFromAbsPos ( float pos )
+    {
+        auto r_pos = pos - style.clientLeftTop.x + _scrollLength;
+        return retrieveIndexFromPos( r_pos );
+    }
+    protected long retrieveIndexFromPos ( float pos )
     {
         foreach ( i,poly; _textElm.polys ) {
             auto border = vec2(poly.pos).x + poly.length/2;
