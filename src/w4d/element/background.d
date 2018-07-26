@@ -17,7 +17,7 @@ class BackgroundElement : RectElement
 
     void resize ( BoxStyle box )
     {
-        auto sz = box.clientSize;
+        auto sz = box.borderInsideSize;
         super.resize( sz );
         _pos = vec3(sz/2,0) + vec3(box.borderInsideLeftTop,0);
     }
