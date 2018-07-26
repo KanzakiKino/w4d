@@ -202,8 +202,9 @@ class LineInputWidget : TextWidget
     {
         auto late = vec2(-_scrollLength,0);
 
-        w.clip.pushRect( style.box.borderInsideLeftTop,
-                style.box.borderInsideSize );
+        auto pos = style.box.
+            borderInsideLeftTop + style.translate;
+        w.clip.pushRect( pos, style.box.borderInsideSize );
         w.moveOrigin( w.origin + late );
 
         super.drawText( w );
