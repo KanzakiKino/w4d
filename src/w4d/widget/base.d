@@ -249,12 +249,9 @@ class Widget : WindowContent
     {
         _needRedraw = true;
     }
-    override void draw ( Window win )
-    {
-        if ( needLayout ) {
-            layout();
-        }
 
+    protected void drawBox ( Window win )
+    {
         auto shader = win.shaders.fill3;
         auto saver  = ShaderStateSaver( shader );
 
@@ -263,9 +260,18 @@ class Widget : WindowContent
 
         _box.setColor( colorset );
         _box.draw( shader );
-
+    }
+    protected void drawChildren ( Window win )
+    {
         children.each!(x => x.draw(win));
-
+    }
+    override void draw ( Window win )
+    {
+        if ( needLayout ) {
+            layout();
+        }
+        drawBox( win );
+        drawChildren( win );
         _needRedraw = false;
     }
 }

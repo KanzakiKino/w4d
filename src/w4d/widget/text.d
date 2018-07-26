@@ -39,14 +39,13 @@ class TextWidget : Widget
         }
         _text = v;
         _textElm.loadText( _font, _text );
+        requestRedraw();
     }
 
-    override void draw ( Window win )
+    protected void drawText ( Window win )
     {
-        super.draw( win );
-
-        auto shader    = win.shaders.alpha3;
-        auto saver     = ShaderStateSaver( shader );
+        auto shader = win.shaders.alpha3;
+        auto saver  = ShaderStateSaver( shader );
 
         auto size = _style.box.clientSize;
         auto late = _style.clientLeftTop;
@@ -56,5 +55,10 @@ class TextWidget : Widget
         shader.setVectors( vec3(late,0) );
         shader.color = colorset.fgColor;
         _textElm.draw( shader );
+    }
+    override void draw ( Window win )
+    {
+        super.draw( win );
+        drawText( win );
     }
 }
