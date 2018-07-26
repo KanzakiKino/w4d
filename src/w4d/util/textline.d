@@ -52,6 +52,14 @@ class TextLine
     {
         moveCursorTo( _cursorIndex+i, selecting );
     }
+    void left ()
+    {
+        moveCursor( -1 );
+    }
+    void right ()
+    {
+        moveCursor( 1 );
+    }
 
     protected @property leftText ()
     {

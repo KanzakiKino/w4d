@@ -42,6 +42,29 @@ class LineInputWidget : TextWidget
         }
         return false;
     }
+    override bool handleKey ( Key key, KeyState status )
+    {
+        if ( super.handleKey( key, status ) ) return true;
+
+        auto pressing = ( status != KeyState.Release );
+
+        if ( key == Key.Backspace && pressing ) {
+            _line.backspace();
+
+        } else if ( key == Key.Delete && pressing ) {
+            _line.del();
+
+        } else if ( key == Key.Left && pressing ) {
+            _line.left();
+
+        } else if ( key == Key.Right && pressing ) {
+            _line.right();
+
+        } else {
+            return false;
+        }
+        return true;
+    }
 
     override bool handleTextInput ( dchar c )
     {
@@ -65,6 +88,7 @@ class LineInputWidget : TextWidget
         _line.onCursorMove = ( long i ) {
             _cursorPos    = retrievePosFromIndex(i);
             _scrollLength = retrieveScrollLength();
+            requestRedraw();
         };
 
         style.box.borderWidth = Rect( Scalar(1,ScalarUnit.Pixel) );
@@ -92,7 +116,9 @@ class LineInputWidget : TextWidget
     {
         i = i.clamp( 0, _line.text.length );
 
-        if ( i == _text.length ) {
+        if ( i == 0 ) {
+            return 0;
+        } else if ( i == _text.length ) {
             auto poly = _textElm.polys[$-1];
             return vec2(poly.pos).x + poly.length;
         } else {

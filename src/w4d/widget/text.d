@@ -38,12 +38,17 @@ class TextWidget : Widget
             _font = f;
         }
         _text = v;
-        _textElm.loadText( _font, _text );
+
+        if ( _text.length ) {
+            _textElm.loadText( _font, _text );
+        }
         requestRedraw();
     }
 
     protected void drawText ( Window win )
     {
+        if ( !_text.length ) return;
+
         auto shader = win.shaders.alpha3;
         auto saver  = ShaderStateSaver( shader );
 
