@@ -11,7 +11,7 @@ alias ExceptionHandler = EventHandler!( bool, Exception );
 
 class App
 {
-    enum DefaultSleepDuration = 33;
+    enum DefaultSleepDuration = 10;
 
     protected Task[]   _tasks;
     protected string[] _args;
