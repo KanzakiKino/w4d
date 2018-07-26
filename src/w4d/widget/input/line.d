@@ -102,6 +102,15 @@ class LineInputWidget : TextWidget
         return true;
     }
 
+    override void handleFocused ( bool status )
+    {
+        if ( !status ) {
+            _line.deselect();
+            requestRedraw();
+        }
+        super.handleFocused( status );
+    }
+
     this ()
     {
         super();
