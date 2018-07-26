@@ -15,7 +15,8 @@ import g4d.element.shape.rect,
        g4d.math.vector,
        g4d.shader.base;
 import std.algorithm,
-       std.conv;
+       std.conv,
+       std.math;
 
 alias TextChangeHandler = EventHandler!( void, dstring );
 
@@ -24,8 +25,12 @@ class LineInputWidget : TextWidget
     protected TextLine _line;
     protected float    _cursorPos;
     protected float    _scrollLength;
+    protected float    _selectionLength;
 
     protected RectElement _cursorElm;
+    protected RectElement _selectionElm;
+
+    protected bool _shift, _ctrl;
 
     TextChangeHandler onTextChange;
 
@@ -35,9 +40,10 @@ class LineInputWidget : TextWidget
             return true;
         }
         if ( btn == MouseButton.Left && status ) {
+            auto selecting = _shift && isFocused;
+            auto r_pos     = pos.x - style.clientLeftTop.x + _scrollLength;
+            _line.moveCursorTo( retrieveIndexFromPos( r_pos ), selecting );
             focus();
-            auto r_pos = pos.x - style.clientLeftTop.x + _scrollLength;
-            _line.moveCursorTo( retrieveIndexFromPos( r_pos ) );
             return true;
         }
         return false;
@@ -48,17 +54,22 @@ class LineInputWidget : TextWidget
 
         auto pressing = ( status != KeyState.Release );
 
-        if ( key == Key.Backspace && pressing ) {
+        if ( key == Key.LeftShift ) {
+            _shift = pressing;
+        } else if ( key == Key.LeftControl ) {
+            _ctrl = pressing;
+
+        } else if ( key == Key.Backspace && pressing ) {
             _line.backspace();
 
         } else if ( key == Key.Delete && pressing ) {
             _line.del();
 
         } else if ( key == Key.Left && pressing ) {
-            _line.left();
+            _line.left( _shift );
 
         } else if ( key == Key.Right && pressing ) {
-            _line.right();
+            _line.right( _shift );
 
         } else {
             return false;
@@ -76,11 +87,13 @@ class LineInputWidget : TextWidget
     {
         super();
 
-        _line         = new TextLine;
-        _cursorPos    = 0;
-        _scrollLength = 0;
+        _line            = new TextLine;
+        _cursorPos       = 0;
+        _scrollLength    = 0;
+        _selectionLength = 0;
 
-        _cursorElm = new RectElement;
+        _cursorElm    = new RectElement;
+        _selectionElm = new RectElement;
 
         _line.onTextChange = ( dstring v ) {
             loadText(v);
@@ -88,6 +101,7 @@ class LineInputWidget : TextWidget
         _line.onCursorMove = ( long i ) {
             _cursorPos    = retrievePosFromIndex(i);
             _scrollLength = retrieveScrollLength();
+            updateSelectionRect();
             requestRedraw();
         };
 
@@ -152,6 +166,19 @@ class LineInputWidget : TextWidget
         }
         return _scrollLength;
     }
+    protected void updateSelectionRect ()
+    {
+        if ( !_line.isSelecting ) return;
+
+        auto selectionPos = retrievePosFromIndex( _line.selectionIndex );
+        auto newLength    = _cursorPos - selectionPos;
+        if ( newLength == _selectionLength ) return;
+
+        _selectionLength = newLength;
+
+        auto size = vec2( _selectionLength.abs, lineHeight );
+        _selectionElm.resize( size );
+    }
 
     protected override void drawText ( Window w )
     {
@@ -165,6 +192,10 @@ class LineInputWidget : TextWidget
         if ( isFocused ) {
             drawCursor( w );
         }
+        if ( _line.isSelecting ) {
+            drawSelectionRect( w );
+        }
+
 
         w.clip.popRect();
         w.moveOrigin( w.origin - late );
@@ -180,5 +211,18 @@ class LineInputWidget : TextWidget
         shader.setVectors( vec3(late,0) );
         shader.color = colorset.fgColor;
         _cursorElm.draw( shader );
+    }
+    protected void drawSelectionRect ( Window w )
+    {
+        auto shader = w.shaders.fill3;
+        auto saver  = ShaderStateSaver( shader );
+        auto late   = vec2(_cursorPos, lineHeight/2);
+        late       += style.clientLeftTop;
+        late.x     -= _selectionLength/2;
+
+        shader.use( false );
+        shader.setVectors( vec3(late,0) );
+        shader.color = colorset.borderColor;
+        _selectionElm.draw( shader );
     }
 }

@@ -43,6 +43,9 @@ class TextLine
         auto temp = _cursorIndex;
         _cursorIndex = i.clamp( 0, _text.length );
 
+        if ( !selecting ) {
+            _selectionIndex = -1;
+        }
         if ( temp != _cursorIndex ) {
             onCursorMove.call( _cursorIndex );
         }
@@ -52,22 +55,30 @@ class TextLine
     {
         moveCursorTo( _cursorIndex+i, selecting );
     }
-    void left ()
+    void left ( bool selecting )
     {
-        moveCursor( -1 );
+        moveCursor( -1, selecting );
     }
-    void right ()
+    void right ( bool selecting )
     {
-        moveCursor( 1 );
+        moveCursor( 1, selecting );
     }
 
     protected @property leftText ()
     {
-        return _text[0 .. _cursorIndex.to!size_t];
+        auto index = _cursorIndex;
+        if ( isSelecting ) {
+            index = min( _cursorIndex, _selectionIndex );
+        }
+        return _text[0 .. index.to!size_t];
     }
     protected @property rightText ()
     {
-        return _text[_cursorIndex.to!size_t .. $];
+        auto index = _cursorIndex;
+        if ( isSelecting ) {
+            index = max( _cursorIndex, _selectionIndex );
+        }
+        return _text[index.to!size_t .. $];
     }
 
     void insert ( dstring v )
@@ -77,6 +88,10 @@ class TextLine
     }
     void backspace ()
     {
+        if ( isSelecting ) {
+            removeSelecting();
+            return;
+        }
         auto left  = leftText;
         auto right = rightText;
 
@@ -88,6 +103,10 @@ class TextLine
     }
     void del ()
     {
+        if ( isSelecting ) {
+            removeSelecting();
+            return;
+        }
         auto left  = leftText;
         auto right = rightText;
 
@@ -97,6 +116,23 @@ class TextLine
         }
     }
 
+    void removeSelecting ()
+    {
+        if ( !isSelecting ) return;
+
+        long cursorMove = 0;
+        if ( _cursorIndex > _selectionIndex ) {
+            cursorMove = -(_cursorIndex-_selectionIndex);
+        }
+        setText( leftText ~ rightText );
+
+        moveCursor( cursorMove );
+    }
+    void deselect ()
+    {
+        _selectionIndex = -1;
+    }
+
     void setText ( dstring v )
     {
         if ( _text != v ) {
@@ -104,10 +140,5 @@ class TextLine
             _text = v;
             onTextChange.call( v );
         }
-    }
-
-    void deselect ()
-    {
-        _selectionIndex = -1;
     }
 }
