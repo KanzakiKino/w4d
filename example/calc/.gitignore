@@ -1,3 +1,5 @@
-/bin/
+/bin/*
 /.dub/
 /dub.selections.json
+
+!/bin/noto.ttf
