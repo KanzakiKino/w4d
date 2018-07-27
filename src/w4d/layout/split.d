@@ -28,6 +28,39 @@ class SplitLayout (bool Horizon) : LineupLayout!Horizon
         _usedLength += getLength(child.style.box.collisionSize);
     }
 }
-
 alias HorizontalSplitLayout = SplitLayout!true;
 alias VerticalSplitLayout   = SplitLayout!false;
+
+class MonospacedSplitLayout (bool Horizon) : LineupLayout!Horizon
+{
+    protected Layout[] _children;
+
+    this ( WidgetStyle style )
+    {
+        super( style );
+    }
+
+    override void push ( Layout child )
+    {
+        enforce( child, "Null is not a child." );
+        _children ~= child;
+    }
+    override void fix ()
+    {
+        if ( !_children.length ) return;
+
+        auto size           = _style.box.clientSize;
+        getLengthRef(size) /= _children.length;
+
+        auto pos = style.clientLeftTop;
+
+        foreach ( l; _children ) {
+            l.move( pos, size );
+            getLengthRef(pos) += getLength(size);
+        }
+        _children = [];
+        super.fix();
+    }
+}
+alias HorizontalMonospacedSplitLayout = MonospacedSplitLayout!true;
+alias VerticalMonospacedSplitLayout   = MonospacedSplitLayout!false;
