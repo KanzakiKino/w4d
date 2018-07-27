@@ -1,0 +1,17 @@
+{
+    "name": "calc",
+    "authors": ["KanzakiKino"],
+    "description": "An example program of w4d.",
+    "copyright": "Copyright © 2018, KanzakiKino",
+    "license": "LGPL-3.0",
+
+    "targetPath": "./bin",
+    "targetType": "executable",
+    "targetName": "calc",
+
+    "sourcePaths": ["./src"],
+
+    "dependencies": {
+        "w4d": {"path":"../../"}
+    }
+}
