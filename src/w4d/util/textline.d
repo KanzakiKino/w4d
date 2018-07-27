@@ -95,11 +95,15 @@ class TextLine
 
     void insert ( dstring v )
     {
+        if ( isLocked ) return;
+
         setText( leftText ~v~ rightText );
         moveCursor( v.length );
     }
     void backspace ()
     {
+        if ( isLocked ) return;
+
         if ( isSelecting ) {
             removeSelecting();
             return;
@@ -115,6 +119,8 @@ class TextLine
     }
     void del ()
     {
+        if ( isLocked ) return;
+
         if ( isSelecting ) {
             removeSelecting();
             return;
@@ -130,7 +136,7 @@ class TextLine
 
     void removeSelecting ()
     {
-        if ( !isSelecting ) return;
+        if ( !isSelecting || isLocked ) return;
 
         long cursorMove = 0;
         if ( _cursorIndex > _selectionIndex ) {
@@ -154,7 +160,7 @@ class TextLine
 
     void setText ( dstring v )
     {
-        if ( !_locked && _text != v ) {
+        if ( _text != v ) {
             deselect();
             _text = v;
             onTextChange.call( v );

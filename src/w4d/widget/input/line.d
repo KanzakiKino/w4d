@@ -98,6 +98,8 @@ class LineInputWidget : TextWidget
 
     override bool handleTextInput ( dchar c )
     {
+        if ( super.handleTextInput(c) ) return true;
+
         _line.insert( c.to!dstring );
         return true;
     }
@@ -238,7 +240,6 @@ class LineInputWidget : TextWidget
         if ( _line.isSelecting ) {
             drawSelectionRect( w );
         }
-
 
         w.clip.popRect();
         w.moveOrigin( w.origin - late );
