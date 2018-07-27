@@ -7,7 +7,7 @@ int main( string[] args )
 {
     auto app    = new App( args );
     auto widget = new RootWidget;
-    auto window = new Window( widget, vec2i(300,242), "calc" );
+    auto window = new Window( widget, vec2i(300,350), "calc" );
 
     app.addTask( window );
     widget.prepare();

@@ -41,7 +41,7 @@ class RootWidget : PanelWidget
     this ()
     {
         super();
-        setLayout!VerticalLineupLayout;
+        setLayout!VerticalSplitLayout;
     }
 
     void prepare ()
@@ -53,17 +53,13 @@ class RootWidget : PanelWidget
         display.loadText( ""d, new FontFace( font, vec2i(32,32) ));
         addChild( display );
 
-        PanelWidget panel      = null;
-        auto        buttonface = new FontFace( font, vec2i(24,24) );
+        PanelWidget panel = new PanelWidget;
+        panel.setLayout!TableLayout( 4, 4 );
+        addChild( panel );
+
+        auto buttonface = new FontFace( font, vec2i(24,24) );
         foreach ( i,b; Buttons ) {
-            if ( i%4 == 0 ) {
-                panel = new PanelWidget;
-                panel.setLayout!HorizontalLineupLayout;
-                panel.style.box.size.height = Scalar(50,ScalarUnit.Pixel);
-                addChild( panel );
-            }
             auto button = new ButtonWidget;
-            button.style.box.size.width = Scalar(25,ScalarUnit.Percent);
             button.loadText( b, buttonface );
             button.onButtonPressed = createEvent( b );
             panel.addChild( button );
