@@ -4,6 +4,7 @@ module w4d.widget.tabhost;
 import w4d.layout.lineup,
        w4d.layout.split,
        w4d.parser.theme,
+       w4d.style.rect,
        w4d.style.scalar,
        w4d.style.widget,
        w4d.widget.base,
@@ -45,18 +46,8 @@ class TabHostWidget : Widget
         this ()
         {
             super();
-            setLayout!( HorizontalLineupLayout );
+            setLayout!( HorizontalMonospacedSplitLayout );
             style.box.size.height = Scalar(40,ScalarUnit.Pixel);
-        }
-        override void layout ()
-        {
-            if ( children.length ) {
-                auto width = 100f/children.length;
-                foreach ( c; children ) {
-                    c.style.box.size.width = Scalar(width,ScalarUnit.Percent);
-                }
-            }
-            super.layout();
         }
     }
 
