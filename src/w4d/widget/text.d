@@ -37,8 +37,9 @@ class TextWidget : Widget
         if ( f ) {
             _font = f;
         }
-        _text = v;
+        enforce( _font, "FontFace is not specified." );
 
+        _text = v;
         if ( _text.length ) {
             _textElm.loadText( _font, _text );
         }
