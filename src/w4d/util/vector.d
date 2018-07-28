@@ -12,8 +12,16 @@ ref lengthRef ( bool Horizon, V ) ( ref V vec )
         return vec.y;
     }
 }
-
 auto length ( bool Horizon, V ) ( V vec )
 {
     return vec.lengthRef!Horizon;
+}
+
+ref weightRef ( bool Horizon, V ) ( ref V vec )
+{
+    return vec.lengthRef!(!Horizon);
+}
+auto weight ( bool Horizon, V ) ( V vec )
+{
+    return vec.weightRef!Horizon;
 }
