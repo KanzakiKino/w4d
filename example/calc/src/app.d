@@ -6,11 +6,11 @@ import w4d;
 int main( string[] args )
 {
     auto app    = new App( args );
-    auto widget = new RootWidget;
-    auto window = new Window( widget, vec2i(300,350), "calc" );
 
+    auto window = new Window( vec2i(300,350), "calc" );
+    window.setContent( new RootWidget );
     app.addTask( window );
-    widget.prepare();
+
     window.show();
 
     return app.exec();

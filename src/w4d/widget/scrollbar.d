@@ -89,7 +89,7 @@ class ScrollBarWidget (bool Horizon) : Widget
         _barLength = 1f;
         _value     = 0f;
 
-        _bar       = null;
+        _bar       = new RectElement;
         _translate = vec2(0,0);
 
         parseThemeFromFile!"theme/scrollbar.yaml"( style );
@@ -141,9 +141,6 @@ class ScrollBarWidget (bool Horizon) : Widget
 
     override void layout ()
     {
-        if ( !_bar ) {
-            _bar = new RectElement;
-        }
         if ( needDrawBar ) {
             auto size    = style.box.clientSize;
             auto barsize = size;
@@ -154,7 +151,6 @@ class ScrollBarWidget (bool Horizon) : Widget
             _translate.lengthRef!Horizon +=
                 size.length!Horizon*_value;
         }
-
         super.layout();
     }
 

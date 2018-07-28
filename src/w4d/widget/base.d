@@ -151,6 +151,9 @@ class Widget : WindowContent
         _status = WidgetState.None;
         _style  = new WidgetStyle;
 
+        _context = null;
+        _box     = new BoxElement;
+
         setLayout!FillLayout();
         parseThemeFromFile!"theme/normal.yaml"( style );
     }
@@ -232,9 +235,6 @@ class Widget : WindowContent
 
         children.each!q{a.layout()};
 
-        if ( !_box ) {
-            _box = new BoxElement;
-        }
         _box.resize( _style.box );
 
         _needLayout = false;

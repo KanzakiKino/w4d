@@ -42,10 +42,7 @@ class RootWidget : PanelWidget
     {
         super();
         setLayout!VerticalSplitLayout;
-    }
 
-    void prepare ()
-    {
         auto dirpath = thisExePath.dirName;
         auto font    = new Font( dirpath~"/noto.ttf" );
 

@@ -19,7 +19,7 @@ class ImageWidget : Widget
 
     this ()
     {
-        _imageElm = null;
+        _imageElm = new RectElement;
         _texture  = null;
         _uv       = vec2(0,0);
     }
@@ -42,9 +42,6 @@ class ImageWidget : Widget
 
     override void layout ()
     {
-        if ( !_imageElm ) {
-            _imageElm = new RectElement;
-        }
         if ( _texture ) {
             auto sz = style.box.clientSize;
             _imageElm.resize( sz, _uv );

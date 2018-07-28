@@ -29,9 +29,8 @@ class Window : g4d.Window, Task
     protected WindowContent _root;
     protected vec2          _cursorPos;
 
-    this ( WindowContent root, vec2i size, string text, WindowHint hint = WindowHint.None )
+    this ( vec2i size, string text, WindowHint hint = WindowHint.None )
     {
-        enforce(                     root, "Main content is NULL." );
         enforce( size.x > 0 && size.y > 0, "Window size is invalid." );
 
         super( size, text, hint );
@@ -39,7 +38,7 @@ class Window : g4d.Window, Task
         _shaders   = new Shaders;
         _clip  = new ClipRect( shaders.fill3 );
         _origin    = vec2(0,0);
-        _root      = root;
+        _root      = null;
         _cursorPos = vec2(0,0);
 
         handler.onWindowResize = delegate ( vec2i sz )
@@ -72,8 +71,12 @@ class Window : g4d.Window, Task
         {
             _root.handleTextInput( c );
         };
+    }
 
-        handler.onWindowResize( size );
+    void setContent ( WindowContent content )
+    {
+        enforce( !_root, "Content is already setted." );
+        _root = content;
     }
 
     protected void recalcMatrix ()
@@ -97,6 +100,9 @@ class Window : g4d.Window, Task
 
     override bool exec ( App app )
     {
+        enforce( _root, "Content is null." );
+        handler.onWindowResize( size );
+
         if ( alive ) {
             if ( _root.needRedraw ) {
                 resetFrame();
