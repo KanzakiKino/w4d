@@ -28,6 +28,18 @@ class TestRootWidget : PanelWidget
         page1.addChild( input2 );
 
         auto page2 = new PanelWidget;
+        page2.setLayout!VerticalLineupLayout;
+
+        auto slider1 = new HorizontalSliderWidget;
+        page2.addChild( slider1 );
+
+        auto text1 = new TextWidget;
+        text1.loadText( "none"d, fontface );
+        text1.colorset.fgColor = vec4(1,1,1,1);
+        slider1.onValueChange = delegate ( float v ) {
+            text1.loadText( v.to!dstring );
+        };
+        page2.addChild( text1 );
 
         auto tab = new TabHostWidget;
         tab.setFontFace( fontface );

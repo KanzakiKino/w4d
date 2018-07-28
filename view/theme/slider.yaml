@@ -1,0 +1,9 @@
+# w4d theme for slider widgets
+# Written under LGPL-3.0 in YAML.
+# Copyright 2018 KanzakiKino
+
+default:
+    foreground: [0.4]
+    background: [0,0,0,0]
+    border    : [0,0,0,0]
+
