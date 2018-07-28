@@ -5,6 +5,7 @@ import w4d.parser.theme,
        w4d.style.scalar,
        w4d.task.window,
        w4d.widget.base,
+       w4d.util.vector,
        w4d.event;
 import g4d.element.shape.rect,
        g4d.math.vector,
@@ -16,19 +17,6 @@ alias ScrollHandler = EventHandler!( void, float );
 class ScrollBarWidget (bool Horizon) : Widget
 {
     enum WheelMagnification = 0.1;
-
-    static ref getLengthRef ( ref vec2 v )
-    {
-        static if ( Horizon ) {
-            return v.x;
-        } else {
-            return v.y;
-        }
-    }
-    static auto getLength ( vec2 v )
-    {
-        return getLengthRef( v );
-    }
 
     ScrollHandler onScroll;
 
@@ -47,7 +35,8 @@ class ScrollBarWidget (bool Horizon) : Widget
 
     protected float getValueAt ( vec2 pos )
     {
-        return getLength(pos)/getLength(style.box.clientSize);
+        return pos.length!Horizon /
+            style.box.clientSize.length!Horizon;
     }
 
     override bool handleMouseMove ( vec2 pos )
@@ -83,7 +72,7 @@ class ScrollBarWidget (bool Horizon) : Widget
     {
         if ( super.handleMouseScroll( amount, pos ) ) return true;
 
-        auto add = -getLength(amount) * _barLength * WheelMagnification;
+        auto add = -amount.length!Horizon * _barLength * WheelMagnification;
         setValue( _value + add );
         return true;
     }
@@ -156,13 +145,14 @@ class ScrollBarWidget (bool Horizon) : Widget
             _bar = new RectElement;
         }
         if ( needDrawBar ) {
-            auto size           = style.box.clientSize;
-            auto barsize        = size;
-            getLengthRef(barsize) *= _barLength;
+            auto size    = style.box.clientSize;
+            auto barsize = size;
+            barsize.lengthRef!Horizon *= _barLength;
             _bar.resize( barsize );
 
             _translate = barsize/2;
-            getLengthRef(_translate) += getLength(size)*_value;
+            _translate.lengthRef!Horizon +=
+                size.length!Horizon*_value;
         }
 
         super.layout();

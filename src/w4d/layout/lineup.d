@@ -4,7 +4,8 @@ module w4d.layout.lineup;
 import w4d.layout.base,
        w4d.layout.exception,
        w4d.layout.fill,
-       w4d.style.widget;
+       w4d.style.widget,
+       w4d.util.vector;
 import g4d.math.vector;
 
 class LineupLayout (bool Horizon) : FillLayout
@@ -18,26 +19,13 @@ class LineupLayout (bool Horizon) : FillLayout
         _usedLength = 0;
     }
 
-    protected ref float getLengthRef ( ref vec2 v )
-    {
-        static if (Horizon) {
-            return v.x;
-        } else {
-            return v.y;
-        }
-    }
-    protected float getLength ( vec2 v )
-    {
-        return getLengthRef(v);
-    }
-
     override void push ( Layout l )
     {
         auto pos = _style.clientLeftTop;
-        getLengthRef(pos) += _usedLength;
+        pos.lengthRef!Horizon += _usedLength;
 
         l.move( pos, _style.box.clientSize );
-        _usedLength += getLength(l.style.box.collisionSize);
+        _usedLength += l.style.box.collisionSize.length!Horizon;
     }
     override void fix ()
     {

@@ -4,7 +4,8 @@ module w4d.layout.split;
 import w4d.layout.base,
        w4d.layout.exception,
        w4d.layout.lineup,
-       w4d.style.widget;
+       w4d.style.widget,
+       w4d.util.vector;
 import g4d.math.vector;
 
 class SplitLayout (bool Horizon) : LineupLayout!Horizon
@@ -17,15 +18,15 @@ class SplitLayout (bool Horizon) : LineupLayout!Horizon
     override void push ( Layout child )
     {
         auto pos = _style.clientLeftTop;
-        getLengthRef(pos) += _usedLength;
+        pos.lengthRef!Horizon += _usedLength;
 
         auto sz = _style.box.clientSize;
-        getLengthRef(sz) -= _usedLength;
+        sz.lengthRef!Horizon -= _usedLength;
 
-        enforce( getLength(sz) > 0, "Cannot place too big child." );
+        enforce( sz.length!Horizon > 0, "Cannot place too big child." );
 
         child.move( pos, sz );
-        _usedLength += getLength(child.style.box.collisionSize);
+        _usedLength += child.style.box.collisionSize.length!Horizon;
     }
 }
 alias HorizontalSplitLayout = SplitLayout!true;
@@ -49,14 +50,14 @@ class MonospacedSplitLayout (bool Horizon) : LineupLayout!Horizon
     {
         if ( !_children.length ) return;
 
-        auto size           = _style.box.clientSize;
-        getLengthRef(size) /= _children.length;
+        auto size               = _style.box.clientSize;
+        size.lengthRef!Horizon /= _children.length;
 
         auto pos = style.clientLeftTop;
 
         foreach ( l; _children ) {
             l.move( pos, size );
-            getLengthRef(pos) += getLength(size);
+            pos.lengthRef!Horizon += size.length!Horizon;
         }
         _children = [];
         super.fix();
