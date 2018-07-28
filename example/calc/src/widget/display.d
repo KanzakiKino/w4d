@@ -10,6 +10,9 @@ class DisplayWidget : LineInputWidget, ResultDisplay
     {
         super();
         lock();
+
+        textOriginRate = vec2(1f,0.5f);
+        textPosRate    = vec2(1f,0.5f);
     }
 
     override void pushText ( dstring v )
