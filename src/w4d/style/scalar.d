@@ -10,6 +10,19 @@ unittest
     assert( sc.calc( ScalarUnitBase(100f,10f) ) == 5f );
 }
 
+@property pixel ( float n )
+{
+    return Scalar( n, ScalarUnit.Pixel );
+}
+@property inch ( float n )
+{
+    return Scalar( n, ScalarUnit.Inch );
+}
+@property percent ( float n )
+{
+    return Scalar( n, ScalarUnit.Percent );
+}
+
 enum ScalarUnit
 {
     None,
