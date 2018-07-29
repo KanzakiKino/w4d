@@ -48,9 +48,12 @@ class TestRootWidget : PanelWidget
         line1.addChild( slider1 );
 
         auto checkbox1 = new CheckBoxWidget;
-        checkbox1.loadText( "hogehoge"d, fontface );
-        checkbox1.colorset.fgColor = vec4(1,1,1,1);
+        checkbox1.loadText( "lock the slider"d, fontface );
         checkbox1.adjustSize();
+        checkbox1.onCheck = delegate ( bool b ) {
+            if ( b ) slider1.lock();
+            else slider1.unlock();
+        };
         page2.addChild( checkbox1 );
 
         auto tab = new TabHostWidget;

@@ -5,6 +5,7 @@ import w4d.parser.theme,
        w4d.style.rect,
        w4d.style.scalar,
        w4d.task.window,
+       w4d.widget.input.templates,
        w4d.widget.base,
        w4d.util.vector,
        w4d.event,
@@ -20,6 +21,8 @@ alias ValueChangeHandler = EventHandler!( void, float );
 
 class SliderWidget(bool Horizon) : Widget
 {
+    mixin Lockable;
+
     protected float _min, _max;
     protected float _value;
     protected float _unit;
@@ -44,7 +47,7 @@ class SliderWidget(bool Horizon) : Widget
     {
         if ( super.handleMouseMove( pos ) ) return true;
 
-        if ( isTracked ) {
+        if ( isTracked && !isLocked ) {
             setValue( retrieveValueFromAbsPos( pos ) );
             return true;
         }
@@ -54,7 +57,7 @@ class SliderWidget(bool Horizon) : Widget
     {
         if ( super.handleMouseButton( btn, status, pos ) ) return true;
 
-        if ( btn == MouseButton.Left && status ) {
+        if ( btn == MouseButton.Left && status && !isLocked ) {
             setValue( retrieveValueFromAbsPos( pos ) );
             focus();
             return true;
@@ -64,6 +67,7 @@ class SliderWidget(bool Horizon) : Widget
     override bool handleMouseScroll ( vec2 amount, vec2 pos )
     {
         if ( super.handleMouseScroll( amount, pos ) ) return true;
+        if ( isLocked ) return false;
 
         auto a = (amount.x != 0)? amount.x: amount.y;
         setValue( _value - a*_unit*magnification );
@@ -72,7 +76,7 @@ class SliderWidget(bool Horizon) : Widget
     override bool handleKey ( Key key, KeyState status )
     {
         if ( super.handleKey( key, status ) ) return true;
-        if ( !isFocused ) return false;
+        if ( !isFocused || isLocked ) return false;
 
         auto pressing = status != KeyState.Release;
         if ( key == Key.LeftShift ) {

@@ -6,6 +6,7 @@ import w4d.parser.theme,
        w4d.style.scalar,
        w4d.style.widget,
        w4d.task.window,
+       w4d.widget.input.templates,
        w4d.widget.text,
        w4d.event;
 import g4d.element.shape.border,
@@ -19,6 +20,8 @@ alias CheckHandler = EventHandler!( void, bool );
 
 class CheckBoxWidget : TextWidget
 {
+    mixin Lockable;
+
     protected bool _checked;
     const @property checked () { return _checked; }
 
@@ -31,8 +34,9 @@ class CheckBoxWidget : TextWidget
     {
         if ( super.handleMouseButton( btn, status, pos ) ) return true;
 
-        if ( !style.isPointInside( pos ) ) return false;
-
+        if ( isLocked || !style.isPointInside( pos ) ) {
+            return false;
+        }
         if ( btn == MouseButton.Left && !status ) {
             setChecked( !_checked );
             return true;
