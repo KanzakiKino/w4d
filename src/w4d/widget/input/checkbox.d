@@ -75,7 +75,7 @@ class CheckBoxWidget : TextWidget
     {
         super.loadText( v, font );
         if ( font ) {
-            _boxBorder.resize( font.size.y/2, 1f );
+            _boxBorder.resize( font.size.y/2, 1.5f );
             _checkMark.resize( font.size.y/3 );
         }
     }
