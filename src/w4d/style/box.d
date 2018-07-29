@@ -10,9 +10,9 @@ import g4d.math.vector;
 unittest
 {
     auto box = BoxStyle();
-    box.size        = Size(Scalar(100,ScalarUnit.Percent), Scalar(200,ScalarUnit.Pixel));
-    box.borderWidth = Rect(Scalar(5,ScalarUnit.Percent));
-    box.margins     = Rect(Scalar(5,ScalarUnit.Percent));
+    box.size        = Size(100.percent, 200.pixel);
+    box.borderWidth = Rect(5.percent);
+    box.margins     = Rect(5.percent);
     box.calc( vec2(300,300) );
 
     assert( box.isRelative );

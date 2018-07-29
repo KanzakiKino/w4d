@@ -6,7 +6,7 @@ import std.math;
 
 unittest
 {
-    auto sc = Scalar( 50f, ScalarUnit.Percent ); // 50%
+    auto sc = 50.percent; // 50%
     assert( sc.calc( ScalarUnitBase(100f,10f) ) == 5f );
 }
 

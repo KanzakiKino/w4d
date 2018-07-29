@@ -135,8 +135,8 @@ class LineInputWidget : TextWidget
             requestRedraw();
         };
 
-        style.box.borderWidth = Rect( Scalar(1,ScalarUnit.Pixel) );
-        style.box.paddings    = Rect( Scalar(5,ScalarUnit.Pixel) );
+        style.box.borderWidth = Rect( 1.pixel );
+        style.box.paddings    = Rect( 5.pixel );
         parseThemeFromFile!"theme/focusable.yaml"( style );
     }
 
@@ -183,7 +183,7 @@ class LineInputWidget : TextWidget
         onTextChange.call( v );
 
         if ( font ) {
-            style.box.size.height = Scalar( lineHeight, ScalarUnit.Pixel );
+            style.box.size.height = lineHeight.pixel;
             _cursorElm.resize( vec2(1,lineHeight) );
         }
     }

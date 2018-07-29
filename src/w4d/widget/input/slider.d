@@ -96,8 +96,8 @@ class SliderWidget(bool Horizon) : Widget
     this ()
     {
         super();
-        style.box.paddings    = Rect( Scalar(5,ScalarUnit.Pixel) );
-        style.box.size.height = Scalar(20,ScalarUnit.Pixel);
+        style.box.paddings    = Rect( 5.pixel );
+        style.box.size.height = 20.pixel;
         parseThemeFromFile!"theme/slider.yaml"( style );
 
         setRange( 0f, 1f, 11e-4f );

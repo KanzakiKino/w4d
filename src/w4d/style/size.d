@@ -8,8 +8,7 @@ import g4d.math.vector;
 unittest
 {
     auto sz = Size(
-            Scalar(30,ScalarUnit.Percent),
-            Scalar(20,ScalarUnit.Percent) );
+            30.percent, 20.percent );
     assert( sz.isRelative );
     sz.calc( vec2(100,100) );
     assert( sz.isCalced );

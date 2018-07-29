@@ -18,13 +18,13 @@ class TestRootWidget : PanelWidget
 
         auto input1 = new LineInputWidget;
         input1.loadText( "default"d, fontface );
-        input1.style.box.margins = Rect( Scalar(5,ScalarUnit.Pixel) );
+        input1.style.box.margins = Rect( 5.pixel );
         page1.addChild( input1 );
 
         auto input2 = new LineInputWidget;
         input2.loadText( "locked"d, fontface );
         input2.lock();
-        input2.style.box.margins = Rect( Scalar(5,ScalarUnit.Pixel) );
+        input2.style.box.margins = Rect( 5.pixel );
         page1.addChild( input2 );
 
         auto page2 = new PanelWidget;
