@@ -29,32 +29,35 @@ class TestRootWidget : PanelWidget
 
         auto page2 = new VerticalScrollPanelWidget;
 
-        foreach ( i; 0..50 ) {
-            auto line1 = new PanelWidget;
-            line1.setLayout!HorizontalSplitLayout;
-            line1.style.box.size.height = 40.pixel;
-            page2.contents.addChild( line1 );
+        static foreach ( i; 0..50 ) {
+            {
+                auto line1 = new PanelWidget;
+                line1.setLayout!HorizontalSplitLayout;
+                line1.style.box.size.height = 9.mm;
+                line1.style.box.margins.top = 5.mm;
+                page2.contents.addChild( line1 );
 
-            auto text1 = new TextWidget;
-            text1.loadText( "x.xxxxx"d, fontface );
-            text1.adjustSize();
-            text1.colorset.fgColor = vec4(1,1,1,1);
-            line1.addChild( text1 );
+                auto text1 = new TextWidget;
+                text1.loadText( "x.xxxxx"d, fontface );
+                text1.adjustSize();
+                text1.colorset.fgColor = vec4(1,1,1,1);
+                line1.addChild( text1 );
 
-            auto slider1 = new HorizontalSliderWidget;
-            slider1.onValueChange = delegate ( float v ) {
-                text1.loadText( v.to!dstring );
-            };
-            line1.addChild( slider1 );
+                auto slider1 = new HorizontalSliderWidget;
+                slider1.onValueChange = delegate ( float v ) {
+                    text1.loadText( v.to!dstring );
+                };
+                line1.addChild( slider1 );
 
-            auto checkbox1 = new CheckBoxWidget;
-            checkbox1.loadText( "lock the slider"d, fontface );
-            checkbox1.adjustSize();
-            checkbox1.onCheck = delegate ( bool b ) {
-                if ( b ) slider1.lock();
-                else slider1.unlock();
-            };
-            page2.contents.addChild( checkbox1 );
+                auto checkbox1 = new CheckBoxWidget;
+                checkbox1.loadText( "lock the slider"d, fontface );
+                checkbox1.adjustSize();
+                checkbox1.onCheck = delegate ( bool b ) {
+                    if ( b ) slider1.lock();
+                    else slider1.unlock();
+                };
+                page2.contents.addChild( checkbox1 );
+            }
         }
 
         auto tab = new TabHostWidget;
