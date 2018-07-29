@@ -7,3 +7,5 @@ default:
     background: [0,0,0,0]
     border    : [0,0,0,0]
 
+hovered:
+    foreground: [0.35]
