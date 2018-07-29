@@ -18,6 +18,10 @@ unittest
 {
     return Scalar( n, ScalarUnit.Inch );
 }
+@property mm ( float n )
+{
+    return Scalar( n, ScalarUnit.MilliMetre );
+}
 @property percent ( float n )
 {
     return Scalar( n, ScalarUnit.Percent );
@@ -29,6 +33,7 @@ enum ScalarUnit
 
     // Absolute
     Pixel,
+    MilliMetre,
     Inch,
 
     // Relative
@@ -39,6 +44,7 @@ struct ScalarUnitBase
     float default_ = 0;
     float percent  = 0;
 
+    static float mm   = 0;
     static float inch = 0;
 }
 
@@ -83,6 +89,9 @@ struct Scalar
                 break;
             case Pixel:
                 _calculated = _value;
+                break;
+            case MilliMetre:
+                _calculated = base.mm*_value;
                 break;
             case Inch:
                 _calculated = base.inch*_value;
