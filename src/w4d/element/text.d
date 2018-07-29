@@ -10,6 +10,8 @@ class TextElement : g4d.element.text.HTextElement
 {
     vec2 originRate;
 
+    @property size () { return _size; }
+
     this ()
     {
         super();
