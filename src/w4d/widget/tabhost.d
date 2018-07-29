@@ -47,7 +47,7 @@ class TabHostWidget : Widget
         {
             super();
             setLayout!( HorizontalMonospacedSplitLayout );
-            style.box.size.height = 40.pixel;
+            style.box.size.height = 10.mm;
         }
     }
 

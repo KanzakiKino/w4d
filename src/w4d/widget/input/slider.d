@@ -100,8 +100,8 @@ class SliderWidget(bool Horizon) : Widget
     this ()
     {
         super();
-        style.box.paddings    = Rect( 5.pixel );
-        style.box.size.height = 20.pixel;
+        style.box.paddings    = Rect( 2.mm );
+        style.box.size.height = 6.mm;
         parseThemeFromFile!"theme/slider.yaml"( style );
 
         setRange( 0f, 1f, 11e-4f );

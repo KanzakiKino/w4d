@@ -95,9 +95,9 @@ class ScrollBarWidget (bool Horizon) : Widget
         parseThemeFromFile!"theme/scrollbar.yaml"( style );
 
         static if ( Horizon ) {
-            style.box.size.height = 20.pixel;
+            style.box.size.height = 3.mm;
         } else {
-            style.box.size.width  = 20.pixel;
+            style.box.size.width  = 3.mm;
         }
     }
 

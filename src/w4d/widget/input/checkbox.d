@@ -47,7 +47,7 @@ class CheckBoxWidget : TextWidget
     this ()
     {
         super();
-        style.box.paddings = Rect( 5.pixel );
+        style.box.paddings = Rect( 2.mm );
         parseThemeFromFile!"theme/checkbox.yaml"( style );
 
         _checked = false;
