@@ -13,7 +13,8 @@ public
     import w4d.style.rect,
            w4d.style.scalar,
            w4d.style.size;
-    import w4d.widget.input.line,
+    import w4d.widget.input.checkbox,
+           w4d.widget.input.line,
            w4d.widget.input.slider,
            w4d.widget.base,
            w4d.widget.button,

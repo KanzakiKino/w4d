@@ -30,16 +30,28 @@ class TestRootWidget : PanelWidget
         auto page2 = new PanelWidget;
         page2.setLayout!VerticalLineupLayout;
 
-        auto slider1 = new HorizontalSliderWidget;
-        page2.addChild( slider1 );
+        auto line1 = new PanelWidget;
+        line1.setLayout!HorizontalSplitLayout;
+        line1.style.box.size.height = 40.pixel;
+        page2.addChild( line1 );
 
         auto text1 = new TextWidget;
-        text1.loadText( "none"d, fontface );
+        text1.loadText( "x.xxxxx"d, fontface );
+        text1.adjustSize();
         text1.colorset.fgColor = vec4(1,1,1,1);
+        line1.addChild( text1 );
+
+        auto slider1 = new HorizontalSliderWidget;
         slider1.onValueChange = delegate ( float v ) {
             text1.loadText( v.to!dstring );
         };
-        page2.addChild( text1 );
+        line1.addChild( slider1 );
+
+        auto checkbox1 = new CheckBoxWidget;
+        checkbox1.loadText( "hogehoge"d, fontface );
+        checkbox1.colorset.fgColor = vec4(1,1,1,1);
+        checkbox1.adjustSize();
+        page2.addChild( checkbox1 );
 
         auto tab = new TabHostWidget;
         tab.setFontFace( fontface );
