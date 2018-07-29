@@ -27,34 +27,35 @@ class TestRootWidget : PanelWidget
         input2.style.box.margins = Rect( 5.pixel );
         page1.addChild( input2 );
 
-        auto page2 = new PanelWidget;
-        page2.setLayout!VerticalLineupLayout;
+        auto page2 = new VerticalScrollPanelWidget;
 
-        auto line1 = new PanelWidget;
-        line1.setLayout!HorizontalSplitLayout;
-        line1.style.box.size.height = 40.pixel;
-        page2.addChild( line1 );
+        foreach ( i; 0..50 ) {
+            auto line1 = new PanelWidget;
+            line1.setLayout!HorizontalSplitLayout;
+            line1.style.box.size.height = 40.pixel;
+            page2.contents.addChild( line1 );
 
-        auto text1 = new TextWidget;
-        text1.loadText( "x.xxxxx"d, fontface );
-        text1.adjustSize();
-        text1.colorset.fgColor = vec4(1,1,1,1);
-        line1.addChild( text1 );
+            auto text1 = new TextWidget;
+            text1.loadText( "x.xxxxx"d, fontface );
+            text1.adjustSize();
+            text1.colorset.fgColor = vec4(1,1,1,1);
+            line1.addChild( text1 );
 
-        auto slider1 = new HorizontalSliderWidget;
-        slider1.onValueChange = delegate ( float v ) {
-            text1.loadText( v.to!dstring );
-        };
-        line1.addChild( slider1 );
+            auto slider1 = new HorizontalSliderWidget;
+            slider1.onValueChange = delegate ( float v ) {
+                text1.loadText( v.to!dstring );
+            };
+            line1.addChild( slider1 );
 
-        auto checkbox1 = new CheckBoxWidget;
-        checkbox1.loadText( "lock the slider"d, fontface );
-        checkbox1.adjustSize();
-        checkbox1.onCheck = delegate ( bool b ) {
-            if ( b ) slider1.lock();
-            else slider1.unlock();
-        };
-        page2.addChild( checkbox1 );
+            auto checkbox1 = new CheckBoxWidget;
+            checkbox1.loadText( "lock the slider"d, fontface );
+            checkbox1.adjustSize();
+            checkbox1.onCheck = delegate ( bool b ) {
+                if ( b ) slider1.lock();
+                else slider1.unlock();
+            };
+            page2.contents.addChild( checkbox1 );
+        }
 
         auto tab = new TabHostWidget;
         tab.setFontFace( fontface );

@@ -241,6 +241,16 @@ class Widget : WindowContent
         requestRedraw();
     }
 
+    protected void shiftChildren ( vec2 a )
+    {
+        foreach ( c; children ) {
+            c.style.x.alter( c.style.x.calced+a.x );
+            c.style.y.alter( c.style.y.calced+a.y );
+            c.shiftChildren( a );
+        }
+        requestRedraw();
+    }
+
     override @property bool needRedraw ()
     {
         return _needRedraw || children.canFind!"a.needRedraw" || needLayout;
