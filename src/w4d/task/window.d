@@ -1,14 +1,16 @@
 // Written under LGPL-3.0 in the D programming language.
 // Copyright 2018 KanzakiKino.
 module w4d.task.window;
-import w4d.util.clipping,
+import w4d.style.scalar,
+       w4d.util.clipping,
        w4d.util.tuple,
        w4d.app,
        w4d.event,
        w4d.exception;
-static import g4d;
-import g4d.math.matrix,
+import g4d.glfw.lib,
+       g4d.math.matrix,
        g4d.math.vector;
+static import g4d;
 
 alias WindowHint  = g4d.WindowHint;
 alias MouseButton = g4d.MouseButton;
@@ -17,6 +19,18 @@ alias KeyState    = g4d.KeyState;
 
 class Window : g4d.Window, Task
 {
+    protected static void retrieveDisplayConfig ()
+    {
+        auto mon = enforce!glfwGetPrimaryMonitor();
+        auto mod = enforce!glfwGetVideoMode( mon );
+
+        int mm_x = 0, mm_y = 0; // millimetres
+        enforce!glfwGetMonitorPhysicalSize( mon, &mm_x, &mm_y );
+
+        ScalarUnitBase.mm   = mod.width*1f / mm_x;
+        ScalarUnitBase.inch = mod.width*1f / mm_x / 25.4f;
+    }
+
     protected Shaders _shaders;
     @property shaders () { return _shaders; }
 
@@ -34,6 +48,7 @@ class Window : g4d.Window, Task
         enforce( size.x > 0 && size.y > 0, "Window size is invalid." );
 
         super( size, text, hint );
+        retrieveDisplayConfig();
 
         _shaders   = new Shaders;
         _clip  = new ClipRect( shaders.fill3 );
