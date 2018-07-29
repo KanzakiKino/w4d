@@ -96,12 +96,18 @@ class ScrollPanelWidget(bool Horizon) : PanelWidget
 
     @property PanelWidget contents () { return _contents; }
 
+    // To override.
+    protected CustomPanelWidget createCustomPanel ()
+    {
+        return new CustomPanelWidget;
+    }
+
     this ()
     {
         super();
         setLayout!( SplitLayout!(!Horizon) );
 
-        _contents  = new CustomPanelWidget;
+        _contents  = createCustomPanel();
         _scrollbar = new CustomScrollBarWidget;
 
         // Order of widgets is different between vertical and horizontal.
