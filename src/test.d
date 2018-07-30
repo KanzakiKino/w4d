@@ -31,6 +31,7 @@ class TestRootWidget : PanelWidget
         auto button1 = new ButtonWidget;
         button1.loadText( "Add", fontface );
         button1.style.box.margins = Rect( 2.mm );
+        input1.chainButton( button1 );
         line1.addChild( button1 );
 
         auto list1 = new ListWidget;
@@ -43,6 +44,8 @@ class TestRootWidget : PanelWidget
             text1.loadText( input1.text, fontface );
             text1.adjustSize();
             list1.addItem( list1.idMap.length.to!int+1, text1 );
+
+            input1.loadText( ""d );
         };
 
         auto tab = new TabHostWidget;

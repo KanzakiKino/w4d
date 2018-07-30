@@ -7,6 +7,7 @@ import w4d.parser.theme,
        w4d.task.window,
        w4d.util.clipping,
        w4d.util.textline,
+       w4d.widget.button,
        w4d.widget.text,
        w4d.event,
        w4d.exception;
@@ -31,6 +32,8 @@ class LineInputWidget : TextWidget
     protected RectElement _selectionElm;
 
     protected bool _shift, _ctrl;
+
+    protected ButtonWidget _chainedButton;
 
     TextChangeHandler onTextChange;
 
@@ -90,6 +93,11 @@ class LineInputWidget : TextWidget
             _line.deselect();
             requestRedraw();
 
+        } else if ( key == Key.Enter && pressing ) {
+            if ( _chainedButton ) {
+                _chainedButton.onButtonPressed.call();
+            }
+
         } else {
             return false;
         }
@@ -124,6 +132,8 @@ class LineInputWidget : TextWidget
 
         _cursorElm    = new RectElement;
         _selectionElm = new RectElement;
+
+        _chainedButton = null;
 
         _line.onTextChange = ( dstring v ) {
             loadText(v);
@@ -195,6 +205,11 @@ class LineInputWidget : TextWidget
     void unlock ()
     {
         _line.unlock();
+    }
+
+    void chainButton ( ButtonWidget btn )
+    {
+        _chainedButton = btn;
     }
 
     protected float retrieveScrollLength ()
