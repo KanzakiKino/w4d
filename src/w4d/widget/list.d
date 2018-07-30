@@ -21,21 +21,42 @@ class ListWidget : VerticalScrollPanelWidget
     protected class CustomPanelWidget :
         typeof(super).CustomPanelWidget
     {
+        protected Widget _dragging;
+
+        override bool handleMouseMove ( vec2 pos )
+        {
+            if ( super.handleMouseMove( pos ) ) return true;
+
+            if ( editable && isTracked && _dragging ) {
+                if ( auto child = findChildAt(pos) ) {
+                    swapChild( child, _dragging );
+                    return true;
+                }
+            }
+            return false;
+        }
         override bool handleMouseButton ( MouseButton btn, bool status, vec2 pos )
         {
             if ( super.handleMouseButton( btn, status, pos ) ) return true;
 
             if ( btn == MouseButton.Left && status ) {
                 if ( auto child = findChildAt( pos ) ) {
+                    _dragging = child;
+                    _dragging.enableState( WidgetState.Pressed );
+
                     toggleItem( retrieveIdFromWidget( child ) );
                     return true;
                 }
+            } else if ( btn == MouseButton.Left && !status ) {
+                _dragging.disableState( WidgetState.Pressed );
+                _dragging = null;
             }
             return false;
         }
         this ()
         {
             super();
+            _dragging = null;
         }
         override @property bool trackable () { return true; }
     }
@@ -55,6 +76,9 @@ class ListWidget : VerticalScrollPanelWidget
     protected bool _multiselect;
     const @property multiselectable () { return _multiselect; }
 
+    protected bool _editable;
+    @property ref editable () { return _editable; }
+
     SelectChangeHandler onSelectChange;
 
     this ()
@@ -63,6 +87,7 @@ class ListWidget : VerticalScrollPanelWidget
         _idMap.clear();
 
         _multiselect = false;
+        _editable    = false;
     }
 
     void setMultiselectable ( bool b )

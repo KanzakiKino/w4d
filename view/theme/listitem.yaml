@@ -6,5 +6,8 @@ default:
     foreground: [0.8]
     background: [0,0,0,0]
 
+pressed:
+    background: [0.6,0.4,0.8]
+
 selected:
     background: [0.4,0.4,0.8]

@@ -34,6 +34,8 @@ class TestRootWidget : PanelWidget
         line1.addChild( button1 );
 
         auto list1 = new ListWidget;
+        list1.setMultiselectable( true );
+        list1.editable = true;
         page1.addChild( list1 );
 
         button1.onButtonPressed = () {
