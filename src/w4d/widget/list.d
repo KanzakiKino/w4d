@@ -9,90 +9,66 @@ import w4d.parser.theme,
        w4d.widget.base,
        w4d.widget.scroll,
        w4d.widget.text,
+       w4d.event,
        w4d.exception;
 import g4d.math.vector;
 import std.algorithm;
 
+alias SelectChangeHandler = EventHandler!( void, int[] );
+
 class ListWidget : VerticalScrollPanelWidget
 {
-    protected class CustomPanelWidget : // FIXME: dirty codes.
+    protected class CustomPanelWidget :
         typeof(super).CustomPanelWidget
     {
-        protected Widget _draggingItem;
-
-        override bool handleMouseMove ( vec2 pos )
-        {
-            if ( swapOrder && isTracked && _draggingItem ) {
-                if ( auto child = findChildAt( pos ) ) {
-                    swapChild( _draggingItem, child );
-                }
-            }
-            return false;
-        }
         override bool handleMouseButton ( MouseButton btn, bool status, vec2 pos )
         {
+            if ( super.handleMouseButton( btn, status, pos ) ) return true;
+
             if ( btn == MouseButton.Left && status ) {
                 if ( auto child = findChildAt( pos ) ) {
-                    _draggingItem = child;
                     toggleItem( retrieveIdFromWidget( child ) );
-                    track();
                     return true;
                 }
-            } else if ( btn == MouseButton.Left && !status ) {
-                _draggingItem = null;
-                refuseTrack();
             }
             return false;
         }
         this ()
         {
             super();
-            _draggingItem = null;
         }
-        override void track ()
-        {
-            enforce( _context, "WindowContext is null." );
-            _context.setTracked( this );
-        }
+        override @property bool trackable () { return true; }
     }
 
     protected override typeof(super).CustomPanelWidget createCustomPanel ()
     {
         return new CustomPanelWidget;
     }
+    override @property typeof(super).CustomPanelWidget contents ()
+    {
+        throw new W4dException( "Modifying contents is not allowed." );
+    }
 
     protected Widget[int] _idMap;
     const @property idMap () { return _idMap; }
 
-    protected int[] _selected;
-    const @property selected () { return _selected; }
-
     protected bool _multiselect;
     const @property multiselectable () { return _multiselect; }
 
-    protected bool _swapOrder;
-    const @property swapOrder () { return _swapOrder; }
+    SelectChangeHandler onSelectChange;
 
     this ()
     {
         super();
         _idMap.clear();
-        _selected = [];
 
         _multiselect = false;
-        _swapOrder   = false;
     }
 
     void setMultiselectable ( bool b )
     {
-        if ( !b && _selected.length ) {
-            _selected.length = 1;
-        }
+        deselect();
         _multiselect = b;
-    }
-    void setSwapOrder ( bool b )
-    {
-        _swapOrder = b;
     }
 
     protected int retrieveIdFromWidget ( Widget w )
@@ -106,62 +82,52 @@ class ListWidget : VerticalScrollPanelWidget
     {
         enforce( id !in _idMap, "Id is already used." );
         _idMap[id] = w;
-        contents.addChild( w );
+        super.contents.addChild( w );
     }
     void removeItem ( int id )
     {
         enforce( id in _idMap, "Id is unknown." );
         auto w = _idMap[id];
-        removeChild( w );
+        super.contents.removeChild( w );
     }
 
     void deselect ()
     {
-        auto copy = _selected.dup;
-        foreach ( id; copy ) {
+        foreach ( id; _idMap.keys ) {
             unselectItem( id );
         }
     }
     void selectAll ()
     {
-        if ( multiselectable ) {
-            _selected = _idMap.keys;
+        foreach ( id; _idMap.keys ) {
+            selectItem( id );
         }
     }
 
-    const bool isSelected ( int id )
+    bool isSelected ( int id )
     {
-        return _selected.canFind!"a==b"( id );
+        enforce( id in _idMap, "Id is unknown." );
+        return isSelected( _idMap[id] );
+    }
+    bool isSelected ( Widget w )
+    {
+        return !!(w.status & WidgetState.Selected);
     }
     void selectItem ( int id )
     {
-        enforce( id in _idMap, "Id is unknown." );
         if ( isSelected( id ) ) return;
+        if ( !multiselectable ) deselect();
 
         auto w = _idMap[id];
         w.enableState( WidgetState.Selected );
-
-        if ( multiselectable ) {
-            _selected ~= id;
-        } else {
-            deselect();
-            _selected = [id];
-        }
+        onSelectChange.call( retrieveSelectedIds() );
     }
     void unselectItem ( int id )
     {
-        enforce( id in _idMap, "Id is unknown." );
         if ( !isSelected( id ) ) return;
-
         auto w = _idMap[id];
         w.disableState( WidgetState.Selected );
-
-        if ( multiselectable ) {
-            _selected = _selected.remove!( x => x==id );
-
-        } else if ( _selected.length ) {
-            _selected = [];
-        }
+        onSelectChange.call( retrieveSelectedIds() );
     }
     void toggleItem ( int id )
     {
@@ -172,6 +138,17 @@ class ListWidget : VerticalScrollPanelWidget
         } else {
             selectItem( id );
         }
+    }
+
+    int[] retrieveSelectedIds ()
+    {
+        int[] result;
+        foreach ( w; super.contents.children ) {
+            if ( isSelected( w ) ) {
+                result ~= retrieveIdFromWidget( w );
+            }
+        }
+        return result;
     }
 }
 
@@ -184,10 +161,20 @@ class ListTextItemWidget : TextWidget
 
         style.box.paddings = Rect( 1.mm );
     }
-
     override void adjustSize ()
     {
         super.adjustSize();
         style.box.size.width = Scalar(0); // none
+    }
+}
+
+class ListPanelItemWidget : TextWidget
+{
+    this ()
+    {
+        super();
+        parseThemeFromFile!"theme/listitem.yaml"( style );
+
+        style.box.paddings = Rect( 1.mm );
     }
 }
