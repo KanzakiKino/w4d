@@ -48,8 +48,10 @@ class ListWidget : VerticalScrollPanelWidget
                     return true;
                 }
             } else if ( btn == MouseButton.Left && !status ) {
-                _dragging.disableState( WidgetState.Pressed );
-                _dragging = null;
+                if ( _dragging ) {
+                    _dragging.disableState( WidgetState.Pressed );
+                    _dragging = null;
+                }
             }
             return false;
         }
