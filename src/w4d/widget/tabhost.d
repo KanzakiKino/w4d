@@ -155,4 +155,7 @@ class TabHostWidget : Widget
         _context.setFocused( null ); // drop the focus focibly
         requestLayout();
     }
+
+    override @property bool trackable () { return false; }
+    override @property bool focusable () { return false; }
 }

@@ -269,4 +269,7 @@ class LineInputWidget : TextWidget
         shader.color = colorset.borderColor;
         _selectionElm.draw( shader );
     }
+
+    override @property bool trackable () { return true; }
+    override @property bool focusable () { return true; }
 }

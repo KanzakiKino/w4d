@@ -73,4 +73,7 @@ class TextWidget : Widget
         super.draw( win );
         drawText( win );
     }
+
+    override @property bool trackable () { return false; }
+    override @property bool focusable () { return false; }
 }

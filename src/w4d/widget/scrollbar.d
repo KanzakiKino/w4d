@@ -169,6 +169,9 @@ class ScrollBarWidget (bool Horizon) : Widget
         shader.color = colorset.fgColor;
         _bar.draw( shader );
     }
+
+    override @property bool trackable () { return true; }
+    override @property bool focusable () { return true; }
 }
 
 alias HorizontalScrollBarWidget = ScrollBarWidget!true;

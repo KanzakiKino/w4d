@@ -61,12 +61,6 @@ class PanelWidget : Widget
         requestRedraw();
     }
 
-    override void track ()
-    {
-        // PanelWidget can't be tracked.
-    }
-    override void focus ()
-    {
-        // PanelWidget can't be focused.
-    }
+    override @property bool trackable () { return false; }
+    override @property bool focusable () { return false; }
 }

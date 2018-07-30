@@ -41,4 +41,7 @@ class ButtonWidget : TextWidget
 
         parseThemeFromFile!"theme/pressable.yaml"( style );
     }
+
+    override @property bool trackable () { return true; }
+    override @property bool focusable () { return true; }
 }

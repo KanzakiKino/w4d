@@ -106,4 +106,7 @@ class CheckBoxWidget : TextWidget
             _checkMark.draw( shader );
         }
     }
+
+    override @property bool trackable () { return true; }
+    override @property bool focusable () { return true; }
 }

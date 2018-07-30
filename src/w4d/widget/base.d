@@ -178,10 +178,13 @@ class Widget : WindowContent
     {
         return _context && _context.tracked is this;
     }
+    @property bool trackable () { return true; }
     void track ()
     {
-        enforce( _context, "WindowContext is null." );
-        _context.setTracked( this );
+        if ( trackable ) {
+            enforce( _context, "WindowContext is null." );
+            _context.setTracked( this );
+        }
     }
     void refuseTrack ()
     {
@@ -193,10 +196,13 @@ class Widget : WindowContent
     {
         return _context && _context.focused is this;
     }
+    @property bool focusable () { return true; }
     void focus ()
     {
-        enforce( _context, "WindowContext is null." );
-        _context.setFocused( this );
+        if ( focusable ) {
+            enforce( _context, "WindowContext is null." );
+            _context.setFocused( this );
+        }
     }
     void dropFocus ()
     {

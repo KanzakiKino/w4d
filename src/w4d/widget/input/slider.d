@@ -204,6 +204,9 @@ class SliderWidget(bool Horizon) : Widget
         shader.setVectors( pointerLate, vec3(0,0,PI) );
         _pointer.draw( shader );
     }
+
+    override @property bool trackable () { return true; }
+    override @property bool focusable () { return true; }
 }
 
 alias HorizontalSliderWidget = SliderWidget!true;

@@ -63,4 +63,7 @@ class ImageWidget : Widget
             _imageElm.draw( shader );
         }
     }
+
+    override @property bool trackable () { return false; }
+    override @property bool focusable () { return false; }
 }
