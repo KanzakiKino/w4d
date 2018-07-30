@@ -1,0 +1,10 @@
+# w4d theme for list item widgets
+# Written under LGPL-3.0 in YAML.
+# Copyright 2018 KanzakiKino
+
+default:
+    foreground: [0.8]
+    background: [0,0,0,0]
+
+selected:
+    background: [0.4,0.4,0.8]

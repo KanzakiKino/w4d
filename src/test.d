@@ -14,56 +14,38 @@ class TestRootWidget : PanelWidget
         auto fontface = new FontFace(new Font("/usr/share/fonts/TTF/Ricty-Regular.ttf"), vec2i(16,16));
 
         auto page1 = new PanelWidget;
-        page1.setLayout!HorizontalMonospacedSplitLayout;
+        page1.setLayout!VerticalSplitLayout;
+
+        auto line1 = new PanelWidget;
+        line1.setLayout!HorizontalSplitLayout;
+        line1.style.box.size.height = 13.mm;
+        line1.style.box.margins = Rect( 1.mm );
+        page1.addChild( line1 );
 
         auto input1 = new LineInputWidget;
-        input1.loadText( "default"d, fontface );
-        input1.style.box.margins = Rect( 5.pixel );
-        page1.addChild( input1 );
+        input1.style.box.size.width = 80.percent;
+        input1.loadText( ""d, fontface );
+        input1.setLayout!GravityLayout(vec2(0f,0.5f));
+        line1.addChild( input1 );
 
-        auto input2 = new LineInputWidget;
-        input2.loadText( "locked"d, fontface );
-        input2.lock();
-        input2.style.box.margins = Rect( 5.pixel );
-        page1.addChild( input2 );
+        auto button1 = new ButtonWidget;
+        button1.loadText( "Add", fontface );
+        button1.style.box.margins = Rect( 2.mm );
+        line1.addChild( button1 );
 
-        auto page2 = new VerticalScrollPanelWidget;
+        auto list1 = new ListWidget;
+        page1.addChild( list1 );
 
-        static foreach ( i; 0..50 ) {
-            {
-                auto line1 = new PanelWidget;
-                line1.setLayout!HorizontalSplitLayout;
-                line1.style.box.size.height = 9.mm;
-                line1.style.box.margins.top = 5.mm;
-                page2.contents.addChild( line1 );
-
-                auto text1 = new TextWidget;
-                text1.loadText( "x.xxxxx"d, fontface );
-                text1.adjustSize();
-                text1.colorset.fgColor = vec4(1,1,1,1);
-                line1.addChild( text1 );
-
-                auto slider1 = new HorizontalSliderWidget;
-                slider1.onValueChange = delegate ( float v ) {
-                    text1.loadText( v.to!dstring );
-                };
-                line1.addChild( slider1 );
-
-                auto checkbox1 = new CheckBoxWidget;
-                checkbox1.loadText( "lock the slider"d, fontface );
-                checkbox1.adjustSize();
-                checkbox1.onCheck = delegate ( bool b ) {
-                    if ( b ) slider1.lock();
-                    else slider1.unlock();
-                };
-                page2.contents.addChild( checkbox1 );
-            }
-        }
+        button1.onButtonPressed = () {
+            auto text1 = new ListTextItemWidget;
+            text1.loadText( input1.text, fontface );
+            text1.adjustSize();
+            list1.addItem( list1.idMap.length.to!int+1, text1 );
+        };
 
         auto tab = new TabHostWidget;
         tab.setFontFace( fontface );
         tab.addTab( 0, "Page1", page1 );
-        tab.addTab( 1, "Page2", page2 );
         addChild( tab );
     }
 }

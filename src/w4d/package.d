@@ -19,6 +19,7 @@ public
            w4d.widget.base,
            w4d.widget.button,
            w4d.widget.image,
+           w4d.widget.list,
            w4d.widget.panel,
            w4d.widget.scroll,
            w4d.widget.scrollbar,
