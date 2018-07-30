@@ -40,6 +40,8 @@ class TestRootWidget : PanelWidget
         page1.addChild( list1 );
 
         button1.onButtonPressed = () {
+            if ( input1.text.length == 0 ) return;
+
             auto text1 = new ListTextItemWidget;
             text1.loadText( input1.text, fontface );
             text1.adjustSize();

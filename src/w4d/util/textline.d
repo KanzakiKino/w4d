@@ -163,6 +163,7 @@ class TextLine
         if ( _text != v ) {
             deselect();
             _text = v;
+            moveCursor(0);
             onTextChange.call( v );
         }
     }
