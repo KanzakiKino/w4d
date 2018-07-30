@@ -15,6 +15,7 @@ import std.algorithm;
 class Widget : WindowContent
 {
     protected uint        _status;
+    const @property status () { return _status; }
     protected WidgetStyle _style;
     @property     style    () { return _style; }
     @property ref colorset () { return style.getColorSet(_status); }
