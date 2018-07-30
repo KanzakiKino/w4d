@@ -106,10 +106,11 @@ class ScrollBarWidget (bool Horizon) : Widget
         return _barLength < 1f;
     }
 
-    void setBarLength ( float barLength )
+    void setBarLength ( float newlen )
     {
+        newlen = newlen.clamp( 0f, 1f );
         auto temp = _barLength;
-        _barLength = barLength;
+        _barLength = newlen;
         correctBar();
 
         if ( temp != _barLength ) {
