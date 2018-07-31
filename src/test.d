@@ -13,14 +13,17 @@ class TestRootWidget : PanelWidget
 
         auto fontface = new FontFace(new Font("/usr/share/fonts/TTF/Ricty-Regular.ttf"), vec2i(16,16));
 
-        auto list1 = new ListWidget;
-        addChild( list1 );
+        auto check1 = new CheckBoxWidget;
+        check1.loadText( "hoge"d, fontface );
+        addChild( check1 );
 
-        foreach ( i; 0..20 ) {
-            auto widget1 = new ListTextItemWidget;
-            widget1.loadText( i.to!dstring~"fuck you."d, fontface );
-            list1.addItem( i, widget1 );
-        }
+        auto text1 = new TextWidget;
+        text1.loadText( "hoge"d, fontface );
+        addChild( text1 );
+
+        check1.onCheck = ( bool b ) {
+            text1.loadText( b? "fuck you"d: "FUCK YOU"d, fontface );
+        };
     }
 }
 
