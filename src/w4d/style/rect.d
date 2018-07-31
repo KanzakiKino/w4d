@@ -23,10 +23,10 @@ struct Rect
     enum Auto = Rect();
 
     @("attr") {
-        Scalar top    = Scalar.Auto,
-               right  = Scalar.Auto,
-               bottom = Scalar.Auto,
-               left   = Scalar.Auto;
+        Scalar top    = Scalar.None,
+               right  = Scalar.None,
+               bottom = Scalar.None,
+               left   = Scalar.None;
     }
 
     this ( Scalar[] args... )

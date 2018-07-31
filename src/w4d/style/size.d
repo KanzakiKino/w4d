@@ -21,8 +21,8 @@ struct Size
     enum Auto = Size();
 
     @("attr") {
-        Scalar width  = Scalar.Auto,
-               height = Scalar.Auto;
+        Scalar width  = Scalar.None,
+               height = Scalar.None;
     }
 
     mixin AttributesUtilities;
