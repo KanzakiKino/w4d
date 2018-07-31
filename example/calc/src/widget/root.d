@@ -21,7 +21,7 @@ class RootWidget : PanelWidget
 
     protected static auto createEvent ( dstring b )
     {
-        ButtonPressedHandler hndl;
+        ButtonPressHandler hndl;
         if ( b.length == 1 && b[0].isDigit ) {
             hndl = delegate () {
                 CalcContext.push( b.to!int );
@@ -57,8 +57,10 @@ class RootWidget : PanelWidget
         auto buttonface = new FontFace( font, vec2i(24,24) );
         foreach ( i,b; Buttons ) {
             auto button = new ButtonWidget;
+            button.style.box.size.width  = Scalar.None;
+            button.style.box.size.height = Scalar.None;
             button.loadText( b, buttonface );
-            button.onButtonPressed = createEvent( b );
+            button.onButtonPress = createEvent( b );
             panel.addChild( button );
         }
 
