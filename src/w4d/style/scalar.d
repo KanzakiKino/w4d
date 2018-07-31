@@ -51,7 +51,8 @@ struct ScalarUnitBase
 
 struct Scalar
 {
-    enum Auto = Scalar();
+    enum None = Scalar(0,ScalarUnit.None);
+    enum Auto = Scalar(0,ScalarUnit.Auto);
 
     protected float      _value = 0;
     protected ScalarUnit _unit  = ScalarUnit.None;
@@ -69,11 +70,11 @@ struct Scalar
 
     @property isAbsolute ()
     {
-        return isSpecified && _unit <= ScalarUnit.Inch;
+        return _unit <= ScalarUnit.Inch && !isNone && !isAuto;
     }
     @property isRelative ()
     {
-        return isSpecified && _unit >= ScalarUnit.Percent;
+        return _unit >= ScalarUnit.Percent;
     }
     @property isSpecified ()
     {

@@ -31,11 +31,15 @@ class TextWidget : Widget
 
     this ()
     {
+        super();
         _textElm = new TextElement;
         _text    = null;
         _font    = null;
 
         textPosRate = vec2(0,0);
+
+        style.box.size.width  = Scalar.Auto;
+        style.box.size.height = Scalar.Auto;
     }
 
     void loadText ( dstring v, FontFace f = null )

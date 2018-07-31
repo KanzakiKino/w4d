@@ -145,6 +145,7 @@ class LineInputWidget : TextWidget
             requestRedraw();
         };
 
+        style.box.size.width  = Scalar.None;
         style.box.borderWidth = Rect( 1.5f.pixel );
         style.box.paddings    = Rect( 2.mm );
         parseThemeFromFile!"theme/focusable.yaml"( style );
