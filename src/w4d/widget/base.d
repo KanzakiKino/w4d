@@ -10,22 +10,29 @@ import w4d.element.box,
        w4d.exception;
 import g4d.math.vector,
        g4d.shader.base;
-import std.algorithm;
+import std.algorithm,
+       std.conv;
 
-class Widget : WindowContent
+class Widget : WindowContent, Layoutable
 {
-    protected uint        _status;
+    protected uint _status;
     const @property status () { return _status; }
+
     protected WidgetStyle _style;
-    @property     style    () { return _style; }
-    @property ref colorset () { return style.getColorSet(_status); }
+    @property WidgetStyle style    () { return _style; }
+    @property ref         colorset () { return style.getColorSet(_status); }
 
     protected Layout        _layout;
     protected BoxElement    _box;
     protected WindowContext _context;
 
     protected Widget _hovered;
-    @property Widget[] children     () { return []; }
+    @property Widget[] children () { return []; }
+
+    @property Layoutable[] childLayoutables ()
+    {
+        return children.to!( Layoutable[] );
+    }
 
     protected bool _needRedraw;
     protected bool _needLayout;
@@ -159,6 +166,14 @@ class Widget : WindowContent
         parseThemeFromFile!"theme/normal.yaml"( style );
     }
 
+    protected void infectWindowContext ()
+    {
+        if ( !_context ) {
+            _context = new WindowContext;
+        }
+        children.each!( x => x._context = _context );
+    }
+
     void enableState ( WidgetState state )
     {
         _status |= state;
@@ -168,11 +183,6 @@ class Widget : WindowContent
     {
         _status &= ~state;
         requestRedraw();
-    }
-
-    void setLayout (L,Args...) ( Args args )
-    {
-        _layout = new L(style,args);
     }
 
     @property isTracked ()
@@ -211,6 +221,10 @@ class Widget : WindowContent
         _context.setFocused( null );
     }
 
+    void setLayout (L,Args...) ( Args args )
+    {
+        _layout = new L(this,args);
+    }
     @property bool needLayout ()
     {
         return _needLayout || children.canFind!"a.needLayout" || !style.isCalced;
@@ -219,33 +233,20 @@ class Widget : WindowContent
     {
         _needLayout = true;
     }
-    override void resize ( vec2i newsz )
-    {
-        enforce( _layout, "Layout is null." );
-
-        _layout.move( vec2(0,0), vec2(newsz) );
-        layout();
+    void layout ( vec2i size )
+    { // Called only by Window.
+        layout( vec2(0,0), vec2(size) );
     }
-    void layout ()
+    vec2 layout ( vec2 pos, vec2 size )
     {
         enforce( _layout, "Layout is null." );
+        _layout.place( pos, size );
 
-        if ( !_context ) {
-            _context = new WindowContext;
-        }
-
-        foreach ( c; children ) {
-            c._context = _context;
-            _layout.push( c._layout );
-        }
-        _layout.fix();
-
-        children.each!q{a.layout()};
-
+        infectWindowContext();
         _box.resize( _style.box );
-
-        _needLayout = false;
         requestRedraw();
+
+        return style.box.collisionSize;
     }
 
     protected void shiftChildren ( vec2 a )
@@ -284,9 +285,6 @@ class Widget : WindowContent
     }
     override void draw ( Window win )
     {
-        if ( needLayout ) {
-            layout();
-        }
         drawBox( win );
         drawChildren( win );
         _needRedraw = false;

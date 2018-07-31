@@ -7,29 +7,46 @@ import w4d.layout.base,
        w4d.style.widget,
        w4d.util.vector;
 import g4d.math.vector;
+import std.algorithm;
 
 class LineupLayout (bool Horizon) : FillLayout
 {
-    protected float _usedLength;
+    protected vec2 _childSize;
+    protected vec2 _basePoint;
+    protected vec2 _usedSize;
 
-    this ( WidgetStyle style )
+    this ( Layoutable owner )
     {
-        super( style );
-
-        _usedLength = 0;
+        super( owner );
     }
 
-    override void push ( Layout l )
+    protected void clearStatus ()
     {
-        auto pos = _style.clientLeftTop;
-        pos.lengthRef!Horizon += _usedLength;
-
-        l.move( pos, _style.box.clientSize );
-        _usedLength += l.style.box.collisionSize.length!Horizon;
+        _childSize = style.box.clientSize;
+        _basePoint = style.clientLeftTop;
+        _usedSize  = vec2(0,0);
     }
-    override void fix ()
+    protected void updateStatus ( vec2 placedSize )
     {
-        _usedLength = 0;
+        auto length = placedSize.length!Horizon;
+        auto weight = placedSize.weight!Horizon;
+
+        _basePoint.lengthRef!Horizon += length;
+        _usedSize .lengthRef!Horizon += length;
+
+        _usedSize.weightRef!Horizon =
+            max( _usedSize.weight!Horizon, weight );
+    }
+
+    override void place ( vec2 basepos, vec2 parentSize )
+    {
+        fill( basepos, parentSize );
+        clearStatus();
+        foreach ( child; children ) {
+            auto size = child.layout( _basePoint, _childSize );
+            updateStatus( size );
+        }
+        alterSize( _usedSize );
     }
 }
 

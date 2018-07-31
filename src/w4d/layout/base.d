@@ -7,16 +7,25 @@ import g4d.math.vector;
 
 abstract class Layout
 {
-    protected WidgetStyle _style;
-    @property style () { return _style; }
+    protected Layoutable _owner;
 
-    this ( WidgetStyle style )
+    @property owner    () { return _owner; }
+    @property style    () { return _owner.style; }
+    @property children () { return _owner.childLayoutables; }
+
+    this ( Layoutable owner )
     {
-        enforce( style, "Style is null." );
-        _style = style;
+        enforce( owner, "Owner is null." );
+        _owner = owner;
     }
 
-    void move ( vec2, vec2 ); // Calculates style.
-    void push ( Layout );
-    void fix  ();             // Calculates children style.
+    void place ( vec2, vec2 );
+}
+
+interface Layoutable
+{
+    @property WidgetStyle  style            ();
+    @property Layoutable[] childLayoutables ();
+
+    vec2 layout ( vec2, vec2 );
 }

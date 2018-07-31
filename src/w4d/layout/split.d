@@ -4,29 +4,23 @@ module w4d.layout.split;
 import w4d.layout.base,
        w4d.layout.exception,
        w4d.layout.lineup,
-       w4d.style.widget,
        w4d.util.vector;
 import g4d.math.vector;
 
 class SplitLayout (bool Horizon) : LineupLayout!Horizon
 {
-    this ( WidgetStyle style )
+    this ( Layoutable owner )
     {
-        super( style );
+        super( owner );
     }
-
-    override void push ( Layout child )
+    protected override void updateStatus ( vec2 placedSize )
     {
-        auto pos = _style.clientLeftTop;
-        pos.lengthRef!Horizon += _usedLength;
+        auto length = placedSize.length!Horizon;
+        enforce( length <= _childSize.length!Horizon,
+              "Failed to place the too big child." );
 
-        auto sz = _style.box.clientSize;
-        sz.lengthRef!Horizon -= _usedLength;
-
-        enforce( sz.length!Horizon > 0, "Cannot place too big child." );
-
-        child.move( pos, sz );
-        _usedLength += child.style.box.collisionSize.length!Horizon;
+        _childSize.lengthRef!Horizon -= length;
+        super.updateStatus( placedSize );
     }
 }
 alias HorizontalSplitLayout = SplitLayout!true;
@@ -34,33 +28,14 @@ alias VerticalSplitLayout   = SplitLayout!false;
 
 class MonospacedSplitLayout (bool Horizon) : LineupLayout!Horizon
 {
-    protected Layout[] _children;
-
-    this ( WidgetStyle style )
+    this ( Layoutable owner )
     {
-        super( style );
+        super( owner );
     }
-
-    override void push ( Layout child )
+    protected override void clearStatus ()
     {
-        enforce( child, "Null is not a child." );
-        _children ~= child;
-    }
-    override void fix ()
-    {
-        if ( !_children.length ) return;
-
-        auto size               = _style.box.clientSize;
-        size.lengthRef!Horizon /= _children.length;
-
-        auto pos = style.clientLeftTop;
-
-        foreach ( l; _children ) {
-            l.move( pos, size );
-            pos.lengthRef!Horizon += size.length!Horizon;
-        }
-        _children = [];
-        super.fix();
+        super.clearStatus();
+        _childSize.lengthRef!Horizon /= children.length;
     }
 }
 alias HorizontalMonospacedSplitLayout = MonospacedSplitLayout!true;

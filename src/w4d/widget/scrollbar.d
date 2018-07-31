@@ -114,7 +114,7 @@ class ScrollBarWidget (bool Horizon) : Widget
         correctBar();
 
         if ( temp != _barLength ) {
-            requestLayout();
+            resizeElements();
         }
     }
     void setValue ( float value )
@@ -125,7 +125,7 @@ class ScrollBarWidget (bool Horizon) : Widget
         if ( temp != _value ) {
             correctBar();
             handleScroll( _value );
-            requestLayout();
+            resizeElements();
         }
     }
 
@@ -140,9 +140,12 @@ class ScrollBarWidget (bool Horizon) : Widget
         }
     }
 
-    override void layout ()
+    protected void resizeElements ()
     {
-        if ( needDrawBar ) {
+        if ( !style.isCalced ) {
+            requestLayout();
+
+        } else if ( needDrawBar ) {
             auto size    = style.box.clientSize;
             auto barsize = size;
             barsize.lengthRef!Horizon *= _barLength;
@@ -152,7 +155,11 @@ class ScrollBarWidget (bool Horizon) : Widget
             _translate.lengthRef!Horizon +=
                 size.length!Horizon*_value;
         }
-        super.layout();
+    }
+    override vec2 layout ( vec2 pos, vec2 size )
+    {
+        scope(success) resizeElements();
+        return super.layout( pos, size );
     }
 
     override void draw ( Window w )

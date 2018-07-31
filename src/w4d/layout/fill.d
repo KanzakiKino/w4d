@@ -8,23 +8,33 @@ import g4d.math.vector;
 
 class FillLayout : Layout
 {
-    this ( WidgetStyle style )
+    this ( Layoutable owner )
     {
-        super( style );
+        super( owner );
     }
 
-    override void move ( vec2 pt, vec2 sz )
+    protected void alterSize ( vec2 sz )
+    {
+        if ( !style.box.size.width.isSpecified ) {
+            style.box.size.width.alter( sz.x );
+        }
+        if ( !style.box.size.height.isSpecified ) {
+            style.box.size.height.alter( sz.y );
+        }
+    }
+
+    protected void fill ( vec2 pt, vec2 sz )
     {
         auto ctx = WidgetStyleCalcContext();
         ctx.parentSize = sz;
         ctx.pos        = pt;
-        _style.calc( ctx );
+        style.calc( ctx );
     }
-    override void push ( Layout )
+
+    override void place ( vec2 pt, vec2 sz )
     {
-        throw new LayoutException( "FillLayout doesn't support children." );
-    }
-    override void fix ()
-    {
+        enforce( !children.length,
+              "FillLayout doesn't support children." );
+        fill( pt, sz );
     }
 }

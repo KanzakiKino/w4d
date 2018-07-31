@@ -38,15 +38,20 @@ class ImageWidget : Widget
         _imageSize = vec2(_texture.size);
         _uv.x      = bmp.width/_imageSize.x;
         _uv.y      = bmp.rows /_imageSize.y;
+        resizeElement();
     }
 
-    override void layout ()
+    protected void resizeElement ()
     {
         if ( _texture ) {
             auto sz = style.box.clientSize;
             _imageElm.resize( sz, _uv );
         }
-        super.layout();
+    }
+    override vec2 layout ( vec2 pos, vec2 size )
+    {
+        scope(success) resizeElement();
+        return super.layout( pos, size );
     }
     override void draw ( Window w )
     {

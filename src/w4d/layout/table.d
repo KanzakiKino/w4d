@@ -3,8 +3,7 @@
 module w4d.layout.table;
 import w4d.layout.base,
        w4d.layout.exception,
-       w4d.layout.fill,
-       w4d.style.widget;
+       w4d.layout.fill;
 import g4d.math.vector;
 
 class TableLayout : FillLayout
@@ -12,16 +11,14 @@ class TableLayout : FillLayout
     protected const size_t _columns;
     protected const size_t _rows;
 
-    protected size_t _index;
-
     protected @property childWidth ()
     {
-        auto width = _style.box.size.width.calced;
+        auto width = style.box.size.width.calced;
         return width / _columns;
     }
     protected @property childHeight ()
     {
-        auto height = _style.box.size.height.calced;
+        auto height = style.box.size.height.calced;
         return height / _rows;
     }
     protected @property childSize ()
@@ -29,29 +26,33 @@ class TableLayout : FillLayout
         return vec2( childWidth, childHeight );
     }
 
-    this ( WidgetStyle style, size_t cols, size_t rows )
+    this ( Layoutable owner, size_t cols, size_t rows )
     {
         enforce( cols > 0 && rows > 0,
                 "Cols and Rows must be natural number(!=0)." );
-        super( style );
+        super( owner );
 
         _columns = cols;
         _rows    = rows;
     }
 
-    override void push ( Layout l )
+    override void place ( vec2 basePoint, vec2 parentSize )
     {
-        auto size = childSize;
-        auto pos  = vec2( _index%_columns, _index/_rows );
-        pos.x    *= size.x;
-        pos.y    *= size.y;
-        pos      += _style.clientLeftTop;
+        fill( basePoint, parentSize );
 
-        l.move( pos, size );
-        _index++;
-    }
-    override void fix ()
-    {
-        _index = 0;
+        auto   size      = childSize;
+        auto   children  = children;
+        auto   translate = style.clientLeftTop;
+        size_t index     = 0;
+
+        for ( auto y = 0; y < _rows; y++ ) {
+            for ( auto x = 0; x < _columns; x++ ) {
+                if ( index >= children.length ) return;
+
+                auto pos = vec2( size.x*x, size.y*y );
+                pos     += translate;
+                children[index++].layout( pos, size );
+            }
+        }
     }
 }

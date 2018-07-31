@@ -95,7 +95,7 @@ class LineInputWidget : TextWidget
 
         } else if ( key == Key.Enter && pressing ) {
             if ( _chainedButton ) {
-                _chainedButton.onButtonPressed.call();
+                _chainedButton.onButtonPress.call();
             }
 
         } else {

@@ -158,7 +158,7 @@ class SliderWidget(bool Horizon) : Widget
         }
     }
 
-    override void layout ()
+    protected void resizeElements ()
     {
         auto size = style.box.clientSize;
 
@@ -171,8 +171,11 @@ class SliderWidget(bool Horizon) : Widget
         _pointerSize =
             (size.weight!Horizon - _barWeight)/2;
         _pointer.resize( _pointerSize );
-
-        super.layout();
+    }
+    override vec2 layout ( vec2 pos, vec2 size )
+    {
+        scope(success) resizeElements();
+        return super.layout( pos, size );
     }
 
     protected @property barLate ()

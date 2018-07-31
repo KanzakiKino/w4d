@@ -3,6 +3,7 @@
 module w4d.widget.scroll;
 import w4d.layout.lineup,
        w4d.layout.split,
+       w4d.style.scalar,
        w4d.task.window,
        w4d.widget.base,
        w4d.widget.panel,
@@ -20,7 +21,6 @@ class ScrollPanelWidget(bool Horizon) : PanelWidget
         {
             super();
         }
-
         override void handleScroll ( float v )
         {
             super.handleScroll( v );
@@ -45,6 +45,8 @@ class ScrollPanelWidget(bool Horizon) : PanelWidget
             size   = vec2(0,0);
 
             setLayout!( LineupLayout!Horizon );
+            style.box.size.width  = 100.percent;
+            style.box.size.height = 100.percent;
         }
 
         void setScroll ( float len )
@@ -62,10 +64,8 @@ class ScrollPanelWidget(bool Horizon) : PanelWidget
             setScroll( temp );
         }
 
-        override void layout ()
+        protected void updatePageSize ()
         {
-            super.layout();
-
             auto clientSize = style.box.clientSize;
             if ( children.length ) {
                 auto last = children[$-1];
@@ -80,8 +80,14 @@ class ScrollPanelWidget(bool Horizon) : PanelWidget
             } else {
                 _scrollbar.setBarLength( clientSize.y/size.y );
             }
-
-            resetScroll();
+        }
+        override vec2 layout ( vec2 pos, vec2 size )
+        {
+            scope(success) {
+                updatePageSize();
+                resetScroll();
+            }
+            return super.layout( pos, size );
         }
 
         override void draw ( Window w )

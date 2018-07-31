@@ -7,11 +7,11 @@ import w4d.parser.theme,
        w4d.event;
 import g4d.math.vector;
 
-alias ButtonPressedHandler = EventHandler!( void );
+alias ButtonPressHandler = EventHandler!( void );
 
 class ButtonWidget : TextWidget
 {
-    ButtonPressedHandler onButtonPressed;
+    ButtonPressHandler onButtonPress;
 
     override bool handleMouseButton ( MouseButton btn, bool status, vec2 pos )
     {
@@ -30,7 +30,7 @@ class ButtonWidget : TextWidget
 
     void handleButtonPress ()
     {
-        onButtonPressed.call();
+        onButtonPress.call();
     }
 
     this ()

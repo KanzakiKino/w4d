@@ -59,7 +59,7 @@ class Window : g4d.Window, Task
         handler.onWindowResize = delegate ( vec2i sz )
         {
             recalcMatrix();
-            _root.resize( sz );
+            _root.layout( sz );
         };
         handler.onMouseEnter = delegate ( bool entered )
         {
@@ -190,6 +190,6 @@ interface WindowContent
 
     @property bool needRedraw ();
 
-    void resize ( vec2i );
+    void layout ( vec2i );
     void draw   ( Window );
 }

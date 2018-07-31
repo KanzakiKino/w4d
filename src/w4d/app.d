@@ -39,8 +39,8 @@ class App
     {
         while ( alive ) {
             try {
-                g4d.Window.pollEvents();
                 _tasks = _tasks.remove!( x => x.exec(this) );
+                g4d.Window.pollEvents();
                 Thread.sleep( dur!"msecs"( sleepDuration ) );
             } catch ( Exception e ) {
                 if ( !onThrown.call( e ) ) {
