@@ -27,5 +27,9 @@ interface Layoutable
     @property WidgetStyle  style            ();
     @property Layoutable[] childLayoutables ();
 
+    @property vec2 wantedSize ();
+
     vec2 layout ( vec2, vec2 );
+
+    void shiftChildren ( vec2 );
 }

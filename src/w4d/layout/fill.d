@@ -28,6 +28,7 @@ class FillLayout : Layout
         auto ctx = WidgetStyleCalcContext();
         ctx.parentSize = sz;
         ctx.pos        = pt;
+        ctx.size       = owner.wantedSize;
         style.calc( ctx );
     }
 

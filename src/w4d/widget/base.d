@@ -33,6 +33,10 @@ class Widget : WindowContent, Layoutable
     {
         return children.to!( Layoutable[] );
     }
+    @property vec2 wantedSize ()
+    {
+        return vec2(-1,-1);
+    }
 
     protected bool _needRedraw;
     protected bool _needLayout;
@@ -248,8 +252,7 @@ class Widget : WindowContent, Layoutable
 
         return style.box.collisionSize;
     }
-
-    protected void shiftChildren ( vec2 a )
+    void shiftChildren ( vec2 a )
     {
         foreach ( c; children ) {
             c.style.x.alter( c.style.x.calced+a.x );

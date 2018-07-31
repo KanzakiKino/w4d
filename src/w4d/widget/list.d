@@ -181,22 +181,10 @@ class ListWidget : VerticalScrollPanelWidget
 
 class ListTextItemWidget : TextWidget
 {
-    this ()
+    override @property vec2 wantedSize ()
     {
-        super();
-        parseThemeFromFile!"theme/listitem.yaml"( style );
-
-        style.box.paddings = Rect( 1.mm );
+        return vec2( -1, super.wantedSize.y );
     }
-    override void adjustSize ()
-    {
-        super.adjustSize();
-        style.box.size.width = Scalar(0); // none
-    }
-}
-
-class ListPanelItemWidget : TextWidget
-{
     this ()
     {
         super();

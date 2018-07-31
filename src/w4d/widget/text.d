@@ -24,6 +24,11 @@ class TextWidget : Widget
 
     vec2 textPosRate;
 
+    override @property vec2 wantedSize ()
+    {
+        return _textElm.size;
+    }
+
     this ()
     {
         _textElm = new TextElement;
@@ -45,11 +50,6 @@ class TextWidget : Widget
             _textElm.loadText( _font, _text );
         }
         requestRedraw();
-    }
-    void adjustSize ()
-    {
-        style.box.size.width  = _textElm.size.x.pixel;
-        style.box.size.height = _textElm.size.y.pixel;
     }
 
     protected void drawText ( Window win )

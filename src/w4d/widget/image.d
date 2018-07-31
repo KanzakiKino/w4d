@@ -17,19 +17,26 @@ class ImageWidget : Widget
     protected vec2        _imageSize;
     protected vec2        _uv;
 
+    override @property vec2 wantedSize ()
+    {
+        return _imageSize;
+    }
+
     this ()
     {
-        _imageElm = new RectElement;
-        _texture  = null;
-        _uv       = vec2(0,0);
+        _imageElm  = new RectElement;
+        _texture   = null;
+        _imageSize = vec2(0,0);
+        _uv        = vec2(0,0);
     }
 
     void setImage (B) ( B bmp )
         if ( isBitmap!B )
     {
         if ( !bmp ) {
-            _texture = null;
-            _uv      = vec2(0,0);
+            _texture   = null;
+            _imageSize = vec2(0,0);
+            _uv        = vec2(0,0);
             return;
         }
 

@@ -19,7 +19,6 @@ class TestRootWidget : PanelWidget
         foreach ( i; 0..20 ) {
             auto widget1 = new ListTextItemWidget;
             widget1.loadText( i.to!dstring~"fuck you."d, fontface );
-            widget1.adjustSize();
             list1.addItem( i, widget1 );
         }
     }
