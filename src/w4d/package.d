@@ -13,7 +13,7 @@ public
            w4d.style.scalar,
            w4d.style.size;
     import w4d.widget.input.line,
-           //w4d.widget.input.slider,
+           w4d.widget.input.slider,
            w4d.widget.base,
            w4d.widget.button,
            w4d.widget.image,
@@ -21,7 +21,7 @@ public
            w4d.widget.panel,
            w4d.widget.scroll,
            w4d.widget.scrollbar,
-           //w4d.widget.tabhost,
+           w4d.widget.tabhost,
            w4d.widget.text;
     import w4d.app;
     // TODO Import useful modules.
