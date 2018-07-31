@@ -53,7 +53,11 @@ class TextWidget : Widget
         if ( _text.length ) {
             _textElm.loadText( _font, _text );
         }
-        requestRedraw();
+        if ( style.box.size.isAuto ) {
+            requestLayout();
+        } else {
+            requestRedraw();
+        }
     }
 
     protected void drawText ( Window win )

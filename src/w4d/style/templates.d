@@ -6,6 +6,16 @@ template AttributesUtilities ()
 {
     import w4d.util.tuple;
 
+    @property bool isAuto ()
+    {
+        static foreach ( name; __traits(allMembers,typeof(this)) ) {
+            static if ( !__traits(compiles,__traits(getAttributes,mixin(name))) ) {
+            } else static if ( "attr".isIn( __traits(getAttributes,mixin(name)) ) ) {
+                if ( mixin(name).isAuto ) return true;
+            }
+        }
+        return false;
+    }
     @property bool isRelative ()
     {
         static foreach ( name; __traits(allMembers,typeof(this)) ) {
