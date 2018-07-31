@@ -56,7 +56,7 @@ class Window : g4d.Window, Task
         _root      = null;
         _cursorPos = vec2(0,0);
 
-        handler.onWindowResize = delegate ( vec2i sz )
+        handler.onFbResize = delegate ( vec2i sz )
         {
             recalcMatrix();
             _root.layout( sz );
@@ -116,9 +116,12 @@ class Window : g4d.Window, Task
     override bool exec ( App app )
     {
         enforce( _root, "Content is null." );
-        handler.onWindowResize( size );
+        handler.onFbResize( size );
 
         if ( alive ) {
+            if ( _root.needLayout ) {
+                _root.layout( size );
+            }
             if ( _root.needRedraw ) {
                 resetFrame();
                 _root.draw( this );
@@ -188,6 +191,7 @@ interface WindowContent
     // Be called when focused and text was inputted.
     bool handleTextInput ( dchar );
 
+    @property bool needLayout ();
     @property bool needRedraw ();
 
     void layout ( vec2i );

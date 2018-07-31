@@ -166,6 +166,11 @@ class Widget : WindowContent, Layoutable
         _context = null;
         _box     = new BoxElement;
 
+        _hovered = null;
+
+        _needLayout = true;
+        _needRedraw = true;
+
         setLayout!FillLayout();
         parseThemeFromFile!"theme/normal.yaml"( style );
     }
@@ -245,6 +250,7 @@ class Widget : WindowContent, Layoutable
     {
         enforce( _layout, "Layout is null." );
         _layout.place( pos, size );
+        _needLayout = false;
 
         infectWindowContext();
         _box.resize( _style.box );
