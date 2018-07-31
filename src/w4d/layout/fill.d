@@ -15,10 +15,10 @@ class FillLayout : Layout
 
     protected void alterSize ( vec2 sz )
     {
-        if ( !style.box.size.width.isSpecified ) {
+        if ( style.box.size.width.isNone ) {
             style.box.size.width.alter( sz.x );
         }
-        if ( !style.box.size.height.isSpecified ) {
+        if ( style.box.size.height.isNone ) {
             style.box.size.height.alter( sz.y );
         }
     }
