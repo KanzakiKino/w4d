@@ -30,6 +30,7 @@ unittest
 enum ScalarUnit
 {
     None,
+    Auto,
 
     // Absolute
     Pixel,
@@ -57,17 +58,26 @@ struct Scalar
 
     protected float _calculated;
 
-    @property isSpecified ()
+    @property isNone ()
     {
-        return _unit != ScalarUnit.None;
+        return _unit == ScalarUnit.None;
     }
+    @property isAuto ()
+    {
+        return _unit == ScalarUnit.Auto;
+    }
+
     @property isAbsolute ()
     {
-        return _unit <= ScalarUnit.Inch && _unit != ScalarUnit.None;
+        return isSpecified && _unit <= ScalarUnit.Inch;
     }
     @property isRelative ()
     {
-        return _unit >= ScalarUnit.Percent;
+        return isSpecified && _unit >= ScalarUnit.Percent;
+    }
+    @property isSpecified ()
+    {
+        return isAbsolute || isRelative;
     }
 
     @property isCalced ()
@@ -84,7 +94,7 @@ struct Scalar
     {
         final switch ( _unit ) with ( ScalarUnit )
         {
-            case None:
+            case None, Auto:
                 _calculated = base.default_;
                 break;
             case Pixel:
