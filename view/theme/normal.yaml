@@ -3,6 +3,6 @@
 # Copyright 2018 KanzakiKino
 
 default:
-    foreground: [0,0,0,1]
+    foreground: [0.8]
     background: [0,0,0,0]
     border    : [0,0,0,0]
