@@ -1,15 +1,14 @@
 // Written under LGPL-3.0 in the D programming language.
 // Copyright 2018 KanzakiKino
 module w4d.widget.list;
-import w4d.parser.theme,
+import w4d.layout.lineup,
+       w4d.parser.theme,
        w4d.style.rect,
        w4d.style.scalar,
        w4d.style.widget,
        w4d.task.window,
        w4d.widget.base,
        w4d.widget.panel,
-       w4d.widget.scroll,
-       w4d.widget.text,
        w4d.event,
        w4d.exception;
 import g4d.math.vector;
@@ -19,85 +18,61 @@ import std.algorithm,
 
 alias SelectChangeHandler = EventHandler!( void, ListItemWidget[] );
 
-class ListWidget : VerticalScrollPanelWidget
+class ListWidget : Widget
 {
-    protected class CustomPanelWidget :
-        typeof(super).CustomPanelWidget
+    protected ListItemWidget[] _items;
+    @property items () { return _items; }
+
+    @property selectedItems ()
     {
-        protected Widget _dragging;
-
-        override bool handleMouseMove ( vec2 pos )
-        {
-            if ( super.handleMouseMove( pos ) ) return true;
-
-            if ( editable && isTracked && _dragging ) {
-                if ( auto child = findChildAt(pos) ) {
-                    swapChild( child, _dragging );
-                    return true;
-                }
+        ListItemWidget[] result;
+        foreach ( item; items ) {
+            if ( item.isSelected ) {
+                result ~= item;
             }
-            return false;
+            result ~= item.selectedItems;
         }
-        override bool handleMouseButton ( MouseButton btn, bool status, vec2 pos )
-        {
-            if ( super.handleMouseButton( btn, status, pos ) ) return true;
-
-            if ( btn == MouseButton.Left && status ) {
-                if ( auto child = findChildAt( pos ) ) {
-                    _dragging = child;
-                    _dragging.enableState( WidgetState.Pressed );
-
-                    toggleItem( child.to!ListItemWidget );
-                    return true;
-                }
-            } else if ( btn == MouseButton.Left && !status ) {
-                if ( _dragging ) {
-                    _dragging.disableState( WidgetState.Pressed );
-                    _dragging = null;
-                }
-            }
-            return false;
-        }
-        this ()
-        {
-            super();
-            _dragging = null;
-        }
-        override @property bool trackable () { return true; }
+        return result;
     }
-
-    protected override typeof(super).CustomPanelWidget createCustomPanel ()
+    override @property Widget[] children ()
     {
-        return new CustomPanelWidget;
-    }
-    override @property typeof(super).CustomPanelWidget contents ()
-    {
-        throw new W4dException( "Modifying contents is not allowed." );
+        return items.to!( Widget[] );
     }
 
     protected bool _multiselect;
     const @property multiselectable () { return _multiselect; }
 
-    protected bool _editable;
-    @property ref editable () { return _editable; }
+    protected Widget _dragging;
 
     SelectChangeHandler onSelectChange;
 
-    @property ListItemWidget[] childItems ()
+    override bool handleMouseButton ( MouseButton btn, bool status, vec2 pos )
     {
-        return super.contents.children.to!(ListItemWidget[]);
-    }
-    @property ListItemWidget[] selectedItems ()
-    {
-        return childItems.filter!"a.isSelected".array;
+        if ( super.handleMouseButton(btn,status,pos) ) return true;
+
+        if ( btn == MouseButton.Left && status ) {
+            if ( auto child = findChildAt( pos ) ) {
+                _dragging = child;
+                _dragging.enableState( WidgetState.Pressed );
+
+                toggleItem( child.to!ListItemWidget );
+                return true;
+            }
+        } else if ( btn == MouseButton.Left && !status ) {
+            if ( _dragging ) {
+                _dragging.disableState( WidgetState.Pressed );
+                _dragging = null;
+            }
+        }
+        return false;
     }
 
     this ()
     {
         super();
+        setLayout!VerticalLineupLayout;
 
         _multiselect = false;
-        _editable    = false;
     }
 
     void setMultiselectable ( bool b )
@@ -109,25 +84,19 @@ class ListWidget : VerticalScrollPanelWidget
     void addItem ( ListItemWidget w )
     {
         enforce( w, "Null is invalid." );
-        w.setParentList( this );
-        super.contents.addChild( w );
+        _items ~= w;
+        w.setParent( this );
     }
     void removeItem ( ListItemWidget w )
     {
-        enforce( w, "Null is invalid." );
-        super.contents.removeChild( w );
+        _items = _items.remove!( x => x is w );
     }
 
     void deselect ()
     {
-        foreach ( i; childItems ) {
+        foreach ( i; items ) {
             unselectItem( i );
-        }
-    }
-    void selectAll ()
-    {
-        foreach ( i; childItems ) {
-            selectItem( i );
+            i.deselect();
         }
     }
 
@@ -158,8 +127,6 @@ class ListWidget : VerticalScrollPanelWidget
 
 class ListItemWidget : PanelWidget
 {
-    protected ListWidget _parentList;
-
     protected int _id;
     const @property id () { return _id; }
 
@@ -182,12 +149,11 @@ class ListItemWidget : PanelWidget
     {
         return !!(status & WidgetState.Selected);
     }
-
-    void setParentList ( ListWidget w )
+    @property ListItemWidget[] selectedItems ()
     {
-        enforce( w, "Null is invalid." );
-        enforce( !_parentList, "Parent is already defined." );
-
-        _parentList = w;
+        return [];
     }
+
+    void setParent ( ListWidget ) { }
+    void deselect  ()             { }
 }

@@ -13,9 +13,12 @@ class TestRootWidget : PanelWidget
 
         auto fontface = new FontFace(new Font("/usr/share/fonts/TTF/Ricty-Regular.ttf"), vec2i(16,16));
 
+        auto scroll1 = new VerticalScrollPanelWidget;
+        addChild( scroll1 );
+
         auto list1 = new ListWidget;
-        list1.setMultiselectable( true );
-        addChild( list1 );
+//        list1.setMultiselectable( true );
+        scroll1.contents.addChild( list1 );
 
         foreach ( i; 0..20 ) {
             auto widget1 = new ListItemWidget(i);
