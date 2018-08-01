@@ -3,7 +3,7 @@
 import w4d;
 import std.conv;
 
-class TestRootWidget : PanelWidget
+class TestRootWidget : RootWidget
 {
     this ()
     {

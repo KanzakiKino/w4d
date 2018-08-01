@@ -61,7 +61,7 @@ class Widget : WindowContent, Layoutable
         }
     }
 
-    override bool handleMouseEnter ( bool entered, vec2 pos )
+    bool handleMouseEnter ( bool entered, vec2 pos )
     {
         if ( _context.tracked && !isTracked ) {
             return true;
@@ -75,7 +75,7 @@ class Widget : WindowContent, Layoutable
         }
         return false;
     }
-    override bool handleMouseMove ( vec2 pos )
+    bool handleMouseMove ( vec2 pos )
     {
         if ( !isTracked ) {
             if ( _context.tracked ) {
@@ -91,7 +91,7 @@ class Widget : WindowContent, Layoutable
         }
         return false;
     }
-    override bool handleMouseButton ( MouseButton btn, bool status, vec2 pos )
+    bool handleMouseButton ( MouseButton btn, bool status, vec2 pos )
     {
 
         if ( !isTracked ) {
@@ -116,7 +116,7 @@ class Widget : WindowContent, Layoutable
         }
         return false;
     }
-    override bool handleMouseScroll ( vec2 amount, vec2 pos )
+    bool handleMouseScroll ( vec2 amount, vec2 pos )
     {
         if ( !isTracked ) {
             if ( _context.tracked ) {
@@ -130,7 +130,7 @@ class Widget : WindowContent, Layoutable
         return false;
     }
 
-    override bool handleKey ( Key key, KeyState status )
+    bool handleKey ( Key key, KeyState status )
     {
         if ( !isFocused ) {
             if ( _context.focused ) {
@@ -141,7 +141,7 @@ class Widget : WindowContent, Layoutable
         }
         return false;
     }
-    override bool handleTextInput ( dchar c )
+    bool handleTextInput ( dchar c )
     {
         if ( _context.focused && !isFocused ) {
             return _context.focused.handleTextInput( c );
@@ -177,9 +177,7 @@ class Widget : WindowContent, Layoutable
 
     protected void infectWindowContext ()
     {
-        if ( !_context ) {
-            _context = new WindowContext;
-        }
+        enforce( _context, "WindowContext is null." );
         children.each!( x => x._context = _context );
     }
 
@@ -243,16 +241,17 @@ class Widget : WindowContent, Layoutable
         _needLayout = true;
     }
     void layout ( vec2i size )
-    { // Called only by Window.
+    {
         layout( vec2(0,0), vec2(size) );
     }
     vec2 layout ( vec2 pos, vec2 size )
     {
+        infectWindowContext();
+
         enforce( _layout, "Layout is null." );
         _layout.place( pos, size );
         _needLayout = false;
 
-        infectWindowContext();
         _box.resize( _style.box );
         requestRedraw();
 
@@ -268,7 +267,7 @@ class Widget : WindowContent, Layoutable
         requestRedraw();
     }
 
-    override @property bool needRedraw ()
+    @property bool needRedraw ()
     {
         return _needRedraw || children.canFind!"a.needRedraw" || needLayout;
     }
@@ -292,7 +291,7 @@ class Widget : WindowContent, Layoutable
     {
         children.each!(x => x.draw(win));
     }
-    override void draw ( Window win )
+    void draw ( Window win )
     {
         drawBox( win );
         drawChildren( win );
