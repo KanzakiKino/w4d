@@ -14,8 +14,20 @@ class RootWidget : PanelWidget
         _context = new WindowContext;
     }
 
+    protected void drawPopup ( Window w )
+    {
+        auto popup = _context.popup;
+        if ( !popup ) return;
+
+        if ( popup.needLayout ) {
+            popup.layout( style.clientLeftTop, style.box.clientSize );
+        }
+        popup.draw( w );
+    }
+
     override void draw ( Window w )
     {
         super.draw( w );
+        drawPopup( w );
     }
 }

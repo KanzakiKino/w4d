@@ -302,14 +302,25 @@ class Widget : WindowContent, Layoutable
 class WindowContext
 {
     protected Widget _tracked;
-    @property tracked () { return _tracked; }
+    @property tracked ()
+    {
+        return _popup? _popup: _tracked;
+    }
+
     protected Widget _focused;
-    @property focused () { return _focused; }
+    @property focused ()
+    {
+        return _popup? _popup: _focused;
+    }
+
+    protected Widget _popup;
+    @property popup () { return _popup; }
 
     this ()
     {
         _tracked = null;
         _focused = null;
+        _popup   = null;
     }
 
     void setTracked ( Widget w )
@@ -322,7 +333,6 @@ class WindowContext
             if ( w    ) w   .handleTracked( true  );
         }
     }
-
     void setFocused ( Widget w )
     {
         auto temp = _focused;
@@ -331,6 +341,15 @@ class WindowContext
         if ( w !is temp ) {
             if ( temp ) temp.handleFocused( false );
             if ( w    ) w   .handleFocused( true  );
+        }
+    }
+    void setPopup ( Widget w )
+    {
+        auto temp = _popup;
+        _popup = w;
+
+        if ( w !is temp ) {
+            // TODO: call the events.
         }
     }
 }
