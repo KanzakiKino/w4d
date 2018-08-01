@@ -7,14 +7,17 @@ import w4d.parser.theme,
        w4d.style.widget,
        w4d.task.window,
        w4d.widget.base,
+       w4d.widget.panel,
        w4d.widget.scroll,
        w4d.widget.text,
        w4d.event,
        w4d.exception;
 import g4d.math.vector;
-import std.algorithm;
+import std.algorithm,
+       std.array,
+       std.conv;
 
-alias SelectChangeHandler = EventHandler!( void, int[] );
+alias SelectChangeHandler = EventHandler!( void, ListItemWidget[] );
 
 class ListWidget : VerticalScrollPanelWidget
 {
@@ -44,7 +47,7 @@ class ListWidget : VerticalScrollPanelWidget
                     _dragging = child;
                     _dragging.enableState( WidgetState.Pressed );
 
-                    toggleItem( retrieveIdFromWidget( child ) );
+                    toggleItem( child.to!ListItemWidget );
                     return true;
                 }
             } else if ( btn == MouseButton.Left && !status ) {
@@ -72,9 +75,6 @@ class ListWidget : VerticalScrollPanelWidget
         throw new W4dException( "Modifying contents is not allowed." );
     }
 
-    protected Widget[int] _idMap;
-    const @property idMap () { return _idMap; }
-
     protected bool _multiselect;
     const @property multiselectable () { return _multiselect; }
 
@@ -83,10 +83,18 @@ class ListWidget : VerticalScrollPanelWidget
 
     SelectChangeHandler onSelectChange;
 
+    @property ListItemWidget[] childItems ()
+    {
+        return super.contents.children.to!(ListItemWidget[]);
+    }
+    @property ListItemWidget[] selectedItems ()
+    {
+        return childItems.filter!"a.isSelected".array;
+    }
+
     this ()
     {
         super();
-        _idMap.clear();
 
         _multiselect = false;
         _editable    = false;
@@ -98,98 +106,88 @@ class ListWidget : VerticalScrollPanelWidget
         _multiselect = b;
     }
 
-    protected int retrieveIdFromWidget ( Widget w )
+    void addItem ( ListItemWidget w )
     {
-        auto index = _idMap.values.countUntil!"a is b"( w );
-        enforce( index >= 0, "The widget is unknown." );
-        return _idMap.keys[index];
-    }
-
-    void addItem ( int id, Widget w )
-    {
-        enforce( id !in _idMap, "Id is already used." );
-        _idMap[id] = w;
+        enforce( w, "Null is invalid." );
+        w.setParentList( this );
         super.contents.addChild( w );
     }
-    void removeItem ( int id )
+    void removeItem ( ListItemWidget w )
     {
-        enforce( id in _idMap, "Id is unknown." );
-        auto w = _idMap[id];
+        enforce( w, "Null is invalid." );
         super.contents.removeChild( w );
     }
 
     void deselect ()
     {
-        foreach ( id; _idMap.keys ) {
-            unselectItem( id );
+        foreach ( i; childItems ) {
+            unselectItem( i );
         }
     }
     void selectAll ()
     {
-        foreach ( id; _idMap.keys ) {
-            selectItem( id );
+        foreach ( i; childItems ) {
+            selectItem( i );
         }
     }
 
-    bool isSelected ( int id )
+    void selectItem ( ListItemWidget w )
     {
-        enforce( id in _idMap, "Id is unknown." );
-        return isSelected( _idMap[id] );
-    }
-    bool isSelected ( Widget w )
-    {
-        return !!(w.status & WidgetState.Selected);
-    }
-    void selectItem ( int id )
-    {
-        if ( isSelected( id ) ) return;
+        if ( w.isSelected ) return;
         if ( !multiselectable ) deselect();
 
-        auto w = _idMap[id];
         w.enableState( WidgetState.Selected );
-        onSelectChange.call( retrieveSelectedIds() );
+        onSelectChange.call( selectedItems );
     }
-    void unselectItem ( int id )
+    void unselectItem ( ListItemWidget w )
     {
-        if ( !isSelected( id ) ) return;
-        auto w = _idMap[id];
+        if ( !w.isSelected ) return;
+
         w.disableState( WidgetState.Selected );
-        onSelectChange.call( retrieveSelectedIds() );
+        onSelectChange.call( selectedItems );
     }
-    void toggleItem ( int id )
+    void toggleItem ( ListItemWidget w )
     {
-        enforce( id in _idMap, "Id is unknown." );
-
-        if ( isSelected( id ) ) {
-            unselectItem( id );
+        if ( w.isSelected ) {
+            unselectItem( w );
         } else {
-            selectItem( id );
+            selectItem( w );
         }
-    }
-
-    int[] retrieveSelectedIds ()
-    {
-        int[] result;
-        foreach ( w; super.contents.children ) {
-            if ( isSelected( w ) ) {
-                result ~= retrieveIdFromWidget( w );
-            }
-        }
-        return result;
     }
 }
 
-class ListTextItemWidget : TextWidget
+class ListItemWidget : PanelWidget
 {
-    override @property vec2 wantedSize ()
-    {
-        return vec2( -1, super.wantedSize.y );
-    }
-    this ()
+    protected ListWidget _parentList;
+
+    protected int _id;
+    const @property id () { return _id; }
+
+    protected string _idStr;
+    const @property idStr () { return _idStr; }
+
+    this ( int id, string idStr = "" )
     {
         super();
+        _id    = id;
+        _idStr = idStr;
+
         parseThemeFromFile!"theme/listitem.yaml"( style );
 
-        style.box.paddings = Rect( 1.mm );
+        style.box.size.width = Scalar.Auto;
+        style.box.paddings   = Rect( 1.mm );
+    }
+
+    @property bool isSelected ()
+    {
+        return !!(status & WidgetState.Selected);
+    }
+
+    void setParentList ( ListWidget w )
+    {
+        enforce( w, "Null is invalid." );
+        enforce( !_parentList, "Parent is already defined." );
+
+        _parentList = w;
     }
 }
