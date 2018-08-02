@@ -79,7 +79,8 @@ class Widget : WindowContent, Layoutable
     {
         if ( !isTracked ) {
             if ( _context.tracked ) {
-                return _context.tracked.handleMouseMove( pos );
+                _context.tracked.handleMouseMove( pos );
+                return true;
             } else if ( auto target = findChildAt(pos) ) {
                 setHovered( target, pos );
                 if ( target.handleMouseMove( pos ) ) {
@@ -96,7 +97,8 @@ class Widget : WindowContent, Layoutable
 
         if ( !isTracked ) {
             if ( _context.tracked ) {
-                return _context.tracked.handleMouseButton( btn, status, pos );
+                _context.tracked.handleMouseButton( btn, status, pos );
+                return true;
             } else if ( auto target = findChildAt(pos) ) {
                 if ( target.handleMouseButton( btn, status, pos ) ) {
                     return true;
@@ -120,7 +122,8 @@ class Widget : WindowContent, Layoutable
     {
         if ( !isTracked ) {
             if ( _context.tracked ) {
-                return _context.tracked.handleMouseScroll( amount, pos );
+                _context.tracked.handleMouseScroll( amount, pos );
+                return true;
             } else if ( auto target = findChildAt(pos) ) {
                 if ( target.handleMouseScroll( amount, pos ) ) {
                     return true;
