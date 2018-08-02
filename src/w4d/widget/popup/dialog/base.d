@@ -39,9 +39,9 @@ class PopupDialogWidget : PopupWidget
         auto late = (parentSize-size)/2 + pos;
         late     -= style.translate;
 
+        shiftChildren( late - style.translate );
         style.x.alter( style.x.calced + late.x );
         style.y.alter( style.y.calced + late.y );
-        shiftChildren( late - style.translate );
 
         return vec2(0,0);
     }
