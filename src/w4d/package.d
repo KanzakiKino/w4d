@@ -16,6 +16,7 @@ public
            w4d.widget.input.line,
            w4d.widget.input.slider,
            w4d.widget.popup.base,
+           w4d.widget.popup.menu,
            w4d.widget.popup.tooltip,
            w4d.widget.base,
            w4d.widget.button,

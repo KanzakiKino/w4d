@@ -6,6 +6,7 @@ import std.conv;
 class TestRootWidget : RootWidget
 {
     protected TooltipPopupWidget _tooltip;
+    protected MenuPopupWidget    _menu;
 
     override bool handleMouseButton ( MouseButton btn, bool status, vec2 pos )
     {
@@ -14,6 +15,12 @@ class TestRootWidget : RootWidget
         if ( btn == MouseButton.Middle && status ) {
             _context.setPopup( _tooltip );
             _tooltip.move( pos+vec2(0,20) );
+            requestRedraw();
+            return true;
+
+        } else if ( btn == MouseButton.Right && status ) {
+            _context.setPopup( _menu );
+            _menu.move( pos, vec2(200,0) );
             requestRedraw();
             return true;
         }
@@ -30,6 +37,16 @@ class TestRootWidget : RootWidget
 
         _tooltip = new TooltipPopupWidget;
         _tooltip.loadText( "Right click to open tree."d, fontface );
+
+        _menu = new MenuPopupWidget;
+        foreach ( i; 0..5 ) {
+            auto item1 = new MenuItemWidget;
+            item1.loadText( "menuitem"d, fontface );
+            item1.onPress = () {
+                return true;
+            };
+            _menu.addItem( item1 );
+        }
 
         auto scroll1 = new VerticalScrollPanelWidget;
         addChild( scroll1 );
