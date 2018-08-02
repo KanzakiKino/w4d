@@ -15,7 +15,7 @@ public
     import w4d.widget.input.checkbox,
            w4d.widget.input.line,
            w4d.widget.input.slider,
-           w4d.widget.popup.dialog.base,
+           w4d.widget.popup.dialog.text,
            w4d.widget.popup.base,
            w4d.widget.popup.menu,
            w4d.widget.popup.tooltip,

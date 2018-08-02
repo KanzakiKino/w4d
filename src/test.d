@@ -37,7 +37,11 @@ class TestRootWidget : RootWidget
 
         _tooltip = new PopupTooltipWidget;
         _tooltip.loadText( "Right click to open tree."d, fontface );
-        _context.setPopup( new PopupDialogWidget );
+
+        auto dialog = new PopupTextDialogWidget;
+        dialog.loadText( "Hello, World"d, fontface );
+        dialog.setButtons( [DialogButton.Ok] );
+        _context.setPopup( dialog );
 
         _menu = new MenuPopupWidget;
         foreach ( i; 0..5 ) {
