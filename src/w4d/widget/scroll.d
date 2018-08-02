@@ -57,12 +57,6 @@ class ScrollPanelWidget(bool Horizon) : PanelWidget
 
             _scroll = len;
         }
-        protected void resetScroll ()
-        {
-            auto temp = _scroll;
-            _scroll = 0;
-            setScroll( temp );
-        }
 
         protected void updatePageSize ()
         {
@@ -84,8 +78,8 @@ class ScrollPanelWidget(bool Horizon) : PanelWidget
         override vec2 layout ( vec2 pos, vec2 size )
         {
             scope(success) {
+                _scroll = 0;
                 updatePageSize();
-                resetScroll();
             }
             return super.layout( pos, size );
         }

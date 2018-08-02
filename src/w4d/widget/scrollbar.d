@@ -111,7 +111,9 @@ class ScrollBarWidget (bool Horizon) : Widget
         newlen = newlen.clamp( 0f, 1f );
         auto temp = _barLength;
         _barLength = newlen;
+
         correctBar();
+        handleScroll( _value );
 
         if ( temp != _barLength ) {
             resizeElements();
