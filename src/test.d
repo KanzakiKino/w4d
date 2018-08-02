@@ -5,6 +5,21 @@ import std.conv;
 
 class TestRootWidget : RootWidget
 {
+    protected TooltipPopupWidget _tooltip;
+
+    override bool handleMouseButton ( MouseButton btn, bool status, vec2 pos )
+    {
+        if ( super.handleMouseButton(btn,status,pos) ) return true;
+
+        if ( btn == MouseButton.Middle && status ) {
+            _context.setPopup( _tooltip );
+            _tooltip.move( pos+vec2(0,20) );
+            requestRedraw();
+            return true;
+        }
+        return false;
+    }
+
     this ()
     {
         super();
@@ -12,6 +27,9 @@ class TestRootWidget : RootWidget
         style.getColorSet(0).bgColor = vec4(0.1,0.1,0.1,1);
 
         auto fontface = new FontFace(new Font("/usr/share/fonts/TTF/Ricty-Regular.ttf"), vec2i(16,16));
+
+        _tooltip = new TooltipPopupWidget;
+        _tooltip.loadText( "Right click to open tree."d, fontface );
 
         auto scroll1 = new VerticalScrollPanelWidget;
         addChild( scroll1 );

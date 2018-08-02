@@ -157,6 +157,9 @@ class Widget : WindowContent, Layoutable
     {
         (a? &enableState: &disableState)( WidgetState.Focused );
     }
+    void handlePopup ( bool, WindowContext )
+    {
+    }
 
     this ()
     {
@@ -349,7 +352,8 @@ class WindowContext
         _popup = w;
 
         if ( w !is temp ) {
-            // TODO: call the events.
+            if ( temp ) temp.handlePopup( false, this );
+            if ( w    ) w   .handlePopup( true , this );
         }
     }
 }

@@ -1,0 +1,7 @@
+# w4d theme for tooltip widgets
+# Written under LGPL-3.0 in YAML.
+# Copyright 2018 KanzakiKino
+
+default:
+    background: [0.2]
+    border    : [0.4]
