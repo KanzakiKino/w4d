@@ -14,17 +14,33 @@ class RootWidget : PanelWidget
         _context = new WindowContext;
     }
 
+    override @property bool needLayout ()
+    {
+        auto popup = _context.popup;
+        return (popup && popup.needLayout) || super.needLayout;
+    }
+    override void layout ( vec2i size )
+    {
+        super.layout( size );
+
+        auto popup = _context.popup;
+        if ( popup ) {
+            popup.layout( style.clientLeftTop, style.box.clientSize );
+        }
+    }
+
+    override @property bool needRedraw ()
+    {
+        auto popup = _context.popup;
+        return (popup && popup.needRedraw) || super.needRedraw;
+    }
     protected void drawPopup ( Window w )
     {
         auto popup = _context.popup;
         if ( !popup ) return;
 
-        if ( popup.needLayout ) {
-            popup.layout( style.clientLeftTop, style.box.clientSize );
-        }
         popup.draw( w );
     }
-
     override void draw ( Window w )
     {
         super.draw( w );
