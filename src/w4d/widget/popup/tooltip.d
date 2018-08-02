@@ -9,7 +9,7 @@ import w4d.parser.theme,
 import g4d.ft.font,
        g4d.math.vector;
 
-class TooltipPopupWidget : PopupWidget
+class PopupTooltipWidget : PopupWidget
 {
     protected TextWidget _text;
 

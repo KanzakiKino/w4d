@@ -5,7 +5,7 @@ import std.conv;
 
 class TestRootWidget : RootWidget
 {
-    protected TooltipPopupWidget _tooltip;
+    protected PopupTooltipWidget _tooltip;
     protected MenuPopupWidget    _menu;
 
     override bool handleMouseButton ( MouseButton btn, bool status, vec2 pos )
@@ -35,7 +35,7 @@ class TestRootWidget : RootWidget
 
         auto fontface = new FontFace(new Font("/usr/share/fonts/TTF/Ricty-Regular.ttf"), vec2i(16,16));
 
-        _tooltip = new TooltipPopupWidget;
+        _tooltip = new PopupTooltipWidget;
         _tooltip.loadText( "Right click to open tree."d, fontface );
 
         _menu = new MenuPopupWidget;
