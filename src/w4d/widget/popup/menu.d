@@ -34,11 +34,20 @@ class MenuPopupWidget : PopupWidget
         parseThemeFromFile!"theme/tooltip.yaml"( style );
         style.box.borderWidth = Rect(1.pixel);
     }
+    mixin DisableModifyChildren;
 
     void addItem ( MenuItemWidget i )
     {
         i._parentMenu = this;
-        addChild( i );
+        super.addChild( i );
+    }
+    void removeItem ( MenuItemWidget i )
+    {
+        super.removeChild( i );
+    }
+    void removeAllItems ()
+    {
+        super.removeAllChildren();
     }
 }
 

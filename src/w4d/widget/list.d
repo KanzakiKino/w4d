@@ -91,6 +91,10 @@ class ListWidget : Widget
     {
         _items = _items.remove!( x => x is w );
     }
+    void removeAllItems ()
+    {
+        _items = [];
+    }
 
     void deselect ()
     {

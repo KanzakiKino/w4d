@@ -329,6 +329,19 @@ class WindowContext
         _popup   = null;
     }
 
+    void forget ( Widget w )
+    {
+        if ( tracked is w ) {
+            setTracked( null );
+        }
+        if ( focused is w ) {
+            setFocused( null );
+        }
+        if ( popup is w ) {
+            setPopup( null );
+        }
+    }
+
     void setTracked ( Widget w )
     {
         auto temp = _tracked;

@@ -9,16 +9,6 @@ import std.algorithm;
 
 class PanelWidget : Widget
 {
-    protected static template DisableModifyChildren ()
-    {
-        import w4d.widget.base,
-               w4d.exception;
-        override Widget addChild ( Widget )
-        {
-            throw new W4dException( "Modifying children is not allowed." );
-        }
-    }
-
     protected Widget[] _children;
     override @property Widget[] children ()
     {
@@ -46,19 +36,42 @@ class PanelWidget : Widget
         _children.swapAt( i1, i2 );
         requestRedraw();
     }
+    void removeAllChildren ()
+    {
+        _children.each!( x => _context.forget(x) );
+        _children = [];
+        requestLayout();
+    }
     void removeChild ( Widget child )
     {
-        if ( _context.tracked is child ) {
-            _context.setTracked( null );
-        }
-        if ( _context.focused is child ) {
-            _context.setFocused( null );
-        }
-        if ( _hovered is child ) {
-            _hovered = null;
-        }
+        _context.forget( child );
         _children = _children.remove!( x => x is child );
-        requestRedraw();
+        requestLayout();
+    }
+
+    protected static template DisableModifyChildren ()
+    {
+        import w4d.widget.base,
+               w4d.exception;
+
+        enum DisableModifyChildren_ErrorMes = "Modifying children is not allowed.";
+
+        override Widget addChild ( Widget )
+        {
+            throw new W4dException( DisableModifyChildren_ErrorMes );
+        }
+        override void swapChild ( Widget, Widget )
+        {
+            throw new W4dException( DisableModifyChildren_ErrorMes );
+        }
+        override void removeChild ( Widget )
+        {
+            throw new W4dException( DisableModifyChildren_ErrorMes );
+        }
+        override void removeAllChildren ()
+        {
+            throw new W4dException( DisableModifyChildren_ErrorMes );
+        }
     }
 
     override @property bool trackable () { return false; }
