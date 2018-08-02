@@ -3,10 +3,11 @@
 module w4d.widget.popup.base;
 import w4d.widget.base,
        w4d.widget.panel,
+       w4d.widget.root,
        w4d.exception;
 import g4d.math.vector;
 
-class PopupWidget : PanelWidget
+class PopupWidget : RootWidget
 {
     // WindowContext of target of popup.
     protected WindowContext _objectContext;
@@ -21,14 +22,11 @@ class PopupWidget : PanelWidget
     this ()
     {
         super();
-
-        // WindowContext for popup widget.
-        _context = new WindowContext;
     }
 
     void move ( vec2 pos, vec2 size )
     {
-        super.layout( pos, size );
+        .Widget.layout( pos, size );
     }
     void close ()
     {
