@@ -29,7 +29,8 @@ public
            w4d.widget.scrollbar,
            w4d.widget.tabhost,
            w4d.widget.text,
-           w4d.widget.tree;
+           w4d.widget.tree,
+           w4d.widget.wrapper;
     import w4d.app;
     // TODO Import useful modules.
 
