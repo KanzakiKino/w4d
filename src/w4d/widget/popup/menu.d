@@ -7,8 +7,7 @@ import w4d.layout.lineup,
        w4d.style.scalar,
        w4d.task.window,
        w4d.widget.popup.base,
-       w4d.widget.panel,
-       w4d.widget.text,
+       w4d.widget.wrapper,
        w4d.event;
 import g4d.ft.font,
        g4d.math.vector;
@@ -53,10 +52,9 @@ class PopupMenuWidget : PopupWidget
 
 alias PressHandler = EventHandler!( bool );
 
-class MenuItemWidget : PanelWidget
+class MenuItemWidget : WrapperWidget
 {
     protected PopupMenuWidget _parentMenu;
-    protected TextWidget      _text;
 
     PressHandler onPress;
 
@@ -81,15 +79,7 @@ class MenuItemWidget : PanelWidget
 
         _parentMenu = null;
 
-        _text = new TextWidget;
-        addChild( _text );
-
         parseThemeFromFile!"theme/menuitem.yaml"( style );
         style.box.paddings = Rect(1.mm);
-    }
-
-    void loadText ( dstring v, FontFace face = null )
-    {
-        _text.loadText( v, face );
     }
 }

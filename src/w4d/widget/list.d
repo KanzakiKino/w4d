@@ -8,7 +8,7 @@ import w4d.layout.lineup,
        w4d.style.widget,
        w4d.task.window,
        w4d.widget.base,
-       w4d.widget.panel,
+       w4d.widget.wrapper,
        w4d.event,
        w4d.exception;
 import g4d.math.vector;
@@ -129,19 +129,11 @@ class ListWidget : Widget
     }
 }
 
-class ListItemWidget : PanelWidget
+class ListItemWidget : WrapperWidget
 {
-    protected int _id;
-    const @property id () { return _id; }
-
-    protected string _idStr;
-    const @property idStr () { return _idStr; }
-
-    this ( int id, string idStr = "" )
+    this ()
     {
         super();
-        _id    = id;
-        _idStr = idStr;
 
         parseThemeFromFile!"theme/listitem.yaml"( style );
 

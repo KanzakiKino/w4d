@@ -45,6 +45,21 @@ class TreeListItemWidget : ListItemWidget
             style.box.paddings.left = 5.mm;
         }
     }
+    protected class CustomPanelWidget : PanelWidget
+    {
+        override @property Widget[] children ()
+        {
+            if ( _opened ) {
+                return [_contents, _childList];
+            } else {
+                return [_contents];
+            }
+        }
+        this ()
+        {
+            super();
+        }
+    }
 
     protected ListWidget _parent;
     protected bool       _opened;
@@ -57,27 +72,21 @@ class TreeListItemWidget : ListItemWidget
     @property contents () { return _contents; }
     @property list     () { return _childList; }
 
-    override @property Widget[] children ()
+    this ()
     {
-        if ( _opened ) {
-            return [_contents, _childList];
-        } else {
-            return [_contents];
-        }
-    }
+        super();
 
-    this ( int id, string idStr = "" )
-    {
-        super( id, idStr );
         _parent = null;
         _opened = false;
 
         _contents  = new ContentsWidget;
         _childList = new TreeListWidget;
 
+        super.setChild( new CustomPanelWidget );
+
         setLayout!VerticalLineupLayout;
     }
-    mixin DisableModifyChildren;
+    mixin DisableModifyChild;
 
     override @property ListItemWidget[] selectedItems ()
     {

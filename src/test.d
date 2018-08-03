@@ -46,10 +46,12 @@ class TestRootWidget : RootWidget
         _menu = new PopupMenuWidget;
         foreach ( i; 0..5 ) {
             auto item1 = new MenuItemWidget;
-            item1.loadText( "menuitem"d, fontface );
             item1.onPress = () {
                 return true;
             };
+            auto text1 = new TextWidget;
+            text1.loadText( "menuitem"d, fontface );
+            item1.setChild( text1 );
             _menu.addItem( item1 );
         }
 
@@ -61,18 +63,18 @@ class TestRootWidget : RootWidget
         scroll1.contents.addChild( list1 );
 
         foreach ( i; 0..20 ) {
-            auto widget1 = new TreeListItemWidget(i);
+            auto widget1 = new TreeListItemWidget;
 
             auto text1 = new TextWidget;
             text1.loadText( i.to!dstring~"deep1"d, fontface );
             widget1.contents.addChild( text1 );
 
             foreach ( j; 0..5 ) {
-                auto widget2 = new ListItemWidget(j);
+                auto widget2 = new ListItemWidget;
 
                 auto text2 = new TextWidget;
                 text2.loadText( j.to!dstring~"deep2"d, fontface );
-                widget2.addChild( text2 );
+                widget2.setChild( text2 );
 
                 widget1.list.addItem( widget2 );
             }
