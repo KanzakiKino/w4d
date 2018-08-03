@@ -38,11 +38,6 @@ class TestRootWidget : RootWidget
         _tooltip = new PopupTooltipWidget;
         _tooltip.loadText( "Right click to open tree."d, fontface );
 
-        auto dialog = new PopupTextDialogWidget;
-        dialog.loadText( "Hello, World"d, fontface );
-        dialog.setButtons( [DialogButton.Ok] );
-        _context.setPopup( dialog );
-
         _menu = new PopupMenuWidget;
         foreach ( i; 0..5 ) {
             auto item1 = new MenuItemWidget;
@@ -55,31 +50,17 @@ class TestRootWidget : RootWidget
             _menu.addItem( item1 );
         }
 
-        auto scroll1 = new VerticalScrollPanelWidget;
-        addChild( scroll1 );
-
-        auto list1 = new ListWidget;
-//        list1.setMultiselectable( true );
-        scroll1.contents.addChild( list1 );
-
-        foreach ( i; 0..20 ) {
-            auto widget1 = new TreeListItemWidget;
+        auto select1 = new SelectInputWidget;
+        addChild( select1 );
+        foreach ( i; 0..5 ) {
+            auto item1 = new MenuItemWidget;
+            select1.addItem( item1 );
 
             auto text1 = new TextWidget;
-            text1.loadText( i.to!dstring~"deep1"d, fontface );
-            widget1.contents.addChild( text1 );
+            text1.loadText( i.to!dstring~":item to be selected"d, fontface );
+            item1.setChild( text1 );
 
-            foreach ( j; 0..5 ) {
-                auto widget2 = new ListItemWidget;
-
-                auto text2 = new TextWidget;
-                text2.loadText( j.to!dstring~"deep2"d, fontface );
-                widget2.setChild( text2 );
-
-                widget1.list.addItem( widget2 );
-            }
-
-            list1.addItem( widget1 );
+            if ( i == 0 ) select1.select( item1 );
         }
     }
 }
