@@ -13,7 +13,7 @@ import w4d.layout.lineup,
 import g4d.ft.font,
        g4d.math.vector;
 
-class MenuPopupWidget : PopupWidget
+class PopupMenuWidget : PopupWidget
 {
     override bool handleMouseButton ( MouseButton b, bool status, vec2 pos )
     {
@@ -55,7 +55,7 @@ alias PressHandler = EventHandler!( bool );
 
 class MenuItemWidget : PanelWidget
 {
-    protected MenuPopupWidget _parentMenu;
+    protected PopupMenuWidget _parentMenu;
     protected TextWidget      _text;
 
     PressHandler onPress;

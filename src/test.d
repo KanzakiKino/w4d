@@ -6,7 +6,7 @@ import std.conv;
 class TestRootWidget : RootWidget
 {
     protected PopupTooltipWidget _tooltip;
-    protected MenuPopupWidget    _menu;
+    protected PopupMenuWidget    _menu;
 
     override bool handleMouseButton ( MouseButton btn, bool status, vec2 pos )
     {
@@ -43,7 +43,7 @@ class TestRootWidget : RootWidget
         dialog.setButtons( [DialogButton.Ok] );
         _context.setPopup( dialog );
 
-        _menu = new MenuPopupWidget;
+        _menu = new PopupMenuWidget;
         foreach ( i; 0..5 ) {
             auto item1 = new MenuItemWidget;
             item1.loadText( "menuitem"d, fontface );
