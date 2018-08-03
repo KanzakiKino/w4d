@@ -38,7 +38,6 @@ class Widget : WindowContent, Layoutable
         return vec2(-1,-1);
     }
 
-    protected bool _needRedraw;
     protected bool _needLayout;
 
     protected Widget findChildAt ( vec2 pt )
@@ -175,7 +174,6 @@ class Widget : WindowContent, Layoutable
         _hovered = null;
 
         _needLayout = true;
-        _needRedraw = true;
 
         setLayout!FillLayout();
         parseThemeFromFile!"theme/normal.yaml"( style );
@@ -275,11 +273,13 @@ class Widget : WindowContent, Layoutable
 
     @property bool needRedraw ()
     {
-        return _needRedraw || children.canFind!"a.needRedraw" || needLayout;
+        return _context && _context.needRedraw;
     }
     void requestRedraw ()
     {
-        _needRedraw = true;
+        if ( _context ) {
+            _context.requestRedraw();
+        }
     }
 
     protected void drawBox ( Window win )
@@ -301,12 +301,15 @@ class Widget : WindowContent, Layoutable
     {
         drawBox( win );
         drawChildren( win );
-        _needRedraw = false;
+        _context.setNoNeedRedraw();
     }
 }
 
 class WindowContext
 {
+    protected bool _needRedraw;
+    @property needRedraw () { return _needRedraw; }
+
     protected Widget _tracked;
     @property tracked ()
     {
@@ -327,6 +330,15 @@ class WindowContext
         _tracked = null;
         _focused = null;
         _popup   = null;
+    }
+
+    void requestRedraw ()
+    {
+        _needRedraw = true;
+    }
+    void setNoNeedRedraw ()
+    {
+        _needRedraw = false;
     }
 
     void forget ( Widget w )

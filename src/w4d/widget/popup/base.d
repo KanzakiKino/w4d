@@ -16,6 +16,9 @@ class PopupWidget : RootWidget
     {
         if ( opened ) {
             _objectContext = w;
+        } else {
+            _objectContext.requestRedraw();
+            _objectContext = null;
         }
     }
 
