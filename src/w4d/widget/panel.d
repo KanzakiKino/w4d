@@ -25,7 +25,7 @@ class PanelWidget : Widget
     {
         enforce( child, "Append child is null." );
         _children ~= child;
-        requestRedraw();
+        requestLayout();
         return child;
     }
     void swapChild ( Widget c1, Widget c2 )
@@ -34,7 +34,7 @@ class PanelWidget : Widget
         auto i2 = _children.countUntil!"a is b"(c2);
         enforce( i1 >= 0 && i2 >= 0, "The children are unknown." );
         _children.swapAt( i1, i2 );
-        requestRedraw();
+        requestLayout();
     }
     void removeAllChildren ()
     {
