@@ -127,7 +127,7 @@ class Widget : WindowContent, Layoutable
     void shiftChildren ( vec2 size )
     {
         foreach ( c; children ) {
-            style.shift( size );
+            c.style.shift( size );
             c.shiftChildren( size );
         }
         requestRedraw();
