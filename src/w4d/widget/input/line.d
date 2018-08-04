@@ -235,12 +235,9 @@ class LineInputWidget : TextWidget
 
     protected override void drawText ( Window w )
     {
-        auto late = vec2(-_scrollLength,0);
-
         auto pos = style.box.
             borderInsideLeftTop + style.translate;
         w.clip.pushRect( pos, style.box.borderInsideSize );
-        w.moveOrigin( w.origin + late );
 
         super.drawText( w );
         if ( isFocused ) {
@@ -251,7 +248,6 @@ class LineInputWidget : TextWidget
         }
 
         w.clip.popRect();
-        w.moveOrigin( w.origin - late );
     }
     protected void drawCursor ( Window w )
     {
