@@ -1,0 +1,17 @@
+{
+    "name": "demo",
+    "authors": ["KanzakiKino"],
+    "description": "An example program of w4d.",
+    "copyright": "Copyright © 2018, KanzakiKino",
+    "license": "LGPL-3.0",
+
+    "targetName": "demo",
+    "targetType": "executable",
+    "targetPath": "./bin",
+
+    "sourcePaths": ["./src"],
+
+    "dependencies": {
+        "w4d": {"path":"../../"}
+    }
+}
