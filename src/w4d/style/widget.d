@@ -79,4 +79,10 @@ class WidgetStyle
         pt -= box.borderInsideSize;
         return pt.x <= 0 && pt.y <= 0;
     }
+
+    void shift ( vec2 size )
+    {
+        x.alter( x.calced+size.x );
+        y.alter( y.calced+size.y );
+    }
 }

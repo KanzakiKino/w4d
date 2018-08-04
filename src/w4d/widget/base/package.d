@@ -121,12 +121,11 @@ class Widget : WindowContent, Layoutable
 
         return style.box.collisionSize;
     }
-    void shiftChildren ( vec2 a )
+    void shiftChildren ( vec2 size )
     {
         foreach ( c; children ) {
-            c.style.x.alter( c.style.x.calced+a.x );
-            c.style.y.alter( c.style.y.calced+a.y );
-            c.shiftChildren( a );
+            style.shift( size );
+            c.shiftChildren( size );
         }
         requestRedraw();
     }
