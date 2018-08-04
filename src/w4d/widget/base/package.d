@@ -7,6 +7,8 @@ import w4d.element.box,
        w4d.parser.theme,
        w4d.style.widget,
        w4d.task.window,
+       w4d.widget.base.keyboard,
+       w4d.widget.base.mouse,
        w4d.exception;
 import g4d.math.vector,
        g4d.shader.base;
@@ -18,25 +20,14 @@ class Widget : WindowContent, Layoutable
     protected uint _status;
     const @property status () { return _status; }
 
+    protected WindowContext _context;
+
     protected WidgetStyle _style;
     @property WidgetStyle style    () { return _style; }
     @property ref         colorset () { return style.getColorSet(_status); }
 
     protected Layout        _layout;
     protected BoxElement    _box;
-    protected WindowContext _context;
-
-    protected Widget _hovered;
-    @property Widget[] children () { return []; }
-
-    @property Layoutable[] childLayoutables ()
-    {
-        return children.to!( Layoutable[] );
-    }
-    @property vec2 wantedSize ()
-    {
-        return vec2(-1,-1);
-    }
 
     protected bool _needLayout;
 
@@ -49,116 +40,10 @@ class Widget : WindowContent, Layoutable
         }
         return null;
     }
-    protected void setHovered ( Widget child, vec2 pos )
-    {
-        auto temp = _hovered;
-        _hovered = child;
 
-        if ( child !is temp ) {
-            if ( temp  ) temp .handleMouseEnter( false, pos );
-            if ( child ) child.handleMouseEnter(  true, pos );
-        }
-    }
+    mixin Mouse;
+    mixin Keyboard;
 
-    bool handleMouseEnter ( bool entered, vec2 pos )
-    {
-        if ( _context.tracked && !isTracked ) {
-            return true;
-        }
-
-        if ( entered ) {
-            enableState( WidgetState.Hovered );
-        } else {
-            setHovered( null, pos );
-            disableState( WidgetState.Hovered );
-        }
-        return false;
-    }
-    bool handleMouseMove ( vec2 pos )
-    {
-        if ( !isTracked ) {
-            if ( _context.tracked ) {
-                _context.tracked.handleMouseMove( pos );
-                return true;
-            } else if ( auto target = findChildAt(pos) ) {
-                setHovered( target, pos );
-                if ( target.handleMouseMove( pos ) ) {
-                    return true;
-                }
-            } else {
-                setHovered( null, pos );
-            }
-        }
-        return false;
-    }
-    bool handleMouseButton ( MouseButton btn, bool status, vec2 pos )
-    {
-
-        if ( !isTracked ) {
-            if ( _context.tracked ) {
-                _context.tracked.handleMouseButton( btn, status, pos );
-                return true;
-            } else if ( auto target = findChildAt(pos) ) {
-                if ( target.handleMouseButton( btn, status, pos ) ) {
-                    return true;
-                }
-                if ( _context.tracked ) {
-                    return true;
-                }
-            }
-        }
-
-        if ( btn == MouseButton.Left && status ) {
-            enableState( WidgetState.Pressed );
-            track();
-        } else if ( btn == MouseButton.Left && !status ) {
-            if ( isTracked ) refuseTrack();
-            disableState( WidgetState.Pressed );
-        }
-        return false;
-    }
-    bool handleMouseScroll ( vec2 amount, vec2 pos )
-    {
-        if ( !isTracked ) {
-            if ( _context.tracked ) {
-                _context.tracked.handleMouseScroll( amount, pos );
-                return true;
-            } else if ( auto target = findChildAt(pos) ) {
-                if ( target.handleMouseScroll( amount, pos ) ) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
-    bool handleKey ( Key key, KeyState status )
-    {
-        if ( !isFocused ) {
-            if ( _context.focused ) {
-                return _context.focused.handleKey( key, status );
-            } else if ( children.canFind!(x => x.handleKey( key, status )) ) {
-                return true;
-            }
-        }
-        return false;
-    }
-    bool handleTextInput ( dchar c )
-    {
-        if ( _context.focused && !isFocused ) {
-            return _context.focused.handleTextInput( c );
-        }
-        return false;
-    }
-
-    void handleTracked ( bool a )
-    {
-        (a? &enableState: &disableState)( WidgetState.Tracked );
-    }
-    void handleFocused ( bool a )
-    {
-        (a? &enableState: &disableState)( WidgetState.Focused );
-    }
     void handlePopup ( bool, WindowContext )
     {
     }
@@ -171,12 +56,23 @@ class Widget : WindowContent, Layoutable
         _context = null;
         _box     = new BoxElement;
 
-        _hovered = null;
-
         _needLayout = true;
 
         setLayout!FillLayout();
         parseThemeFromFile!"theme/normal.yaml"( style );
+    }
+
+    @property vec2 wantedSize ()
+    {
+        return vec2(-1,-1);
+    }
+    @property Widget[] children ()
+    {
+        return [];
+    }
+    @property Layoutable[] childLayoutables ()
+    {
+        return children.to!( Layoutable[] );
     }
 
     protected void infectWindowContext ()
@@ -194,42 +90,6 @@ class Widget : WindowContent, Layoutable
     {
         _status &= ~state;
         requestRedraw();
-    }
-
-    @property isTracked ()
-    {
-        return _context && _context.tracked is this;
-    }
-    @property bool trackable () { return true; }
-    void track ()
-    {
-        if ( trackable ) {
-            enforce( _context, "WindowContext is null." );
-            _context.setTracked( this );
-        }
-    }
-    void refuseTrack ()
-    {
-        enforce( isTracked, "The widget has not been tracked." );
-        _context.setTracked( null );
-    }
-
-    @property isFocused ()
-    {
-        return _context && _context.focused is this;
-    }
-    @property bool focusable () { return true; }
-    void focus ()
-    {
-        if ( focusable ) {
-            enforce( _context, "WindowContext is null." );
-            _context.setFocused( this );
-        }
-    }
-    void dropFocus ()
-    {
-        enforce( isFocused, "The widget has not been focused." );
-        _context.setFocused( null );
     }
 
     void setLayout (L,Args...) ( Args args )
@@ -281,7 +141,6 @@ class Widget : WindowContent, Layoutable
             _context.requestRedraw();
         }
     }
-
     protected void drawBox ( Window win )
     {
         auto shader = win.shaders.fill3;
