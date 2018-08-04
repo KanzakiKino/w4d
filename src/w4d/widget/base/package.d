@@ -7,6 +7,7 @@ import w4d.element.box,
        w4d.parser.theme,
        w4d.style.widget,
        w4d.task.window,
+       w4d.widget.base.context,
        w4d.widget.base.keyboard,
        w4d.widget.base.mouse,
        w4d.exception;
@@ -14,6 +15,8 @@ import g4d.math.vector,
        g4d.shader.base;
 import std.algorithm,
        std.conv;
+
+mixin Context;
 
 class Widget : WindowContent, Layoutable
 {
@@ -160,86 +163,5 @@ class Widget : WindowContent, Layoutable
         drawBox( win );
         drawChildren( win );
         _context.setNoNeedRedraw();
-    }
-}
-
-class WindowContext
-{
-    protected bool _needRedraw;
-    @property needRedraw () { return _needRedraw; }
-
-    protected Widget _tracked;
-    @property tracked ()
-    {
-        return _popup? _popup: _tracked;
-    }
-
-    protected Widget _focused;
-    @property focused ()
-    {
-        return _popup? _popup: _focused;
-    }
-
-    protected Widget _popup;
-    @property popup () { return _popup; }
-
-    this ()
-    {
-        _tracked = null;
-        _focused = null;
-        _popup   = null;
-    }
-
-    void requestRedraw ()
-    {
-        _needRedraw = true;
-    }
-    void setNoNeedRedraw ()
-    {
-        _needRedraw = false;
-    }
-
-    void forget ( Widget w )
-    {
-        if ( tracked is w ) {
-            setTracked( null );
-        }
-        if ( focused is w ) {
-            setFocused( null );
-        }
-        if ( popup is w ) {
-            setPopup( null );
-        }
-    }
-
-    void setTracked ( Widget w )
-    {
-        auto temp = _tracked;
-        _tracked = w;
-
-        if ( w !is temp ) {
-            if ( temp ) temp.handleTracked( false );
-            if ( w    ) w   .handleTracked( true  );
-        }
-    }
-    void setFocused ( Widget w )
-    {
-        auto temp = _focused;
-        _focused = w;
-
-        if ( w !is temp ) {
-            if ( temp ) temp.handleFocused( false );
-            if ( w    ) w   .handleFocused( true  );
-        }
-    }
-    void setPopup ( Widget w )
-    {
-        auto temp = _popup;
-        _popup = w;
-
-        if ( w !is temp ) {
-            if ( temp ) temp.handlePopup( false, this );
-            if ( w    ) w   .handlePopup( true , this );
-        }
     }
 }
