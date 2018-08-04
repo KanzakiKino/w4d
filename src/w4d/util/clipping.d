@@ -45,12 +45,13 @@ class ClipRect
         auto right  = pos.x + size.x;
         auto bottom = pos.y + size.y;
 
-        auto cur = currentRect;
+        auto cur    = currentRect;
+        auto curpos = cur.pos - cur.size/2;
 
-        left   = max( left  , cur.pos.x );
-        top    = max( top   , cur.pos.y );
-        right  = min( right , cur.pos.x+cur.size.x );
-        bottom = min( bottom, cur.pos.y+cur.size.y );
+        left   = max( left  , curpos.x );
+        top    = max( top   , curpos.y );
+        right  = min( right , curpos.x+cur.size.x );
+        bottom = min( bottom, curpos.y+cur.size.y );
 
         auto rpos  = vec2(left,top);
         auto rsize = vec2(right,bottom) - pos;
