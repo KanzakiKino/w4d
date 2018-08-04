@@ -74,6 +74,7 @@ class SelectInputWidget : PanelWidget
         auto size = style.box.borderInsideSize;
         auto late = style.box.borderInsideLeftTop;
         late.y   += size.y;
+        late     += style.translate;
 
         _context.setPopup( _menu );
         _menu.move( late, vec2( size.x, 0 ) );
