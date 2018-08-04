@@ -113,8 +113,8 @@ class TextLine
 
         if ( left.length ) {
             left = left[0..$-1];
-            setText( left~right );
             moveCursor( -1 );
+            setText( left~right );
         }
     }
     void del ()
