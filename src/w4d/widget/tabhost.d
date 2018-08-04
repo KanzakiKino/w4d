@@ -28,6 +28,8 @@ class TabHostWidget : Widget
             id = i;
 
             parseThemeFromFile!"theme/tabheader.yaml"( style );
+            style.box.size.width  = Scalar.None;
+            style.box.size.height = Scalar.None;
         }
 
         override void handleButtonPress ()
