@@ -8,7 +8,7 @@ int main( string[] args )
     auto app    = new App( args );
 
     auto window = new Window( vec2i(300,350), "calc" );
-    window.setContent( new RootWidget );
+    window.setContent( new CalcRootWidget );
     app.addTask( window );
 
     window.show();

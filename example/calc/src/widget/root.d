@@ -10,7 +10,7 @@ import std.ascii,
        std.file,
        std.path;
 
-class RootWidget : PanelWidget
+class CalcRootWidget : RootWidget
 {
     enum dstring[] Buttons = [
          "7", "8", "9", "/",
