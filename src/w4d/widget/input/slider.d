@@ -34,13 +34,12 @@ class SliderWidget(bool Horizon) : Widget
     protected float                _pointerSize;
     protected RegularNgonElement!3 _pointer;
 
-    protected bool _shift;
-
     ValueChangeHandler onValueChange;
 
     protected @property magnification ()
     {
-        return _shift? 10f: 2f;
+        enforce( _context );
+        return _context.shift? 10f: 2f;
     }
 
     override bool handleMouseMove ( vec2 pos )
@@ -79,10 +78,7 @@ class SliderWidget(bool Horizon) : Widget
         if ( !isFocused || isLocked ) return false;
 
         auto pressing = status != KeyState.Release;
-        if ( key == Key.LeftShift ) {
-            _shift = pressing;
-
-        } else if ( key == Key.Left && pressing ) {
+        if ( key == Key.Left && pressing ) {
             setValue( _value - _unit*magnification );
         } else if ( key == Key.Right && pressing ) {
             setValue( _value + _unit*magnification );
@@ -113,8 +109,6 @@ class SliderWidget(bool Horizon) : Widget
 
         _pointerSize = 0f;
         _pointer     = new RegularNgonElement!3;
-
-        _shift = false;
     }
 
     protected float retrieveValueFromAbsPos ( vec2 pos )

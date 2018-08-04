@@ -60,7 +60,13 @@ template Keyboard ()
             }
         }
 
-        if ( key == Key.Tab && status != KeyState.Release ) {
+        auto pressing = status != KeyState.Release;
+        if ( key == Key.LeftShift ) {
+            _context.setModkeyStatus( Modkey.Shift, pressing );
+        } else if ( key == Key.LeftControl ) {
+            _context.setModkeyStatus( Modkey.Ctrl, pressing );
+
+        } else if ( key == Key.Tab && pressing ) {
             return pullFocusChain();
         }
         return false;

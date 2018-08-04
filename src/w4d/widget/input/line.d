@@ -31,8 +31,6 @@ class LineInputWidget : TextWidget
     protected RectElement _cursorElm;
     protected RectElement _selectionElm;
 
-    protected bool _shift, _ctrl;
-
     protected ButtonWidget _chainedButton;
 
     TextChangeHandler onTextChange;
@@ -54,7 +52,7 @@ class LineInputWidget : TextWidget
             return true;
         }
         if ( btn == MouseButton.Left && status ) {
-            auto selecting = _shift && isFocused;
+            auto selecting = _context.shift && isFocused;
             _line.moveCursorTo( retrieveIndexFromAbsPos( pos.x ), selecting );
             focus();
             return true;
@@ -67,29 +65,24 @@ class LineInputWidget : TextWidget
 
         auto pressing = ( status != KeyState.Release );
 
-        if ( key == Key.LeftShift ) {
-            _shift = pressing;
-        } else if ( key == Key.LeftControl ) {
-            _ctrl = pressing;
-
-        } else if ( key == Key.Backspace && pressing ) {
+        if ( key == Key.Backspace && pressing ) {
             _line.backspace();
 
         } else if ( key == Key.Delete && pressing ) {
             _line.del();
 
         } else if ( key == Key.Left && pressing ) {
-            _line.left( _shift );
+            _line.left( _context.shift );
         } else if ( key == Key.Right && pressing ) {
-            _line.right( _shift );
+            _line.right( _context.shift );
         } else if ( key == Key.Home && pressing ) {
-            _line.home( _shift );
+            _line.home( _context.shift );
         } else if ( key == Key.End && pressing ) {
-            _line.end( _shift );
+            _line.end( _context.shift );
 
-        } else if ( key == Key.A && pressing && _ctrl ) {
+        } else if ( key == Key.A && pressing && _context.ctrl ) {
             _line.selectAll();
-        } else if ( key == Key.D && pressing && _ctrl ) {
+        } else if ( key == Key.D && pressing && _context.ctrl ) {
             _line.deselect();
             requestRedraw();
 

@@ -4,6 +4,14 @@ module w4d.widget.base.context;
 
 template Context ()
 {
+    enum Modkey
+    {
+        None  = 0b00,
+
+        Ctrl  = 0b01,
+        Shift = 0b10,
+    }
+
     class WindowContext
     {
         this ()
@@ -23,6 +31,27 @@ template Context ()
         void setNoNeedRedraw ()
         {
             _needRedraw = false;
+        }
+
+
+        protected uint _modkey;
+
+        @property bool ctrl ()
+        {
+            return !!( _modkey & Modkey.Ctrl );
+        }
+        @property bool shift ()
+        {
+            return !!( _modkey & Modkey.Shift );
+        }
+
+        void setModkeyStatus ( Modkey key, bool press )
+        {
+            if ( press ) {
+                _modkey |= key;
+            } else {
+                _modkey &= ~key;
+            }
         }
 
 
