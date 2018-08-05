@@ -131,4 +131,7 @@ class CheckBoxWidget : Widget
     {
         _text.loadText( text, face );
     }
+
+    override @property bool trackable () { return true; }
+    override @property bool focusable () { return true; }
 }

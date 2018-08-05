@@ -75,7 +75,6 @@ template Mouse ()
 
     bool handleMouseButton ( MouseButton btn, bool status, vec2 pos )
     {
-
         if ( !isTracked ) {
             if ( _context.tracked ) {
                 _context.tracked.handleMouseButton( btn, status, pos );
@@ -93,6 +92,7 @@ template Mouse ()
         if ( btn == MouseButton.Left && status ) {
             enableState( WidgetState.Pressed );
             track();
+            focus();
         } else if ( btn == MouseButton.Left && !status ) {
             if ( isTracked ) refuseTrack();
             disableState( WidgetState.Pressed );

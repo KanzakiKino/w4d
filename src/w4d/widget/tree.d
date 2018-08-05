@@ -44,6 +44,9 @@ class TreeListItemWidget : ListItemWidget
             super();
             style.box.paddings.left = 5.mm;
         }
+
+        override @property bool trackable () { return false; }
+        override @property bool focusable () { return false; }
     }
     protected class CustomPanelWidget : PanelWidget
     {

@@ -96,4 +96,7 @@ class SelectInputWidget : PanelWidget
     {
         _menu.removeAllItems();
     }
+
+    override @property bool trackable () { return true; }
+    override @property bool focusable () { return true; }
 }
