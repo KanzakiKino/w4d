@@ -15,8 +15,7 @@ template TitleBar ()
             if ( super.handleMouseMove( pos ) ) return true;
 
             if ( isTracked ) {
-                _pos = pos - _cursorOffset;
-                .MdiClientWidget.requestLayout();
+                move( pos - _cursorOffset );
                 return true;
             }
             return false;

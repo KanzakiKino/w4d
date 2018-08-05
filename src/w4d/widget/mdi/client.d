@@ -7,10 +7,12 @@ import w4d.layout.lineup,
        w4d.task.window,
        w4d.widget.mdi.host,
        w4d.widget.mdi.titlebar,
+       w4d.widget.mdi.window,
        w4d.widget.base,
        w4d.widget.panel,
        w4d.widget.root,
-       w4d.widget.text;
+       w4d.widget.text,
+       w4d.exception;
 import g4d.ft.font,
        g4d.math.vector;
 
@@ -22,12 +24,6 @@ class MdiClientWidget : PanelWidget, MdiClient
 
     protected TitleBarWidget _titlebar;
     protected RootWidget     _root;
-
-    protected vec2 _pos;
-    @property vec2 pos () { return _pos; }
-
-    protected vec2 _size;
-    @property vec2 size () { return _size; }
 
     override bool handleMouseButton ( MouseButton btn, bool status, vec2 pos )
     {
@@ -56,6 +52,8 @@ class MdiClientWidget : PanelWidget, MdiClient
         _pos  = vec2(0,0);
         _size = vec2(320,240);
     }
+
+    mixin WindowOperations;
 
     @property Widget widget ()
     {
