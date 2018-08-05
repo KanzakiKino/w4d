@@ -3,6 +3,7 @@
 module w4d.widget.input.checkbox;
 import w4d.layout.lineup,
        w4d.parser.theme,
+       w4d.style.rect,
        w4d.style.scalar,
        w4d.style.widget,
        w4d.task.window,
@@ -108,9 +109,12 @@ class CheckBoxWidget : Widget
 
         _checked = false;
 
+        style.box.margins     = Rect(1.mm);
+        style.box.borderWidth = Rect(1.pixel);
+
         parseThemeFromFile!"theme/checkbox.yaml"( style );
         parseThemeFromFile!"theme/checkbox.yaml"( _mark.style );
-        parseThemeFromFile!"theme/checkbox.yaml"( _text.style );
+        parseThemeFromFile!"theme/checkbox.yaml"( _text.style ); // FIXME
     }
 
     void setChecked ( bool b )

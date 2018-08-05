@@ -1,8 +1,9 @@
 // Written under LGPL-3.0 in the D programming language.
 // Copyright 2018 KanzakiKino
 module w4d.widget.text;
-import w4d.style.scalar,
-       w4d.element.text,
+import w4d.element.text,
+       w4d.style.rect,
+       w4d.style.scalar,
        w4d.task.window,
        w4d.widget.base,
        w4d.exception;

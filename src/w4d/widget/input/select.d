@@ -57,9 +57,10 @@ class SelectInputWidget : PanelWidget
         _menu     = new CustomPopupMenuWidget;
         _selected = null;
 
-        parseThemeFromFile!"theme/select.yaml"( style );
         style.box.borderWidth = Rect(1.pixel);
-        style.box.paddings = Rect(1.mm);
+        style.box.paddings    = Rect(1.mm);
+        style.box.margins     = Rect(1.mm);
+        parseThemeFromFile!"theme/select.yaml"( style );
     }
 
     void select ( MenuItemWidget s )

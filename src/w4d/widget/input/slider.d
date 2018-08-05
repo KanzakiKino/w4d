@@ -96,9 +96,6 @@ class SliderWidget(bool Horizon) : Widget
     this ()
     {
         super();
-        style.box.paddings    = Rect( 2.mm );
-        style.box.size.height = 6.mm;
-        parseThemeFromFile!"theme/slider.yaml"( style );
 
         setRange( 0f, 1f, 11e-4f );
         _value = 0.5;
@@ -109,6 +106,12 @@ class SliderWidget(bool Horizon) : Widget
 
         _pointerSize = 0f;
         _pointer     = new RegularNgonElement!3;
+
+        style.box.size.height = 6.mm;
+        style.box.paddings    = Rect(2.mm);
+        style.box.margins     = Rect(1.mm);
+        style.box.borderWidth = Rect(1.pixel);
+        parseThemeFromFile!"theme/slider.yaml"( style );
     }
 
     protected float retrieveValueFromAbsPos ( vec2 pos )

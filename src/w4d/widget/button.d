@@ -2,6 +2,8 @@
 // Copyright 2018 KanzakiKino
 module w4d.widget.button;
 import w4d.parser.theme,
+       w4d.style.rect,
+       w4d.style.scalar,
        w4d.task.window,
        w4d.widget.text,
        w4d.event;
@@ -39,6 +41,9 @@ class ButtonWidget : TextWidget
         textOriginRate = vec2(0.5,0.5);
         textPosRate    = vec2(0.5,0.5);
 
+        style.box.margins     = Rect(1.mm);
+        style.box.paddings    = Rect(2.mm);
+        style.box.borderWidth = Rect(1.pixel);
         parseThemeFromFile!"theme/pressable.yaml"( style );
     }
 
