@@ -29,6 +29,12 @@ class MdiClientWidget : PanelWidget, MdiClient
     protected vec2 _size;
     @property vec2 size () { return _size; }
 
+    override bool handleMouseButton ( MouseButton btn, bool status, vec2 pos )
+    {
+        _host.focusClient( this );
+        return super.handleMouseButton(btn,status,pos);
+    }
+
     this ()
     {
         super();
