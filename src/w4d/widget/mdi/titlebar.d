@@ -15,6 +15,7 @@ template TitleBar ()
             if ( super.handleMouseMove( pos ) ) return true;
 
             if ( isTracked ) {
+                pos -= _host.style.clientLeftTop;
                 move( pos - _cursorOffset );
                 return true;
             }
