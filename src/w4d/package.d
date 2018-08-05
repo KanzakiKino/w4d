@@ -16,6 +16,8 @@ public
            w4d.widget.input.line,
            w4d.widget.input.select,
            w4d.widget.input.slider,
+           w4d.widget.mdi.client,
+           w4d.widget.mdi.host,
            w4d.widget.popup.dialog.text,
            w4d.widget.popup.base,
            w4d.widget.popup.menu,
