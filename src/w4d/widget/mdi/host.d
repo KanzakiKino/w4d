@@ -73,7 +73,10 @@ class MdiHostWidget : Widget
     {
         layoutQuickly();
 
+        w.clip.pushRect( style.box.borderInsideLeftTop,
+                style.box.borderInsideSize );
         super.draw( w );
+        w.clip.popRect();
     }
 }
 
