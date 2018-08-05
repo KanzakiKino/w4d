@@ -37,9 +37,6 @@ class Window : g4d.Window, Task
     protected ClipRect _clip;
     @property clip () { return _clip; }
 
-    protected vec2 _origin;
-    @property origin () { return _origin; }
-
     protected WindowContent _root;
     protected vec2          _cursorPos;
 
@@ -54,7 +51,6 @@ class Window : g4d.Window, Task
 
         _shaders    = new Shaders;
         _clip       = new ClipRect( shaders.fill3 );
-        _origin     = vec2(0,0);
         _root       = null;
         _cursorPos  = vec2(0,0);
 
@@ -103,7 +99,7 @@ class Window : g4d.Window, Task
     protected void recalcMatrix ()
     {
         auto half = vec2(size)/2;
-        auto late = origin - half;
+        auto late = half*-1;
 
         auto proj = mat4.orthographic( -half.x,half.x, -half.y,half.y, short.min,short.max )*
             mat4.translate( late.x, late.y, 0 );
@@ -111,12 +107,6 @@ class Window : g4d.Window, Task
         foreach ( s; shaders.list ) {
             s.projection = proj;
         }
-    }
-
-    void moveOrigin ( vec2 pos )
-    {
-        _origin = pos;
-        recalcMatrix();
     }
 
     override bool exec ( App app )
