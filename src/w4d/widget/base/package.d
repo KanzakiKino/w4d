@@ -36,7 +36,8 @@ class Widget : WindowContent, Layoutable
 
     protected Widget findChildAt ( vec2 pt )
     {
-        foreach ( c; children ) {
+        // Use reversed foreach to match the order with drawing.
+        foreach_reverse ( c; children ) {
             if ( c.style.isPointInside(pt) ) {
                 return c;
             }
