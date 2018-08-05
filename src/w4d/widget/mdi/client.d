@@ -71,6 +71,11 @@ class MdiClientWidget : PanelWidget, MdiClient
         _titlebar._title.loadText( v, face );
     }
 
+    override void requestLayout ()
+    {
+        super.requestLayout();
+        requestRedraw();
+    }
     override vec2 layout ( vec2 basept, vec2 size )
     {
         return super.layout( basept+_pos, _size );

@@ -16,7 +16,7 @@ template TitleBar ()
 
             if ( isTracked ) {
                 _pos = pos - _cursorOffset;
-                requestLayout();
+                .MdiClientWidget.requestLayout();
                 return true;
             }
             return false;

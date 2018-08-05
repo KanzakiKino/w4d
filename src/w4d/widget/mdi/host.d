@@ -1,7 +1,8 @@
 // Written under LGPL-3.0 in the D programming language.
 // Copyright 2018 KanzakiKino
 module w4d.widget.mdi.host;
-import w4d.widget.mdi.layout,
+import w4d.task.window,
+       w4d.widget.mdi.layout,
        w4d.widget.base,
        w4d.exception;
 import g4d.math.vector;
@@ -43,6 +44,26 @@ class MdiHostWidget : Widget
         enforce( cli, "The client is invalid." );
         removeClient( cli );
         addClient( cli );
+    }
+
+    override @property bool needLayout ()
+    {
+        return _needLayout;
+    }
+    void layoutQuickly ()
+    {
+        auto pos  = style.clientLeftTop;
+        auto size = style.box.clientSize;
+
+        children.filter!"a.needLayout"().
+            each!( x => x.layout(pos,size) );
+    }
+
+    override void draw ( Window w )
+    {
+        layoutQuickly();
+
+        super.draw( w );
     }
 }
 
