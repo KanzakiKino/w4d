@@ -1,7 +1,8 @@
 // Written under LGPL-3.0 in the D programming language.
 // Copyright 2018 KanzakiKino
 module w4d.widget.mdi.host;
-import w4d.task.window,
+import w4d.style.widget,
+       w4d.task.window,
        w4d.widget.mdi.layout,
        w4d.widget.base,
        w4d.exception;
@@ -32,6 +33,9 @@ class MdiHostWidget : Widget
         enforce( cli, "The client is invalid." );
         cli.setHost( this );
         _clients ~= cli;
+
+        unfocusAllClients();
+        cli.widget.enableState( WidgetState.Focused );
     }
     void removeClient ( MdiClient cli )
     {
@@ -39,6 +43,12 @@ class MdiHostWidget : Widget
         _clients = _clients.remove!( x => x is cli );
     }
 
+    protected void unfocusAllClients ()
+    {
+        foreach ( cli; _clients ) {
+            cli.widget.disableState( WidgetState.Focused );
+        }
+    }
     void focusClient ( MdiClient cli )
     {
         enforce( cli, "The client is invalid." );
