@@ -1,6 +1,7 @@
 // Written under LGPL-3.0 in the D programming language.
 // Copyright 2018 KanzakiKino
 module w4d.widget.mdi.window;
+import w4d.event;
 
 enum Side
 {
@@ -10,6 +11,8 @@ enum Side
     Right  = 0b0100,
     Bottom = 0b1000,
 }
+
+alias MdiClientCloseHandler = EventHandler!( bool );
 
 template WindowOperations ()
 {
@@ -98,10 +101,13 @@ template WindowOperations ()
         requestLayout();
     }
 
+    MdiClientCloseHandler onClose; // Return true to abort closing.
     void close ()
     {
         enforce( _host, "Host is not defined yet." );
-        _host.removeClient( this );
+        if ( !onClose.call() ) {
+            _host.removeClient( this );
+        }
     }
 
 
