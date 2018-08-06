@@ -62,6 +62,20 @@ template WindowOperations ()
     }
 
 
+    protected vec2 _minSize;
+    @property vec2 minSize () { return _minSize; }
+
+    protected vec2 _maxSize;
+    @property vec2 maxSize () { return _maxSize; }
+
+    void limitSize ( vec2 min, vec2 max )
+    {
+        _minSize = min;
+        _maxSize = max;
+        resize( size );
+    }
+
+
     protected vec2 _pos;
     @property vec2 pos () { return _pos; }
 
@@ -75,6 +89,8 @@ template WindowOperations ()
     }
     void resize ( vec2 size )
     {
+        size.x = size.x.clamp( minSize.x, maxSize.x );
+        size.y = size.y.clamp( minSize.y, maxSize.y );
         _size = size;
         requestLayout();
     }

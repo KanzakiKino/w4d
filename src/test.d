@@ -18,6 +18,7 @@ class TestRootWidget : RootWidget
 
         foreach ( i; 0..5 ) {
             auto cli1 = new MdiClientWidget;
+            cli1.limitSize( vec2(200,200), vec2(400,400) );
             cli1.loadText( "Client1 - MdiClientWidget"d, fontface );
             host.addClient( cli1 );
         }

@@ -14,6 +14,7 @@ import w4d.layout.lineup,
        w4d.exception;
 import g4d.ft.font,
        g4d.math.vector;
+import std.algorithm;
 
 class MdiClientWidget : PanelWidget, MdiClient
 {
@@ -41,6 +42,9 @@ class MdiClientWidget : PanelWidget, MdiClient
         _contents.style.box.size.height = Scalar.Auto;
         _contents.colorset.bgColor = vec4(1,1,1,1); // TODO
         addChild( _contents );
+
+        _maxSize = vec2(int.max,int.max);
+        _minSize = vec2(0,0);
 
         _pos  = vec2(0,0);
         _size = vec2(320,240);
