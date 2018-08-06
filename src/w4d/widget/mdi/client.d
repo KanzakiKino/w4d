@@ -10,7 +10,6 @@ import w4d.layout.lineup,
        w4d.widget.mdi.window,
        w4d.widget.base,
        w4d.widget.panel,
-       w4d.widget.root,
        w4d.widget.text,
        w4d.exception;
 import g4d.ft.font,
@@ -23,13 +22,7 @@ class MdiClientWidget : PanelWidget, MdiClient
     protected MdiHostWidget _host;
 
     protected TitleBarWidget _titlebar;
-    protected RootWidget     _root;
-
-    override bool handleMouseButton ( MouseButton btn, bool status, vec2 pos )
-    {
-        _host.focusClient( this );
-        return super.handleMouseButton(btn,status,pos);
-    }
+    protected PanelWidget    _contents;
 
     this ()
     {
@@ -43,11 +36,11 @@ class MdiClientWidget : PanelWidget, MdiClient
         _titlebar = new TitleBarWidget;
         addChild( _titlebar );
 
-        _root = new RootWidget;
-        _root.style.box.size.width  = Scalar.Auto;
-        _root.style.box.size.height = Scalar.Auto;
-        _root.colorset.bgColor = vec4(1,1,1,1); // TODO
-        addChild( _root );
+        _contents = new PanelWidget;
+        _contents.style.box.size.width  = Scalar.Auto;
+        _contents.style.box.size.height = Scalar.Auto;
+        _contents.colorset.bgColor = vec4(1,1,1,1); // TODO
+        addChild( _contents );
 
         _pos  = vec2(0,0);
         _size = vec2(320,240);
@@ -78,4 +71,6 @@ class MdiClientWidget : PanelWidget, MdiClient
     {
         return super.layout( basept+_pos, _size );
     }
+
+    override @property bool trackable () { return true; }
 }
