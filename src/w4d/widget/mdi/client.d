@@ -2,6 +2,7 @@
 // Copyright 2018 KanzakiKino
 module w4d.widget.mdi.client;
 import w4d.layout.lineup,
+       w4d.layout.split,
        w4d.style.rect,
        w4d.style.scalar,
        w4d.task.window,
@@ -30,7 +31,7 @@ class MdiClientWidget : PanelWidget, MdiClient
         super();
         style.box.paddings = Rect(1.mm);
         colorset.bgColor = vec4(0.4,0.4,0.4,1);
-        setLayout!VerticalLineupLayout;
+        setLayout!VerticalSplitLayout;
 
         _host = null;
 
