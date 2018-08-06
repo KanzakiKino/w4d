@@ -1,7 +1,8 @@
 // Written under LGPL-3.0 in the D programming language.
 // Copyright 2018 KanzakiKino
 module w4d.widget.mdi.client;
-import w4d.layout.lineup,
+import w4d.layout.gravity,
+       w4d.layout.lineup,
        w4d.layout.split,
        w4d.style.rect,
        w4d.style.scalar,
@@ -10,6 +11,7 @@ import w4d.layout.lineup,
        w4d.widget.mdi.titlebar,
        w4d.widget.mdi.window,
        w4d.widget.base,
+       w4d.widget.button,
        w4d.widget.panel,
        w4d.widget.text,
        w4d.exception;

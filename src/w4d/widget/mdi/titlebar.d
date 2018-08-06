@@ -4,9 +4,27 @@ module w4d.widget.mdi.titlebar;
 
 template TitleBar ()
 {
+    protected class CloseButtonWidget : ButtonWidget
+    {
+        override void handleButtonPress ()
+        {
+            close();
+            super.handleButtonPress();
+        }
+        this ()
+        {
+            super();
+            style.box.paddings    = Rect(0.mm);
+            style.box.size.width  = 4.mm;
+            style.box.size.height = 4.mm;
+            setLayout!GravityLayout( vec2(1,0) );
+        }
+    }
+
     protected class TitleBarWidget : PanelWidget
     {
-        TextWidget _title;
+        TextWidget        _title;
+        CloseButtonWidget _close;
 
         protected vec2 _cursorOffset;
 
@@ -37,12 +55,14 @@ template TitleBar ()
         {
             super();
 
-            style.box.size.width  = Scalar.Auto;
-            style.box.size.height = 7.mm;
-            setLayout!HorizontalLineupLayout;
+            style.box.size.width = Scalar.Auto;
+            setLayout!HorizontalSplitLayout;
 
             _title = new TextWidget;
             addChild( _title );
+
+            _close = new CloseButtonWidget;
+            addChild( _close );
         }
 
         override @property bool trackable () { return true; }
