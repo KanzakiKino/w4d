@@ -49,12 +49,15 @@ template WindowOperations ()
         if ( sides & Side.Left ) {
             size.x += pos.x-cur.x;
             pos.x   = cur.x;
-        } else if ( sides & Side.Top ) {
+        }
+        if ( sides & Side.Top ) {
             size.y += pos.y-cur.y;
             pos.y   = cur.y;
-        } else if ( sides & Side.Right ) {
+        }
+        if ( sides & Side.Right ) {
             size.x = cur.x - pos.x;
-        } else if ( sides & Side.Bottom ) {
+        }
+        if ( sides & Side.Bottom ) {
             size.y = cur.y - pos.y;
         }
         move  ( pos );
