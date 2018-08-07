@@ -14,6 +14,7 @@ import w4d.layout.lineup,
 import g4d.element.shape.border,
        g4d.element.shape.regular,
        g4d.ft.font,
+       g4d.glfw.cursor,
        g4d.math.vector,
        g4d.shader.base;
 import std.math;
@@ -31,6 +32,10 @@ class CheckBoxWidget : Widget
         {
             auto lineheight = _text.font.size.y;
             return vec2( lineheight, lineheight );
+        }
+        override @property Cursor cursor ()
+        {
+            return Cursor.Hand;
         }
         this ()
         {

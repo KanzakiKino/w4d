@@ -12,6 +12,7 @@ import w4d.parser.theme,
        w4d.exception;
 import g4d.element.shape.rect,
        g4d.element.shape.regular,
+       g4d.glfw.cursor,
        g4d.math.vector,
        g4d.shader.base;
 import std.algorithm,
@@ -91,6 +92,15 @@ class SliderWidget(bool Horizon) : Widget
             return false;
         }
         return true;
+    }
+
+    override @property Cursor cursor ()
+    {
+        static if ( Horizon ) {
+            return Cursor.HResize;
+        } else {
+            return Cursor.VResize;
+        }
     }
 
     this ()

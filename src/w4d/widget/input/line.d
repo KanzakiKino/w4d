@@ -13,6 +13,7 @@ import w4d.parser.theme,
        w4d.exception;
 import g4d.element.shape.rect,
        g4d.ft.font,
+       g4d.glfw.cursor,
        g4d.math.vector,
        g4d.shader.base;
 import std.algorithm,
@@ -112,6 +113,11 @@ class LineInputWidget : TextWidget
             requestRedraw();
         }
         super.handleFocused( status );
+    }
+
+    override @property Cursor cursor ()
+    {
+        return Cursor.IBeam;
     }
 
     this ()
