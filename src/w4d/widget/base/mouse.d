@@ -17,6 +17,11 @@ template Mouse ()
         }
     }
 
+    @property Cursor cursor ()
+    {
+        return _hovered? _hovered.cursor: Cursor.Arrow;
+    }
+
 
     @property isTracked ()
     {

@@ -123,6 +123,7 @@ class Window : g4d.Window, Task
                 _root.draw( this );
                 applyFrame();
             }
+            setCursor( _root.cursor );
             return false;
         }
         return true;
@@ -186,6 +187,8 @@ interface WindowContent
     bool handleKey ( Key, KeyState );
     // Be called when focused and text was inputted.
     bool handleTextInput ( dchar );
+
+    @property g4d.Cursor cursor ();
 
     @property bool needLayout ();
     @property bool needRedraw ();

@@ -11,7 +11,8 @@ import w4d.element.box,
        w4d.widget.base.keyboard,
        w4d.widget.base.mouse,
        w4d.exception;
-import g4d.math.vector,
+import g4d.glfw.cursor,
+       g4d.math.vector,
        g4d.shader.base;
 import std.algorithm,
        std.conv;
