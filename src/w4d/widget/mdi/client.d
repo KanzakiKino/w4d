@@ -51,7 +51,8 @@ class MdiClientWidget : PanelWidget, MdiClient
         _size = vec2(320,240);
 
         parseColorSetsFromFile!"colorset/mdiclient.yaml"( style );
-        style.box.paddings = Rect(1.mm);
+        style.box.paddings    = Rect(1.mm);
+        style.box.borderWidth = Rect(1.pixel);
         setLayout!VerticalSplitLayout;
     }
 

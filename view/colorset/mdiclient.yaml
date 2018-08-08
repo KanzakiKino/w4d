@@ -3,7 +3,7 @@
 
 default:
     background: [0.4]
-    border    : [0.1]
+    border    : [0.2]
 
 focused:
     background: [0.45]
