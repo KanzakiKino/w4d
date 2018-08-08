@@ -43,21 +43,21 @@ vec4 parseColor ( Node seq )
     }
 }
 
-ColorSet parseColorSet ( Node block )
+void parseColorSet ( Node block, ref ColorSet colorset )
 {
-    ColorSet result;
     foreach ( string name, Node node; block ) {
-        result[name] = parseColor( node );
+        colorset[name] = parseColor( node );
     }
-    return result;
 }
 
 void parseColorSets ( Node root, WidgetStyle style )
 {
-    style.colorsets.clear();
     foreach ( string name, Node node; root ) {
         auto state = name.toState;
-        style.colorsets[state] = parseColorSet( node );
+        if ( state !in style.colorsets ) {
+            style.colorsets[state] = ColorSet();
+        }
+        parseColorSet( node, style.colorsets[state] );
     }
 }
 
