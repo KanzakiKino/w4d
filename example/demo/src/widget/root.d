@@ -2,7 +2,8 @@
 // Copyright 2018 KanzakiKino
 module demo.widget.root;
 import w4d;
-import std.format;
+import std.conv,
+       std.format;
 
 class DemoRootWidget : RootWidget
 {
@@ -18,6 +19,7 @@ class DemoRootWidget : RootWidget
         addChild( tabhost );
 
         tabhost.addTab( 0, "Input", createInputPage( face ) );
+        tabhost.addTab( 1, "List" , createListPage ( face ) );
     }
 
     protected Widget createInputPage ( FontFace face )
@@ -25,10 +27,6 @@ class DemoRootWidget : RootWidget
         auto scroll = new VerticalScrollPanelWidget;
 
         auto page = scroll.contents;
-        page.style.box.size.width  = Scalar.Auto;
-        page.style.box.size.height = Scalar.Auto;
-
-        page.style.box.paddings = Rect(2.mm);
 
         foreach ( c; 0..30 ) {
             {
@@ -89,4 +87,22 @@ class DemoRootWidget : RootWidget
         return scroll;
     }
 
+    protected Widget createListPage ( FontFace face )
+    {
+        auto scroll = new VerticalScrollPanelWidget;
+        auto page   = scroll.contents;
+
+        auto list = new ListWidget;
+        page.addChild( list );
+
+        foreach ( i; 0..50 ) {
+            auto item = new ListItemWidget;
+            list.addItem( item );
+            auto text = new TextWidget;
+            item.setChild( text );
+
+            text.loadText( i.to!dstring~": ListItemWidget"d, face );
+        }
+        return scroll;
+    }
 }
