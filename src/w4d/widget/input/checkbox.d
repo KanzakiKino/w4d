@@ -2,7 +2,7 @@
 // Copyright 2018 KanzakiKino
 module w4d.widget.input.checkbox;
 import w4d.layout.lineup,
-       w4d.parser.theme,
+       w4d.parser.colorset,
        w4d.style.color,
        w4d.style.rect,
        w4d.style.scalar,

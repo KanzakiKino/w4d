@@ -4,7 +4,7 @@ module w4d.widget.base;
 import w4d.element.box,
        w4d.layout.base,
        w4d.layout.fill,
-       w4d.parser.theme,
+       w4d.parser.colorset,
        w4d.style.color,
        w4d.style.widget,
        w4d.task.window,

@@ -2,7 +2,7 @@
 // Copyright 2018 KanzakiKino
 module w4d.widget.popup.menu;
 import w4d.layout.lineup,
-       w4d.parser.theme,
+       w4d.parser.colorset,
        w4d.style.rect,
        w4d.style.scalar,
        w4d.task.window,

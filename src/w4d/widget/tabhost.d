@@ -3,7 +3,7 @@
 module w4d.widget.tabhost;
 import w4d.layout.lineup,
        w4d.layout.split,
-       w4d.parser.theme,
+       w4d.parser.colorset,
        w4d.style.rect,
        w4d.style.scalar,
        w4d.style.widget,

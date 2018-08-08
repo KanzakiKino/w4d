@@ -1,7 +1,7 @@
 // Written under LGPL-3.0 in the D programming language.
 // Copyright 2018 KanzakiKino
 module w4d.widget.input.line;
-import w4d.parser.theme,
+import w4d.parser.colorset,
        w4d.style.rect,
        w4d.style.scalar,
        w4d.task.window,
