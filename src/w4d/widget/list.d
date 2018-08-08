@@ -152,6 +152,6 @@ class ListItemWidget : WrapperWidget
     void setParent ( ListWidget ) { }
     void deselect  ()             { }
 
-    override @property bool trackable () { return true; }
+    override @property bool trackable () { return false; }
     override @property bool focusable () { return false; }
 }
