@@ -111,6 +111,16 @@ template WindowOperations ()
     }
 
 
+    override @property Cursor cursor ()
+    {
+        return
+            _draggingSides & Side.Left  ? Cursor.HResize:
+            _draggingSides & Side.Right ? Cursor.HResize:
+            _draggingSides & Side.Top   ? Cursor.VResize:
+            _draggingSides & Side.Bottom? Cursor.VResize:
+            super.cursor;
+    }
+
     override bool handleMouseMove ( vec2 cur )
     {
         if ( super.handleMouseMove( cur ) ) return true;
@@ -120,7 +130,9 @@ template WindowOperations ()
             resizeWithDragging( cur );
             return true;
         }
-        return false;
+
+        enableSideDragging( cur );
+        return true;
     }
 
     override bool handleMouseButton ( MouseButton btn, bool status, vec2 pos )
@@ -129,15 +141,6 @@ template WindowOperations ()
         _host.focusClient( this );
 
         if ( super.handleMouseButton(btn,status,pos) ) return true;
-
-        if ( btn == MouseButton.Left && status ) {
-            enableSideDragging( pos );
-            return true;
-
-        } else if ( btn == MouseButton.Left && !status ) {
-            _draggingSides = Side.None;
-            return true;
-        }
         return false;
     }
 }
