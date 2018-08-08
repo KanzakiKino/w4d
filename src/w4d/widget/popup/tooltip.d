@@ -27,7 +27,6 @@ class PopupTooltipWidget : PopupWidget
         _text = new TextWidget;
         addChild( _text );
 
-        parseThemeFromFile!"theme/tooltip.yaml"( style );
         style.box.borderWidth = Rect(1.pixel);
     }
 

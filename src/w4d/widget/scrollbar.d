@@ -92,8 +92,6 @@ class ScrollBarWidget (bool Horizon) : Widget
         _bar       = new RectElement;
         _translate = vec2(0,0);
 
-        parseThemeFromFile!"theme/scrollbar.yaml"( style );
-
         static if ( Horizon ) {
             style.box.size.height = 3.mm;
         } else {

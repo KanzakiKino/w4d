@@ -64,7 +64,6 @@ class Widget : WindowContent, Layoutable
         _needLayout = true;
 
         setLayout!FillLayout();
-        parseThemeFromFile!"theme/normal.yaml"( style );
     }
 
     @property vec2 wantedSize ()

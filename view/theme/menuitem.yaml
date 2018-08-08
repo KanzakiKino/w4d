@@ -1,9 +1,0 @@
-# w4d theme for list item widgets
-# Written under LGPL-3.0 in YAML.
-# Copyright 2018 KanzakiKino
-
-default:
-    background: [0,0,0,0]
-
-hovered:
-    background: [0.4,0.4,0.8,0.5]

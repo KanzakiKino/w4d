@@ -30,7 +30,6 @@ class PopupMenuWidget : PopupWidget
         super();
         setLayout!VerticalLineupLayout;
 
-        parseThemeFromFile!"theme/tooltip.yaml"( style );
         style.box.borderWidth = Rect(1.pixel);
     }
     mixin DisableModifyChildren;
@@ -79,7 +78,6 @@ class MenuItemWidget : WrapperWidget
 
         _parentMenu = null;
 
-        parseThemeFromFile!"theme/menuitem.yaml"( style );
         style.box.paddings = Rect(1.mm);
     }
 }

@@ -50,7 +50,6 @@ class ButtonWidget : TextWidget
         style.box.margins     = Rect(1.mm);
         style.box.paddings    = Rect(2.mm);
         style.box.borderWidth = Rect(1.pixel);
-        parseThemeFromFile!"theme/pressable.yaml"( style );
     }
 
     override @property bool trackable () { return true; }

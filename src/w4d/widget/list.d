@@ -138,8 +138,6 @@ class ListItemWidget : WrapperWidget
     {
         super();
 
-        parseThemeFromFile!"theme/listitem.yaml"( style );
-
         style.box.size.width = Scalar.Auto;
         style.box.paddings   = Rect( 1.mm );
     }

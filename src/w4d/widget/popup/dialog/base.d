@@ -23,7 +23,6 @@ class PopupDialogWidget : PopupWidget
     {
         super();
 
-        parseThemeFromFile!"theme/tooltip.yaml"( style );
         style.box.borderWidth = Rect(1.pixel);
         style.box.paddings    = Rect(2.mm);
     }

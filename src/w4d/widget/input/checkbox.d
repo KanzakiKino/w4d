@@ -116,10 +116,6 @@ class CheckBoxWidget : Widget
 
         style.box.margins     = Rect(1.mm);
         style.box.borderWidth = Rect(1.pixel);
-
-        parseThemeFromFile!"theme/checkbox.yaml"( style );
-        parseThemeFromFile!"theme/checkbox.yaml"( _mark.style );
-        parseThemeFromFile!"theme/checkbox.yaml"( _text.style ); // FIXME
     }
 
     void setChecked ( bool b )

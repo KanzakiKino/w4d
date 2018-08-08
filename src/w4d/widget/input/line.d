@@ -148,7 +148,6 @@ class LineInputWidget : TextWidget
         style.box.borderWidth = Rect( 1.pixel );
         style.box.paddings    = Rect( 1.mm );
         style.box.margins     = Rect(1.mm);
-        parseThemeFromFile!"theme/focusable.yaml"( style );
     }
 
     protected @property lineHeight ()

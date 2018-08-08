@@ -121,7 +121,6 @@ class SliderWidget(bool Horizon) : Widget
         style.box.paddings    = Rect(2.mm);
         style.box.margins     = Rect(1.mm);
         style.box.borderWidth = Rect(1.pixel);
-        parseThemeFromFile!"theme/slider.yaml"( style );
     }
 
     protected float retrieveValueFromAbsPos ( vec2 pos )
