@@ -2,6 +2,7 @@
 // Copyright 2018 KanzakiKino
 module w4d.widget.scrollbar;
 import w4d.parser.theme,
+       w4d.style.color,
        w4d.style.scalar,
        w4d.task.window,
        w4d.widget.base,
@@ -162,9 +163,9 @@ class ScrollBarWidget (bool Horizon) : Widget
         return super.layout( pos, size );
     }
 
-    override void draw ( Window w )
+    override void draw ( Window w, ColorSet parent )
     {
-        super.draw( w );
+        super.draw( w, parent );
         if ( !needDrawBar ) return;
 
         auto late = style.clientLeftTop + _translate;
@@ -173,7 +174,7 @@ class ScrollBarWidget (bool Horizon) : Widget
         auto saver  = ShaderStateSaver( shader );
         shader.use( false );
         shader.setVectors( vec3(late,0) );
-        shader.color = colorset.fgColor;
+        shader.color = colorset.foreground;
         _bar.draw( shader );
     }
 

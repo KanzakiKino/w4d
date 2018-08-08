@@ -5,6 +5,7 @@ import w4d.element.box,
        w4d.layout.base,
        w4d.layout.fill,
        w4d.parser.theme,
+       w4d.style.color,
        w4d.style.widget,
        w4d.task.window,
        w4d.widget.base.context,
@@ -28,7 +29,9 @@ class Widget : WindowContent, Layoutable
 
     protected WidgetStyle _style;
     @property WidgetStyle style    () { return _style; }
-    @property ref         colorset () { return style.getColorSet(_status); }
+
+    protected ColorSet _colorset;
+    @property colorset () { return _colorset; }
 
     protected Layout        _layout;
     protected BoxElement    _box;
@@ -157,12 +160,19 @@ class Widget : WindowContent, Layoutable
     }
     protected void drawChildren ( Window win )
     {
-        children.each!(x => x.draw(win));
+        children.each!(x => x.draw(win,colorset));
     }
-    void draw ( Window win )
+    void draw ( Window win, ColorSet parent )
     {
+        _colorset = style.getColorSet(status);
+        _colorset.inherit( parent );
+
         drawBox( win );
         drawChildren( win );
         _context.setNoNeedRedraw();
+    }
+    void draw ( Window win )
+    {
+        draw( win, ColorSet() );
     }
 }

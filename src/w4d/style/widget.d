@@ -60,14 +60,17 @@ class WidgetStyle
         box.calc( ctx.parentSize, ctx.size );
     }
 
-    ref ColorSet getColorSet ( uint status )
+    ColorSet getColorSet ( uint status )
     {
+        ColorSet result;
+
         static foreach ( v; __traits(allMembers,WidgetState) ) with (WidgetState) {
-            if ( (status & mixin(v)) && (mixin(v) in colorsets) ) {
-                return colorsets[mixin(v)];
+            enum S = mixin(v);
+            if ( ((status & S) && (S in colorsets)) || !S ) {
+                result.inherit( colorsets[S] );
             }
         }
-        return colorsets[WidgetState.None];
+        return result;
     }
 
     bool isPointInside ( vec2 pt )

@@ -1,7 +1,8 @@
 // Written under LGPL-3.0 in the D programming language.
 // Copyright 2018 KanzakiKino
 module w4d.widget.root;
-import w4d.task.window,
+import w4d.style.color,
+       w4d.task.window,
        w4d.widget.base,
        w4d.widget.panel;
 import g4d.glfw.cursor,
@@ -19,6 +20,10 @@ class RootWidget : PanelWidget
     {
         super();
         _context = new WindowContext;
+
+        import w4d.style.widget; // TODO
+        style.colorsets[WidgetState.None].foreground = vec4(1,1,1,0.1);
+        style.colorsets[WidgetState.None].background = vec4(1,1,1,0.1);
     }
 
     override @property bool needLayout ()
@@ -48,9 +53,9 @@ class RootWidget : PanelWidget
 
         popup.draw( w );
     }
-    override void draw ( Window w )
+    override void draw ( Window w, ColorSet parent )
     {
-        super.draw( w );
+        super.draw( w, parent );
         drawPopup( w );
     }
 }

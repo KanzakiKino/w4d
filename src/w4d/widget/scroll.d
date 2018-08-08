@@ -3,6 +3,7 @@
 module w4d.widget.scroll;
 import w4d.layout.lineup,
        w4d.layout.split,
+       w4d.style.color,
        w4d.style.scalar,
        w4d.task.window,
        w4d.widget.base,
@@ -84,10 +85,10 @@ class ScrollPanelWidget(bool Horizon) : PanelWidget
             return super.layout( pos, size );
         }
 
-        override void draw ( Window w )
+        override void draw ( Window w, ColorSet parent )
         {
             w.clip.pushRect( style.clientLeftTop, style.box.clientSize );
-            super.draw( w );
+            super.draw( w, parent );
             w.clip.popRect();
         }
     }

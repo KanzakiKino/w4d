@@ -1,7 +1,8 @@
 // Written under LGPL-3.0 in the D programming language.
 // Copyright 2018 KanzakiKino
 module w4d.widget.image;
-import w4d.task.window,
+import w4d.style.color,
+       w4d.task.window,
        w4d.widget.base;
 import g4d.element.shape.rect,
        g4d.gl.texture,
@@ -60,9 +61,9 @@ class ImageWidget : Widget
         scope(success) resizeElement();
         return super.layout( pos, size );
     }
-    override void draw ( Window w )
+    override void draw ( Window w, ColorSet parent )
     {
-        super.draw( w );
+        super.draw( w, parent );
 
         if ( _texture ) {
             auto shader = w.shaders.rgba3;

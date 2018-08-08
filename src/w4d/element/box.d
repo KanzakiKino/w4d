@@ -32,8 +32,8 @@ class BoxElement : Element
     }
     void setColor ( ColorSet col )
     {
-        _bgColor     = col.bgColor;
-        _borderColor = col.borderColor;
+        _bgColor     = col.background;
+        _borderColor = col.border;
     }
 
     override void clear ()

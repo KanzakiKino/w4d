@@ -33,7 +33,6 @@ class MdiClientWidget : PanelWidget, MdiClient
     {
         super();
         style.box.paddings = Rect(1.mm);
-        colorset.bgColor = vec4(0.4,0.4,0.4,1);
         setLayout!VerticalSplitLayout;
 
         _host = null;
@@ -44,7 +43,6 @@ class MdiClientWidget : PanelWidget, MdiClient
         _contents = new PanelWidget;
         _contents.style.box.size.width  = Scalar.Auto;
         _contents.style.box.size.height = Scalar.Auto;
-        _contents.colorset.bgColor = vec4(1,1,1,1); // TODO
         addChild( _contents );
 
         _maxSize = vec2(int.max,int.max);

@@ -5,7 +5,22 @@ import g4d.math.vector;
 
 struct ColorSet
 {
-    vec4 fgColor     = vec4(0,0,0,1),
-         bgColor     = vec4(0,0,0,0),
-         borderColor = vec4(0,0,0,0);
+    protected vec4[string] _colors;
+
+    ref vec4 opDispatch ( string v ) ()
+    {
+        if ( v !in _colors ) {
+            _colors[v] = vec4(0,0,0,0);
+        }
+        return _colors[v];
+    }
+
+    void inherit ( ColorSet parent )
+    {
+        foreach ( key,val; parent._colors ) {
+            if ( key !in _colors ) {
+                _colors[key] = val;
+            }
+        }
+    }
 }

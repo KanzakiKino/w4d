@@ -3,6 +3,7 @@
 module w4d.widget.input.checkbox;
 import w4d.layout.lineup,
        w4d.parser.theme,
+       w4d.style.color,
        w4d.style.rect,
        w4d.style.scalar,
        w4d.style.widget,
@@ -56,9 +57,9 @@ class CheckBoxWidget : Widget
             }
             return super.layout( pos, size );
         }
-        override void draw ( Window w )
+        override void draw ( Window w, ColorSet parent )
         {
-            super.draw( w );
+            super.draw( w, parent );
 
             auto shader = w.shaders.fill3;
             auto saver  = ShaderStateSaver( shader );
@@ -67,7 +68,7 @@ class CheckBoxWidget : Widget
 
             shader.use( false );
             shader.setVectors( vec3(late,0), vec3(0,0,PI/4) );
-            shader.color = colorset.fgColor;
+            shader.color = colorset.foreground;
             _border.draw( shader );
 
             if ( checked ) {

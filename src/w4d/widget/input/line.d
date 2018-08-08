@@ -264,7 +264,7 @@ class LineInputWidget : TextWidget
 
         shader.use( false );
         shader.setVectors( vec3(late,0) );
-        shader.color = colorset.fgColor;
+        shader.color = colorset.foreground;
         _cursorElm.draw( shader );
     }
     protected void drawSelectionRect ( Window w )
@@ -277,7 +277,7 @@ class LineInputWidget : TextWidget
 
         shader.use( false );
         shader.setVectors( vec3(late,0) );
-        shader.color = colorset.borderColor;
+        shader.color = colorset.border;
         _selectionElm.draw( shader );
     }
 

@@ -1,7 +1,8 @@
 // Written under LGPL-3.0 in the D programming language.
 // Copyright 2018 KanzakiKino
 module w4d.widget.mdi.host;
-import w4d.style.widget,
+import w4d.style.color,
+       w4d.style.widget,
        w4d.task.window,
        w4d.widget.mdi.layout,
        w4d.widget.base,
@@ -69,13 +70,13 @@ class MdiHostWidget : Widget
             each!( x => x.layout(pos,size) );
     }
 
-    override void draw ( Window w )
+    override void draw ( Window w, ColorSet parent )
     {
         layoutQuickly();
 
         w.clip.pushRect( style.box.borderInsideLeftTop,
                 style.box.borderInsideSize );
-        super.draw( w );
+        super.draw( w, parent );
         w.clip.popRect();
     }
 }

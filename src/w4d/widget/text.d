@@ -2,6 +2,7 @@
 // Copyright 2018 KanzakiKino
 module w4d.widget.text;
 import w4d.element.text,
+       w4d.style.color,
        w4d.style.rect,
        w4d.style.scalar,
        w4d.task.window,
@@ -74,12 +75,12 @@ class TextWidget : Widget
 
         shader.use( false );
         shader.setVectors( vec3(late,0) );
-        shader.color = colorset.fgColor;
+        shader.color = colorset.foreground;
         _textElm.draw( shader );
     }
-    override void draw ( Window win )
+    override void draw ( Window win, ColorSet parent )
     {
-        super.draw( win );
+        super.draw( win, parent );
         drawText( win );
     }
 

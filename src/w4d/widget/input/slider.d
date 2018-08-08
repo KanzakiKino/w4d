@@ -2,6 +2,7 @@
 // Copyright 2018 KanzakiKino
 module w4d.widget.input.slider;
 import w4d.parser.theme,
+       w4d.style.color,
        w4d.style.rect,
        w4d.style.scalar,
        w4d.task.window,
@@ -198,16 +199,16 @@ class SliderWidget(bool Horizon) : Widget
         result.weightRef!Horizon += _barWeight+_pointerSize;
         return result;
     }
-    override void draw ( Window w )
+    override void draw ( Window w, ColorSet parent )
     {
-        super.draw( w );
+        super.draw( w, parent );
 
         auto shader = w.shaders.fill3;
         auto saver  = ShaderStateSaver( shader );
 
         shader.use( false );
         shader.setVectors( barLate );
-        shader.color = colorset.fgColor;
+        shader.color = colorset.foreground;
         _bar.draw( shader );
 
         shader.setVectors( pointerLate, vec3(0,0,PI) );
