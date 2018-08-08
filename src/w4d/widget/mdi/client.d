@@ -77,6 +77,12 @@ class MdiClientWidget : PanelWidget, MdiClient
     }
     override vec2 layout ( vec2 basept, vec2 size )
     {
+        _size.x = _size.x.clamp( minSize.x, min( maxSize.x, size.x ) );
+        _size.y = _size.y.clamp( minSize.y, min( maxSize.y, size.y ) );
+
+        _pos.x = _pos.x.clamp( 0, size.x-_size.x );
+        _pos.y = _pos.y.clamp( 0, size.y-_size.y );
+
         return super.layout( basept+_pos, _size );
     }
 

@@ -95,8 +95,6 @@ template WindowOperations ()
     }
     void resize ( vec2 size )
     {
-        size.x = size.x.clamp( minSize.x, maxSize.x );
-        size.y = size.y.clamp( minSize.y, maxSize.y );
         _size = size;
         requestLayout();
     }
