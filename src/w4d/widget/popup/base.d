@@ -12,6 +12,8 @@ class PopupWidget : RootWidget
     // WindowContext of target of popup.
     protected WindowContext _objectContext;
 
+    protected vec2 _pos, _size;
+
     override void handlePopup ( bool opened, WindowContext w )
     {
         if ( opened ) {
@@ -25,11 +27,17 @@ class PopupWidget : RootWidget
     this ()
     {
         super();
+        _objectContext = null;
+
+        _pos  = vec2(0,0);
+        _size = vec2(0,0);
     }
 
     void move ( vec2 pos, vec2 size )
     {
-        .Widget.layout( pos, size );
+        _pos  = pos;
+        _size = size;
+        requestLayout();
     }
     void close ()
     {
@@ -38,8 +46,29 @@ class PopupWidget : RootWidget
         _objectContext.setPopup( null );
     }
 
-    override vec2 layout ( vec2 leftTop, vec2 size )
+    override vec2 layout ( vec2 rootlt, vec2 rootsz )
     {
+        .Widget.layout( _pos, _size );
+
+        auto rootrb = rootlt + rootsz;
+
+        auto lt = style.translate;
+        auto rb = lt + style.box.collisionSize;
+
+        auto late = vec2(0,0);
+        if ( lt.x < rootlt.x ) {
+            late.x = rootlt.x - lt.x;
+        } else if ( rb.x > rootrb.x ) {
+            late.x = rootrb.x - rb.x;
+        }
+        if ( lt.y < rootlt.y ) {
+            late.y = rootlt.y - lt.y;
+        } else if ( rb.y > rootrb.y ) {
+            late.y = rootrb.y - rb.y;
+        }
+
+        style.shift( late );
+        shiftChildren( late );
         return vec2(0,0);
     }
 }
