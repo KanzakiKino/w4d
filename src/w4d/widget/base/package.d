@@ -66,6 +66,7 @@ class Widget : WindowContent, Layoutable
 
         _needLayout = true;
 
+        parseColorSetsFromFile!"colorset/widget.yaml"( style );
         setLayout!FillLayout();
     }
 

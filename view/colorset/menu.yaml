@@ -1,0 +1,7 @@
+# Written under LGPL-3.0 in YAML.
+# Copyright 2018 KanzakiKino
+
+default:
+    foreground: [0.9]
+    background: [0.4]
+    border    : [0.6]

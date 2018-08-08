@@ -53,16 +53,12 @@ class ListWidget : Widget
         if ( btn == MouseButton.Left && status ) {
             if ( auto child = findChildAt( pos ) ) {
                 _dragging = child;
-                _dragging.enableState( WidgetState.Pressed );
 
                 toggleItem( child.to!ListItemWidget );
                 return true;
             }
         } else if ( btn == MouseButton.Left && !status ) {
-            if ( _dragging ) {
-                _dragging.disableState( WidgetState.Pressed );
-                _dragging = null;
-            }
+            _dragging = null;
         }
         return false;
     }
@@ -70,6 +66,7 @@ class ListWidget : Widget
     this ()
     {
         super();
+        parseColorSetsFromFile!"colorset/list.yaml"( style );
         setLayout!VerticalLineupLayout;
 
         _multiselect = false;
@@ -138,6 +135,7 @@ class ListItemWidget : WrapperWidget
     {
         super();
 
+        parseColorSetsFromFile!"colorset/listitem.yaml"( style );
         style.box.size.width = Scalar.Auto;
         style.box.paddings   = Rect( 1.mm );
     }

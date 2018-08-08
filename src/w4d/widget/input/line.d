@@ -144,6 +144,7 @@ class LineInputWidget : TextWidget
             requestRedraw();
         };
 
+        parseColorSetsFromFile!"colorset/lineinput.yaml"( style );
         style.box.size.width  = Scalar.None;
         style.box.borderWidth = Rect( 1.pixel );
         style.box.paddings    = Rect( 1.mm );

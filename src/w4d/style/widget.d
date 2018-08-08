@@ -66,7 +66,7 @@ class WidgetStyle
 
         static foreach ( v; __traits(allMembers,WidgetState) ) with (WidgetState) {
             enum S = mixin(v);
-            if ( ((status & S) && (S in colorsets)) || !S ) {
+            if ( ((status & S) || !S) && (S in colorsets) ) {
                 result.inherit( colorsets[S] );
             }
         }

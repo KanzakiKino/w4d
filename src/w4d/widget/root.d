@@ -1,7 +1,8 @@
 // Written under LGPL-3.0 in the D programming language.
 // Copyright 2018 KanzakiKino
 module w4d.widget.root;
-import w4d.style.color,
+import w4d.parser.colorset,
+       w4d.style.color,
        w4d.task.window,
        w4d.widget.base,
        w4d.widget.panel;
@@ -21,9 +22,7 @@ class RootWidget : PanelWidget
         super();
         _context = new WindowContext;
 
-        import w4d.style.widget; // TODO
-        style.colorsets[WidgetState.None].foreground = vec4(1,1,1,0.1);
-        style.colorsets[WidgetState.None].background = vec4(1,1,1,0.1);
+        parseColorSetsFromFile!"colorset/root.yaml"( style );
     }
 
     override @property bool needLayout ()

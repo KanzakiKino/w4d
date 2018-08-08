@@ -63,6 +63,7 @@ class SelectInputWidget : PanelWidget
         _menu     = new CustomPopupMenuWidget;
         _selected = null;
 
+        parseColorSetsFromFile!"colorset/selectinput.yaml"( style );
         style.box.borderWidth = Rect(1.pixel);
         style.box.paddings    = Rect(1.mm);
         style.box.margins     = Rect(1.mm);

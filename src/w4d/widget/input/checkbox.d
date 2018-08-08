@@ -115,6 +115,7 @@ class CheckBoxWidget : Widget
 
         _checked = false;
 
+        parseColorSetsFromFile!"colorset/checkbox.yaml"( style );
         style.box.margins     = Rect(1.mm);
         style.box.borderWidth = Rect(1.pixel);
     }

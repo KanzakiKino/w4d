@@ -27,6 +27,7 @@ class PopupTooltipWidget : PopupWidget
         _text = new TextWidget;
         addChild( _text );
 
+        parseColorSetsFromFile!"colorset/menu.yaml"( style );
         style.box.borderWidth = Rect(1.pixel);
     }
 

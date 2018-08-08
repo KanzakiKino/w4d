@@ -1,0 +1,11 @@
+# Written under LGPL-3.0 in YAML.
+# Copyright 2018 KanzakiKino
+
+default:
+    background: []
+
+hovered:
+    background: [0.4,0.4,0.8,0.5]
+
+pressed:
+    background: [0.8,0.4,0.4,0.5]

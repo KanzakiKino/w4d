@@ -27,6 +27,7 @@ class TabHostWidget : Widget
             super();
             id = i;
 
+            parseColorSetsFromFile!"colorset/tabheader.yaml"( style );
             style.box.size.width     = Scalar.None;
             style.box.size.height    = Scalar.None;
             style.box.margins.bottom = 0.mm;

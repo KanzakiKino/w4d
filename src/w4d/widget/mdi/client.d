@@ -4,6 +4,7 @@ module w4d.widget.mdi.client;
 import w4d.layout.gravity,
        w4d.layout.lineup,
        w4d.layout.split,
+       w4d.parser.colorset,
        w4d.style.rect,
        w4d.style.scalar,
        w4d.task.window,
@@ -32,8 +33,6 @@ class MdiClientWidget : PanelWidget, MdiClient
     this ()
     {
         super();
-        style.box.paddings = Rect(1.mm);
-        setLayout!VerticalSplitLayout;
 
         _host = null;
 
@@ -50,6 +49,10 @@ class MdiClientWidget : PanelWidget, MdiClient
 
         _pos  = vec2(0,0);
         _size = vec2(320,240);
+
+        parseColorSetsFromFile!"colorset/mdiclient.yaml"( style );
+        style.box.paddings = Rect(1.mm);
+        setLayout!VerticalSplitLayout;
     }
 
     mixin WindowOperations;

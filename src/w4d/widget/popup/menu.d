@@ -28,8 +28,9 @@ class PopupMenuWidget : PopupWidget
     this ()
     {
         super();
-        setLayout!VerticalLineupLayout;
 
+        parseColorSetsFromFile!"colorset/menu.yaml"( style );
+        setLayout!VerticalLineupLayout;
         style.box.borderWidth = Rect(1.pixel);
     }
     mixin DisableModifyChildren;
@@ -74,10 +75,11 @@ class MenuItemWidget : WrapperWidget
     this ()
     {
         super();
-        setLayout!HorizontalLineupLayout;
 
         _parentMenu = null;
 
+        parseColorSetsFromFile!"colorset/menuitem.yaml"( style );
+        setLayout!HorizontalLineupLayout;
         style.box.paddings = Rect(1.mm);
     }
 }

@@ -47,6 +47,7 @@ class ButtonWidget : TextWidget
         textOriginRate = vec2(0.5,0.5);
         textPosRate    = vec2(0.5,0.5);
 
+        parseColorSetsFromFile!"colorset/button.yaml"( style );
         style.box.margins     = Rect(1.mm);
         style.box.paddings    = Rect(2.mm);
         style.box.borderWidth = Rect(1.pixel);
