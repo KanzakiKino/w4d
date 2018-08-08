@@ -7,12 +7,17 @@ struct ColorSet
 {
     protected vec4[string] _colors;
 
-    ref vec4 opDispatch ( string v ) ()
+    ref vec4 opIndex ( string v )
     {
-        if ( v !in _colors ) {
+        if ( v!in _colors ) {
             _colors[v] = vec4(0,0,0,0);
         }
         return _colors[v];
+    }
+
+    ref vec4 opDispatch ( string v ) ()
+    {
+        return this[v];
     }
 
     void inherit ( ColorSet parent )
