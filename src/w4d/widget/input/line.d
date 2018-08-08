@@ -182,7 +182,7 @@ class LineInputWidget : TextWidget
             auto poly = _textElm.polys[$-1];
             return vec2(poly.pos).x + poly.length;
         } else {
-            return vec2(_textElm.polys[i].pos).x;
+            return vec2(_textElm.polys[i.to!size_t].pos).x;
         }
     }
 
