@@ -11,6 +11,8 @@
 
     "sourcePaths": ["./src"],
 
+    "copyFiles-windows-x86_64": ["./lib/windows-x86_64/*.dll"],
+
     "dependencies": {
         "w4d": {"path":"../../"},
         "g4d": "~>1.3.3"
