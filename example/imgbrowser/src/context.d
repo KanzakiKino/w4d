@@ -24,21 +24,25 @@ class AppContext
         return dir~"/noto.ttf";
     }
 
-    this ()
+    this ( App app )
     {
         assert( !_instance );
+        _app      = app;
         _instance = this;
     }
 
+    protected App _app;
+    @property app () { return _app; }
+
 
     protected MainTabHost _mainTabs;
+    @property mainTabs () { return _mainTabs; }
 
     void setMainTabHost ( MainTabHost host )
     {
         assert( !_mainTabs );
         _mainTabs = host;
     }
-    @property mainTabs () { return _mainTabs; }
 }
 alias ImgBrowser = AppContext.instance;
 

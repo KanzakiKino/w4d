@@ -7,7 +7,7 @@ import w4d;
 int main( string[] args )
 {
     auto app = new App( args );
-    new AppContext;
+    new AppContext( app );
 
     auto win = new Window( vec2i(600,500), ImgBrowser.title,
             WindowHint.Resizable );

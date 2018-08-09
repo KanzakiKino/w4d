@@ -28,6 +28,11 @@ class ImgSearcher
         source = url.get().to!string;
         clear();
     }
+    this ( char[] src )
+    {
+        source = src.to!string;
+        clear();
+    }
 
     protected bool seekTo ( string v )
     {
