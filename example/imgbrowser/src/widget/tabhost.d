@@ -11,6 +11,8 @@ class MainTabHostWidget : TabHostWidget, MainTabHost
 {
     protected int _lastId;
 
+    protected PopupTextDialogWidget _dialog;
+
     this ( FontFace face )
     {
         ImgBrowser.setMainTabHost( this );
@@ -18,6 +20,10 @@ class MainTabHostWidget : TabHostWidget, MainTabHost
         setFontFace( face );
 
         _lastId = 0;
+
+        _dialog = new PopupTextDialogWidget;
+        _dialog.loadText( ""d, face );
+        _dialog.setButtons( [DialogButton.Ok], face );
 
         addTab( _lastId++, "About"d, createAbout( face ) );
     }
@@ -43,8 +49,17 @@ class MainTabHostWidget : TabHostWidget, MainTabHost
 
     void openNewPage ( string url = "" )
     {
-        auto title = url[0 .. min(10,url.length)].to!dstring;
-        addTab( _lastId, title, new PageWidget( url ) );
-        activateTab( findTabWithId(_lastId++) );
+        try {
+            auto title = url[0 .. min(10,url.length)].to!dstring;
+            addTab( _lastId, title, new PageWidget( url ) );
+            activateTab( findTabWithId(_lastId++) );
+
+        } catch ( Exception e ) {
+            if ( auto tab = findTabWithId(_lastId) ) {
+                removeTab( tab );
+            }
+            _dialog.loadText( e.msg.to!dstring );
+            _context.setPopup( _dialog );
+        }
     }
 }

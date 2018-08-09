@@ -7,7 +7,6 @@ import w4d, g4d;
 class PageWidget : VerticalScrollPanelWidget
 {
     protected ImgSearcher _searcher;
-    protected bool        _needReload;
 
     this ( string url )
     {
