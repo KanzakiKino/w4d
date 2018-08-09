@@ -44,6 +44,7 @@ class MainTabHostWidget : TabHostWidget, MainTabHost
     void openNewPage ( string url = "" )
     {
         auto title = url[0 .. min(10,url.length)].to!dstring;
-        addTab( _lastId++, title, new PageWidget( url ) );
+        addTab( _lastId, title, new PageWidget( url ) );
+        activateTab( findTabWithId(_lastId++) );
     }
 }
