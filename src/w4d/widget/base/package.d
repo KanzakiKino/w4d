@@ -16,6 +16,7 @@ import g4d.glfw.cursor,
        g4d.math.vector,
        g4d.shader.base;
 import std.algorithm,
+       std.array,
        std.conv;
 
 mixin Context;
@@ -41,7 +42,7 @@ class Widget : WindowContent, Layoutable
     protected Widget findChildAt ( vec2 pt )
     {
         // Use reversed foreach to match the order with drawing.
-        foreach_reverse ( c; children ) {
+        foreach_reverse ( c; calcedChildren ) {
             if ( c.style.isPointInside(pt) ) {
                 return c;
             }
@@ -77,6 +78,10 @@ class Widget : WindowContent, Layoutable
     @property Widget[] children ()
     {
         return [];
+    }
+    @property Widget[] calcedChildren ()
+    {
+        return children.filter!"a.style.isCalced".array;
     }
     @property Layoutable[] childLayoutables ()
     {
@@ -131,7 +136,7 @@ class Widget : WindowContent, Layoutable
     }
     void shiftChildren ( vec2 size )
     {
-        foreach ( c; children ) {
+        foreach ( c; calcedChildren ) {
             c.style.shift( size );
             c.shiftChildren( size );
         }

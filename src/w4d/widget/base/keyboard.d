@@ -55,7 +55,7 @@ template Keyboard ()
         if ( !isFocused ) {
             if ( _context.focused ) {
                 return _context.focused.handleKey( key, status );
-            } else if ( children.canFind!(x => x.handleKey( key, status )) ) {
+            } else if ( calcedChildren.canFind!(x => x.handleKey( key, status )) ) {
                 return true;
             }
         }
