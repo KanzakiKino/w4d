@@ -1,0 +1,14 @@
+.dub
+docs.json
+__dummy.html
+docs/
+imgbrowser.so
+imgbrowser.dylib
+imgbrowser.dll
+imgbrowser.a
+imgbrowser.lib
+imgbrowser-test-*
+*.exe
+*.o
+*.obj
+*.lst
