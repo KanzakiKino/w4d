@@ -5,6 +5,7 @@ module w4d;
 public
 {
     import w4d.layout.fill,
+           w4d.layout.gravity,
            w4d.layout.lineup,
            w4d.layout.split,
            w4d.layout.table;
