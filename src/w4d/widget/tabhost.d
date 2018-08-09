@@ -140,7 +140,7 @@ class TabHostWidget : Widget
             activateTab( _tabs[0] );
         }
     }
-    void deleteTab ( Tab t )
+    void removeTab ( Tab t )
     {
         _tabs = _tabs.remove!( x => x is t );
     }
