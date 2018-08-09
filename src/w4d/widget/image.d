@@ -2,6 +2,7 @@
 // Copyright 2018 KanzakiKino
 module w4d.widget.image;
 import w4d.style.color,
+       w4d.style.scalar,
        w4d.task.window,
        w4d.widget.base;
 import g4d.element.shape.rect,
@@ -9,7 +10,8 @@ import g4d.element.shape.rect,
        g4d.math.vector,
        g4d.shader.base,
        g4d.util.bitmap;
-import std.math;
+import std.algorithm,
+       std.math;
 
 class ImageWidget : Widget
 {
@@ -25,6 +27,8 @@ class ImageWidget : Widget
 
     this ()
     {
+        super();
+
         _imageElm  = new RectElement;
         _texture   = null;
         _imageSize = vec2(0,0);
@@ -46,7 +50,7 @@ class ImageWidget : Widget
         _imageSize = vec2(_texture.size);
         _uv.x      = bmp.width/_imageSize.x;
         _uv.y      = bmp.rows /_imageSize.y;
-        resizeElement();
+        requestLayout();
     }
 
     protected void resizeElement ()
@@ -58,6 +62,18 @@ class ImageWidget : Widget
     }
     override vec2 layout ( vec2 pos, vec2 size )
     {
+        if ( style.box.size.width.isNone && style.box.size.height.isNone ) {
+            auto w = _imageSize.x, h = _imageSize.y;
+            auto ratio = w/h;
+            auto maxsz = size;
+
+            size.x = ratio * size.y;
+            if ( size.x > maxsz.x ) {
+                size.x = maxsz.x;
+                size.y = (1f/ratio) * size.x;
+            }
+        }
+
         scope(success) resizeElement();
         return super.layout( pos, size );
     }
