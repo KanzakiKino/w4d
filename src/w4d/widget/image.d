@@ -47,9 +47,10 @@ class ImageWidget : Widget
 
         _texture = new Tex2D( bmp );
 
-        _imageSize = vec2(_texture.size);
-        _uv.x      = bmp.width/_imageSize.x;
-        _uv.y      = bmp.rows /_imageSize.y;
+        auto texSz = vec2( _texture.size );
+        _uv.x      = bmp.width/texSz.x;
+        _uv.y      = bmp.rows /texSz.y;
+        _imageSize = vec2(bmp.width,bmp.rows);
         requestLayout();
     }
 
