@@ -83,6 +83,25 @@ class WidgetStyle
         return pt.x <= 0 && pt.y <= 0;
     }
 
+    bool isWidgetInside ( WidgetStyle target )
+    {
+        auto targetLT = target.translate +
+            target.box.borderOutsideLeftTop;
+        auto targetRB = targetLT +
+            target.box.borderOutsideSize;
+
+        auto selfLT = translate +
+            box.borderOutsideLeftTop;
+        auto selfRB = selfLT +
+            box.borderOutsideSize;
+
+        return selfLT.x > targetRB.x? false:
+               selfLT.y > targetRB.y? false:
+               selfRB.x < targetLT.x? false:
+               selfRB.y < targetLT.y? false:
+               true;
+    }
+
     void shift ( vec2 size )
     {
         x.alter( x.calced+size.x );

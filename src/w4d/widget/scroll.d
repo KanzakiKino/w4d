@@ -13,6 +13,7 @@ import w4d.layout.lineup,
 import g4d.math.matrix,
        g4d.math.vector,
        g4d.shader.base;
+import std.algorithm;
 
 class ScrollPanelWidget(bool Horizon) : PanelWidget
 {
@@ -85,6 +86,12 @@ class ScrollPanelWidget(bool Horizon) : PanelWidget
             return super.layout( pos, size );
         }
 
+        protected override void drawChildren ( Window w )
+        {
+            children.
+                filter!( x => style.isWidgetInside(x.style) ).
+                each!( x => x.draw( w, colorset ) );
+        }
         override void draw ( Window w, ColorSet parent )
         {
             w.clip.pushRect( style.clientLeftTop, style.box.clientSize );
