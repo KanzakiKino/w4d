@@ -27,7 +27,6 @@ class PageWidget : VerticalScrollPanelWidget
         auto image = new ImageWidget;
         image.setImage( bmp );
         contents.addChild( image );
-        ImgBrowser.app.terminate();
     }
 
     protected void reload ()
