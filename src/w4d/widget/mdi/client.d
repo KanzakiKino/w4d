@@ -28,7 +28,9 @@ class MdiClientWidget : PanelWidget, MdiClient
     protected MdiHostWidget _host;
 
     protected TitleBarWidget _titlebar;
-    protected PanelWidget    _contents;
+
+    protected PanelWidget _contents;
+    @property contents () { return _contents; }
 
     this ()
     {
