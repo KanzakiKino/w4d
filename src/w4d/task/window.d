@@ -40,8 +40,6 @@ class Window : g4d.Window, Task
     protected WindowContent _root;
     protected vec2          _cursorPos;
 
-    protected vec2i _beforeSize;
-
     this ( vec2i size, string text, WindowHint hint = WindowHint.None )
     {
         enforce( size.x > 0 && size.y > 0, "Window size is invalid." );
@@ -54,14 +52,11 @@ class Window : g4d.Window, Task
         _root       = null;
         _cursorPos  = vec2(0,0);
 
-        _beforeSize = vec2i(0,0);
         handler.onWindowResize = delegate ( vec2i sz )
         {
-            if ( _beforeSize != sz ) {
-                recalcMatrix();
-                _root.layout( sz );
-                _beforeSize = sz;
-            }
+            enforce( _root, "Content is null." );
+            recalcMatrix();
+            _root.layout( sz );
         };
         handler.onMouseEnter = delegate ( bool entered )
         {
@@ -94,6 +89,7 @@ class Window : g4d.Window, Task
     {
         enforce( !_root, "Content is already setted." );
         _root = content;
+        handler.onWindowResize( size );
     }
 
     protected void recalcMatrix ()
@@ -112,7 +108,6 @@ class Window : g4d.Window, Task
     override bool exec ( App app )
     {
         enforce( _root, "Content is null." );
-        handler.onWindowResize( size );
 
         if ( alive ) {
             if ( _root.needLayout ) {
