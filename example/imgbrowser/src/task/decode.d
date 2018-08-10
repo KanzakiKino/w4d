@@ -4,57 +4,51 @@ module imgbrowser.task.decode;
 import w4d.event,
        w4d;
 import g4d;
-import core.thread;
+import core.sync.mutex,
+       core.thread;
 
 alias DecodeFinishHandler = EventHandler!( void, BitmapRGBA );
 
-class DecodeTask : Task
+class DecodeTask : Thread, Task
 {
-    protected Server _server;
+    immutable string[] urls;
 
-    DecodeFinishHandler onFinish;
+    protected Mutex        _mutex;
+    protected BitmapRGBA[] _stack;
 
-    this ( string url )
+    DecodeFinishHandler onDecode;
+
+    this ( string[] urls )
     {
-        _server = new Server(url);
-        _server.start();
+        super( &task );
+
+        this.urls = urls.dup;
+        _mutex    = new Mutex;
+        _stack    = [];
+
+        start();
     }
-
-    @property finished ()
+    protected void task ()
     {
-        return !_server.isRunning;
+        foreach ( url; urls ) {
+            auto media = new MediaFile( url );
+            auto bmp   = media.decodeNextImage();
+
+            synchronized ( _mutex ) {
+                _stack ~= bmp;
+            }
+            media.dispose();
+        }
     }
 
     override bool exec ( App )
     {
-        if ( finished ) {
-            onFinish.call( _server.result );
-            return true;
+        synchronized ( _mutex ) {
+            foreach ( bmp; _stack ) {
+                onDecode.call( bmp );
+            }
+            _stack = [];
         }
-        return false;
-    }
-}
-
-private class Server : Thread
-{
-    const string url;
-
-    protected BitmapRGBA _result;
-    @property result () { return _result; }
-
-    this ( string u )
-    {
-        super( &exec );
-        url = u;
-    }
-
-    protected void exec ()
-    {
-        try {
-            auto media = new MediaFile( url );
-            _result = media.decodeNextImage();
-        } catch ( Exception e ) {
-            _result = null;
-        }
+        return !isRunning;
     }
 }

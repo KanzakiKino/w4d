@@ -16,8 +16,12 @@ class PageWidget : VerticalScrollPanelWidget
     {
         super();
 
-        _searcher = new ImgSearcher( url );
-        reload();
+        auto task = new DownloadTask( url );
+        task.onFinish = ( char[] src ) {
+            _searcher = new ImgSearcher( url );
+            reload();
+        };
+        ImgBrowser.app.addTask( task );
     }
 
     protected void addImage ( BitmapRGBA bmp )
@@ -27,20 +31,22 @@ class PageWidget : VerticalScrollPanelWidget
         auto image = new ImageWidget;
         image.setImage( bmp );
         contents.addChild( image );
+        bmp.dispose();
     }
 
     protected void reload ()
     {
         contents.removeAllChildren();
 
-        while ( true )
-        {
+        string[] urls;
+        while ( true ) {
             auto url = _searcher.pop;
             if ( url == "" ) break;
 
-            auto task = new DecodeTask( url );
-            ImgBrowser.app.addTask( task );
-            task.onFinish = &addImage;
+            urls ~= url;
         }
+        auto task = new DecodeTask( urls );
+        task.onDecode = &addImage;
+        ImgBrowser.app.addTask( task );
     }
 }
