@@ -39,7 +39,11 @@ class App
     {
         while ( alive ) {
             try {
-                _tasks = _tasks.remove!( x => x.exec(this) );
+                // Adding tasks is possible inside of remove template.
+                auto temp = _tasks;
+                _tasks    = [];
+                _tasks   ~= temp.remove!( x => x.exec(this) );
+
                 g4d.Window.pollEvents();
                 Thread.sleep( dur!"msecs"( sleepDuration ) );
             } catch ( Exception e ) {
