@@ -56,7 +56,7 @@ class ClipRect
         auto rpos  = vec2(left,top);
         auto rsize = vec2(right,bottom) - pos;
 
-        rpos     += size/2; // pos is center of rect
+        rpos     += rsize/2; // pos is center of rect
         _rcStack ~= Rect( rpos, rsize );
         apply();
     }
