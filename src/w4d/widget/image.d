@@ -35,7 +35,7 @@ class ImageWidget : Widget
         _uv        = vec2(0,0);
     }
 
-    void setImage (B) ( B bmp )
+    void setImage (B) ( B bmp, bool compress = true )
         if ( isBitmap!B )
     {
         if ( !bmp ) {
@@ -45,7 +45,7 @@ class ImageWidget : Widget
             return;
         }
 
-        _texture = new Tex2D( bmp );
+        _texture = new Tex2D( bmp, compress );
 
         auto texSz = vec2( _texture.size );
         _uv.x      = bmp.width/texSz.x;
