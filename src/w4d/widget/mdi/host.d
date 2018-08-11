@@ -75,7 +75,10 @@ class MdiHostWidget : Widget
     {
         layoutQuickly();
 
-        w.clip.pushRect( style.box.borderInsideLeftTop,
+        auto leftTop = style.translate +
+            style.box.borderInsideLeftTop;
+
+        w.clip.pushRect( leftTop,
                 style.box.borderInsideSize );
         super.draw( w, parent );
         w.clip.popRect();
