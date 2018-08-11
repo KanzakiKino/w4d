@@ -34,6 +34,7 @@ class MdiHostWidget : Widget
         enforce( cli, "The client is invalid." );
         cli.setHost( this );
         _clients ~= cli;
+        infectWindowContext();
 
         unfocusAllClients();
         cli.widget.enableState( WidgetState.Focused );
