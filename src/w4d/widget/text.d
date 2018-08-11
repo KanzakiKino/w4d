@@ -21,8 +21,8 @@ class TextWidget : Widget
 
     @property ref textOriginRate () { return _textElm.originRate; }
 
-    @property text () { return _text; }
-    @property font () { return _font; }
+    @property dstring text () { return _text; }
+    @property FontFace font () { return _font; }
 
     vec2 textPosRate;
 
