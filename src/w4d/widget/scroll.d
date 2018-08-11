@@ -47,8 +47,8 @@ class ScrollPanelWidget(bool Horizon) : PanelWidget
             size   = vec2(0,0);
 
             setLayout!( LineupLayout!Horizon );
-            style.box.size.width  = 100.percent;
-            style.box.size.height = 100.percent;
+            style.box.size.width  = Scalar.Auto;
+            style.box.size.height = Scalar.Auto;
         }
 
         void setScroll ( float len )
