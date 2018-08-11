@@ -13,7 +13,7 @@
     "stringImportPaths": ["./src","./view"],
 
     "dependencies": {
-        "g4d": "~>1.3.5",
+        "g4d": "~develop",
         "dyaml": "~>0.7.0-beta.1"
     },
     "subPackages": [
@@ -28,7 +28,9 @@
             "name": "unittest",
 
             "targetType": "executable",
-            "mainSourceFile": "./src/test.d"
+            "mainSourceFile": "./src/test.d",
+
+            "dflags": ["-profile=gc"]
         }
     ]
 }

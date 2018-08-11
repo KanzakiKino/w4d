@@ -1,5 +1,6 @@
 /.dub/
 /bin/
 /dub.selections.json
+/profilegc.log
 
 *.swp
