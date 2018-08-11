@@ -9,7 +9,7 @@ class TestRootWidget : RootWidget
     this ()
     {
         super();
-        setLayout!VerticalLineupLayout;
+        setLayout!VerticalSplitLayout;
         style.getColorSet(0).bgColor = vec4(0.1,0.1,0.1,1);
 
         auto fontface = new FontFace(new Font("/usr/share/fonts/TTF/Ricty-Regular.ttf"), vec2i(16,16));
