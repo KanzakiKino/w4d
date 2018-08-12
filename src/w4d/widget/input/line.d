@@ -18,7 +18,8 @@ import g4d.element.shape.rect,
        g4d.shader.base;
 import std.algorithm,
        std.conv,
-       std.math;
+       std.math,
+       std.range;
 
 alias TextChangeHandler = EventHandler!( void, dstring );
 
@@ -28,6 +29,7 @@ class LineInputWidget : TextWidget
     protected float    _cursorPos;
     protected float    _scrollLength;
     protected float    _selectionLength;
+    protected dchar    _passwordChar;
 
     protected RectElement _cursorElm;
     protected RectElement _selectionElm;
@@ -188,7 +190,7 @@ class LineInputWidget : TextWidget
 
     override void loadText ( dstring v, FontFace font = null )
     {
-        super.loadText( v, font );
+        super.loadText( isPasswordField ? passwordChar.repeat(v.length).to!dstring : v, font );
 
         _line.setText( v );
         onTextChange.call( v );
@@ -284,4 +286,10 @@ class LineInputWidget : TextWidget
 
     override @property bool trackable () { return true; }
     override @property bool focusable () { return true; }
+
+    @property auto passwordChar () const { return _passwordChar; }
+    @property void passwordChar (dchar c) { _passwordChar = c; loadText(text); }
+    @property auto isPasswordField () const { return _passwordChar != dchar.init; }
+
+    override @property dstring text () { return _line.text; }
 }

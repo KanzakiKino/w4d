@@ -62,6 +62,25 @@ class DemoRootWidget : RootWidget
             }
             {
                 auto line = new PanelWidget;
+                line.setLayout!HorizontalMonospacedSplitLayout;
+                page.addChild( line );
+
+                auto input1 = new LineInputWidget;
+                input1.style.box.margins = Rect(1.mm); // TODO
+                input1.loadText( "password - LineInputWidget"d, face );
+                input1.passwordChar = '*';
+                line.addChild( input1 );
+
+                auto input2 = new LineInputWidget;
+                input2.style.box.margins = Rect(1.mm); // TODO
+                input2.loadText( input1.text, face );
+                input2.lock();
+                line.addChild( input2 );
+
+                input1.onTextChange = ((input2) => (dstring text) { input2.loadText(text); })(input2);
+            }
+            {
+                auto line = new PanelWidget;
                 line.setLayout!HorizontalSplitLayout;
                 page.addChild( line );
 
