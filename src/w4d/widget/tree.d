@@ -7,7 +7,7 @@ import w4d.layout.lineup,
        w4d.widget.base,
        w4d.widget.list,
        w4d.widget.panel;
-import g4d.math.vector;
+import gl3n.linalg;
 
 class TreeListItemWidget : ListItemWidget
 {

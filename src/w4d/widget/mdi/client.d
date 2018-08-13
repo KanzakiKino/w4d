@@ -17,8 +17,8 @@ import w4d.layout.gravity,
        w4d.widget.text,
        w4d.exception;
 import g4d.ft.font,
-       g4d.glfw.cursor,
-       g4d.math.vector;
+       g4d.glfw.cursor;
+import gl3n.linalg;
 import std.algorithm;
 
 class MdiClientWidget : PanelWidget, MdiClient

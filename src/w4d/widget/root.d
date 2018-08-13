@@ -6,12 +6,12 @@ import w4d.parser.colorset,
        w4d.task.window,
        w4d.widget.base,
        w4d.widget.panel;
-import g4d.glfw.cursor,
-       g4d.math.vector;
+import g4d.glfw.cursor;
+import gl3n.linalg;
 
 class RootWidget : PanelWidget
 {
-    override @property Cursor cursor ()
+    override @property const(Cursor) cursor ()
     {
         auto popup = _context.popup;
         return popup? popup.cursor: super.cursor;

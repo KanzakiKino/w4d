@@ -13,8 +13,8 @@ import w4d.element.box,
        w4d.widget.base.mouse,
        w4d.exception;
 import g4d.glfw.cursor,
-       g4d.math.vector,
        g4d.shader.base;
+import gl3n.linalg;
 import std.algorithm,
        std.array,
        std.conv;
@@ -158,8 +158,8 @@ class Widget : WindowContent, Layoutable
         auto shader = win.shaders.fill3;
         auto saver  = ShaderStateSaver( shader );
 
-        shader.use( false );
-        shader.setVectors( vec3(style.translate,0) );
+        shader.use();
+        shader.matrix.late = vec3( style.translate, 0 );
 
         _box.setColor( colorset );
         _box.draw( shader );

@@ -1,10 +1,9 @@
 // Written under LGPL-3.0 in the D programming laguage.
 // Copyright 2018 KanzakiKino
 module w4d.util.vector;
-import g4d.math.vector;
+import gl3n.linalg;
 
-ref lengthRef ( bool Horizon, V ) ( ref V vec )
-    if ( isVector!V )
+ref getLength ( bool Horizon, V ) ( return ref V vec )
 {
     static if ( Horizon ) {
         return vec.x;
@@ -12,16 +11,8 @@ ref lengthRef ( bool Horizon, V ) ( ref V vec )
         return vec.y;
     }
 }
-auto length ( bool Horizon, V ) ( V vec )
-{
-    return vec.lengthRef!Horizon;
-}
 
-ref weightRef ( bool Horizon, V ) ( ref V vec )
+ref getWeight ( bool Horizon, V ) ( ref V vec )
 {
-    return vec.lengthRef!(!Horizon);
-}
-auto weight ( bool Horizon, V ) ( V vec )
-{
-    return vec.weightRef!Horizon;
+    return vec.getLength!(!Horizon);
 }

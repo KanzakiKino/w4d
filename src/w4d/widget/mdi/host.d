@@ -7,7 +7,7 @@ import w4d.style.color,
        w4d.widget.mdi.layout,
        w4d.widget.base,
        w4d.exception;
-import g4d.math.vector;
+import gl3n.linalg;
 import std.algorithm,
        std.array;
 

@@ -7,9 +7,9 @@ import w4d.style.color,
        w4d.widget.base;
 import g4d.element.shape.rect,
        g4d.gl.texture,
-       g4d.math.vector,
        g4d.shader.base,
        g4d.util.bitmap;
+import gl3n.linalg;
 import std.algorithm,
        std.math;
 
@@ -83,12 +83,13 @@ class ImageWidget : Widget
         super.draw( w, parent );
 
         if ( _texture ) {
-            auto shader = w.shaders.rgba3;
-            auto saver  = ShaderStateSaver( shader );
-            auto late   = style.clientLeftTop + style.box.clientSize/2;
+            auto  shader = w.shaders.rgba3;
+            const saver  = ShaderStateSaver( shader );
+            const late   = style.clientLeftTop + style.box.clientSize/2;
 
             shader.use();
-            shader.setVectors( vec3(late,0), vec3(PI,0,0) );
+            shader.matrix.late = vec3( late, 0 );
+            shader.matrix.rota = vec3( PI, 0, 0 );
             shader.uploadTexture( _texture );
             _imageElm.draw( shader );
         }

@@ -16,8 +16,8 @@ import g4d.element.shape.border,
        g4d.element.shape.regular,
        g4d.ft.font,
        g4d.glfw.cursor,
-       g4d.math.vector,
        g4d.shader.base;
+import gl3n.linalg;
 import std.math;
 
 alias CheckHandler = EventHandler!( void, bool );
@@ -34,7 +34,7 @@ class CheckBoxWidget : Widget
             auto lineheight = _text.font.size.y;
             return vec2( lineheight, lineheight );
         }
-        override @property Cursor cursor ()
+        override @property const(Cursor) cursor ()
         {
             return Cursor.Hand;
         }
@@ -66,8 +66,9 @@ class CheckBoxWidget : Widget
             auto late   = style.box.clientSize/2;
             late       += style.clientLeftTop;
 
-            shader.use( false );
-            shader.setVectors( vec3(late,0), vec3(0,0,PI/4) );
+            shader.use();
+            shader.matrix.late = vec3( late, 0 );
+            shader.matrix.rota = vec3( 0, 0, PI/4 );
             shader.color = colorset.foreground;
             _border.draw( shader );
 

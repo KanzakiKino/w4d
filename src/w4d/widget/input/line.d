@@ -14,8 +14,8 @@ import w4d.parser.colorset,
 import g4d.element.shape.rect,
        g4d.ft.font,
        g4d.glfw.cursor,
-       g4d.math.vector,
        g4d.shader.base;
+import gl3n.linalg;
 import std.algorithm,
        std.conv,
        std.math,
@@ -117,7 +117,7 @@ class LineInputWidget : TextWidget
         super.handleFocused( status );
     }
 
-    override @property Cursor cursor ()
+    override @property const(Cursor) cursor ()
     {
         return Cursor.IBeam;
     }
@@ -265,8 +265,8 @@ class LineInputWidget : TextWidget
         auto late   = vec2(_cursorPos, lineHeight/2);
         late       += style.clientLeftTop;
 
-        shader.use( false );
-        shader.setVectors( vec3(late,0) );
+        shader.use();
+        shader.matrix.late = vec3( late, 0 );
         shader.color = colorset.foreground;
         _cursorElm.draw( shader );
     }
@@ -278,8 +278,8 @@ class LineInputWidget : TextWidget
         late       += style.clientLeftTop;
         late.x     -= _selectionLength/2;
 
-        shader.use( false );
-        shader.setVectors( vec3(late,0) );
+        shader.use();
+        shader.matrix.late = vec3( late, 0 );
         shader.color = colorset.border;
         _selectionElm.draw( shader );
     }

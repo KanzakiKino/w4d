@@ -2,9 +2,10 @@
 // Copyright 2018 KanzakiKino
 module w4d.element.border;
 import w4d.style.box;
-import g4d.element.base,
-       g4d.shader.base,
-       g4d;
+import g4d.element.shape.rect,
+       g4d.element.base,
+       g4d.shader.base;
+import gl3n.linalg;
 import std.algorithm;
 
 class BoxBorderElement : Element
@@ -43,19 +44,27 @@ class BoxBorderElement : Element
         _pos = vec3(box.collisionSize/2, 0);
     }
 
-    override void clear ()
+    void clear ()
     {
-        _rects.each!( x => x.clear() );
+        _rects.each!"a.clear()";
         _lates[] = 0;
     }
 
-    override void draw ( Shader s )
+    void draw ( Shader s )
     {
-        s.translate += _pos;
+        s.matrix.late = s.matrix.late+_pos;
+
         foreach ( i,rc; _rects ) {
-            auto saver = ShaderStateSaver( s );
-            (i%2? s.translate.x: s.translate.y) += _lates[i];
+            vec3 late;
+            if ( i%2 == 0 ) {
+                late.y = _lates[i];
+            } else {
+                late.x = _lates[i];
+            }
+
+            s.matrix.late = s.matrix.late + late;
             rc.draw( s );
+            s.matrix.late = s.matrix.late - late;
         }
     }
 }

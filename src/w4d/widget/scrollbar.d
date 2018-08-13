@@ -9,14 +9,16 @@ import w4d.parser.colorset,
        w4d.util.vector,
        w4d.event;
 import g4d.element.shape.rect,
-       g4d.math.vector,
        g4d.shader.base;
+import gl3n.linalg;
 import std.algorithm;
 
 alias ScrollHandler = EventHandler!( void, float );
 
-class ScrollBarWidget (bool Horizon) : Widget
+class ScrollBarWidget (bool H) : Widget
 {
+    alias Horizon = H;
+
     enum WheelMagnification = 0.1;
 
     ScrollHandler onScroll;
@@ -36,8 +38,8 @@ class ScrollBarWidget (bool Horizon) : Widget
 
     protected float getValueAt ( vec2 pos )
     {
-        return pos.length!Horizon /
-            style.box.clientSize.length!Horizon;
+        auto size = style.box.clientSize;
+        return pos.getLength!H / size.getLength!H;
     }
 
     override bool handleMouseMove ( vec2 pos )
@@ -73,7 +75,8 @@ class ScrollBarWidget (bool Horizon) : Widget
     {
         if ( super.handleMouseScroll( amount, pos ) ) return true;
 
-        auto add = -amount.length!Horizon * _barLength * WheelMagnification;
+        auto add = -amount.getLength!H *
+            _barLength * WheelMagnification;
         setValue( _value + add );
         return true;
     }
@@ -150,12 +153,12 @@ class ScrollBarWidget (bool Horizon) : Widget
         } else if ( needDrawBar ) {
             auto size    = style.box.clientSize;
             auto barsize = size;
-            barsize.lengthRef!Horizon *= _barLength;
+            barsize.getLength!H *= _barLength;
             _bar.resize( barsize );
 
             _translate = barsize/2;
-            _translate.lengthRef!Horizon +=
-                size.length!Horizon*_value;
+            _translate.getLength!H +=
+                size.getLength!H * _value;
         }
     }
     override vec2 layout ( vec2 pos, vec2 size )
@@ -173,9 +176,9 @@ class ScrollBarWidget (bool Horizon) : Widget
 
         auto shader = w.shaders.fill3;
         auto saver  = ShaderStateSaver( shader );
-        shader.use( false );
-        shader.setVectors( vec3(late,0) );
-        shader.color = colorset.foreground;
+        shader.use();
+        shader.matrix.late = vec3( late, 0 );
+        shader.color       = colorset.foreground;
         _bar.draw( shader );
     }
 

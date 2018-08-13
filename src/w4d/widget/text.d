@@ -9,8 +9,8 @@ import w4d.element.text,
        w4d.widget.base,
        w4d.exception;
 import g4d.ft.font,
-       g4d.math.vector,
        g4d.shader.base;
+import gl3n.linalg;
 import std.math;
 
 class TextWidget : Widget
@@ -73,9 +73,9 @@ class TextWidget : Widget
         auto late = _style.clientLeftTop;
         late += vec2( size.x*textPosRate.x, size.y*textPosRate.y );
 
-        shader.use( false );
-        shader.setVectors( vec3(late,0) );
-        shader.color = colorset.foreground;
+        shader.use();
+        shader.matrix.late = vec3( late, 0 );
+        shader.color       = colorset.foreground;
         _textElm.draw( shader );
     }
     override void draw ( Window win, ColorSet parent )

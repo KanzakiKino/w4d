@@ -4,7 +4,7 @@ module w4d.parser.colorset;
 import w4d.parser.exception,
        w4d.style.color,
        w4d.style.widget;
-import g4d.math.vector;
+import gl3n.linalg;
 import dyaml;
 import std.uni;
 

@@ -38,6 +38,6 @@ public
     import w4d.app;
     // TODO Import useful modules.
 
-    import g4d.ft.font,
-           g4d.math.vector;
+    import g4d.ft.font;
+    import gl3n.linalg;
 }

@@ -5,7 +5,7 @@ import w4d.widget.base,
        w4d.widget.panel,
        w4d.widget.root,
        w4d.exception;
-import g4d.math.vector;
+import gl3n.linalg;
 
 class PopupWidget : RootWidget
 {

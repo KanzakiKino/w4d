@@ -6,8 +6,8 @@ import w4d.parser.colorset,
        w4d.style.scalar,
        w4d.widget.popup.base,
        w4d.widget.text;
-import g4d.ft.font,
-       g4d.math.vector;
+import g4d.ft.font;
+import gl3n.linalg;
 
 class PopupTooltipWidget : PopupWidget
 {

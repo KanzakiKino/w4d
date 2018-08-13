@@ -1,7 +1,7 @@
 // Written under LGPL-3.0 in the D programming language.
 // Copyright 2018 KanzakiKino
 module w4d.style.color;
-import g4d.math.vector;
+import gl3n.linalg;
 
 struct ColorSet
 {

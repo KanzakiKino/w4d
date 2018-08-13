@@ -5,9 +5,9 @@ import w4d.layout.base,
        w4d.layout.exception,
        w4d.layout.lineup,
        w4d.util.vector;
-import g4d.math.vector;
+import gl3n.linalg;
 
-class SplitLayout (bool Horizon) : LineupLayout!Horizon
+class SplitLayout (bool H) : LineupLayout!H
 {
     this ( Layoutable owner )
     {
@@ -15,18 +15,18 @@ class SplitLayout (bool Horizon) : LineupLayout!Horizon
     }
     protected override void updateStatus ( vec2 placedSize )
     {
-        auto length = placedSize.length!Horizon;
-        enforce( length <= _childSize.length!Horizon,
+        auto length = placedSize.getLength!H;
+        enforce( length <= _childSize.getLength!H,
               "Failed to place the too big child." );
 
-        _childSize.lengthRef!Horizon -= length;
+        _childSize.getLength!H -= length;
         super.updateStatus( placedSize );
     }
 }
 alias HorizontalSplitLayout = SplitLayout!true;
 alias VerticalSplitLayout   = SplitLayout!false;
 
-class MonospacedSplitLayout (bool Horizon) : LineupLayout!Horizon
+class MonospacedSplitLayout (bool H) : LineupLayout!H
 {
     this ( Layoutable owner )
     {
@@ -35,7 +35,7 @@ class MonospacedSplitLayout (bool Horizon) : LineupLayout!Horizon
     protected override void clearStatus ()
     {
         super.clearStatus();
-        _childSize.lengthRef!Horizon /= children.length;
+        _childSize.getLength!H /= children.length;
     }
 }
 alias HorizontalMonospacedSplitLayout = MonospacedSplitLayout!true;

@@ -3,7 +3,7 @@
 module w4d.style.size;
 import w4d.style.scalar,
        w4d.style.templates;
-import g4d.math.vector;
+import gl3n.linalg;
 
 unittest
 {

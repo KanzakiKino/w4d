@@ -3,7 +3,7 @@
 module w4d.layout.base;
 import w4d.layout.exception,
        w4d.style.widget;
-import g4d.math.vector;
+import gl3n.linalg;
 
 abstract class Layout
 {

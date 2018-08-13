@@ -6,11 +6,13 @@ import w4d.layout.base,
        w4d.layout.fill,
        w4d.style.widget,
        w4d.util.vector;
-import g4d.math.vector;
+import gl3n.linalg;
 import std.algorithm;
 
-class LineupLayout (bool Horizon) : FillLayout
+class LineupLayout (bool H) : FillLayout
 {
+    alias Horizon = H;
+
     protected vec2 _childSize;
     protected vec2 _basePoint;
     protected vec2 _usedSize;
@@ -28,14 +30,14 @@ class LineupLayout (bool Horizon) : FillLayout
     }
     protected void updateStatus ( vec2 placedSize )
     {
-        auto length = placedSize.length!Horizon;
-        auto weight = placedSize.weight!Horizon;
+        auto length = placedSize.getLength!H;
+        auto weight = placedSize.getWeight!H;
 
-        _basePoint.lengthRef!Horizon += length;
-        _usedSize .lengthRef!Horizon += length;
+        _basePoint.getLength!H += length;
+        _usedSize .getLength!H += length;
 
-        _usedSize.weightRef!Horizon =
-            max( _usedSize.weight!Horizon, weight );
+        _usedSize.getWeight!Horizon =
+            max( _usedSize.getWeight!H, weight );
     }
 
     override void place ( vec2 basepos, vec2 parentSize )

@@ -3,7 +3,7 @@
 module w4d.widget.mdi.layout;
 import w4d.layout.base,
        w4d.layout.fill;
-import g4d.math.vector;
+import gl3n.linalg;
 
 class MdiLayout : FillLayout
 {

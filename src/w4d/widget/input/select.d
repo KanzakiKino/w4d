@@ -10,8 +10,8 @@ import w4d.parser.colorset,
        w4d.widget.panel,
        w4d.event,
        w4d.exception;
-import g4d.glfw.cursor,
-       g4d.math.vector;
+import g4d.glfw.cursor;
+import gl3n.linalg;
 
 alias SelectChanged = EventHandler!( void, int );
 
@@ -52,7 +52,7 @@ class SelectInputWidget : PanelWidget
         return false;
     }
 
-    override @property Cursor cursor ()
+    override @property const(Cursor) cursor ()
     {
         return Cursor.Hand;
     }

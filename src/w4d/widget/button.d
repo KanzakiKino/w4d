@@ -7,8 +7,8 @@ import w4d.parser.colorset,
        w4d.task.window,
        w4d.widget.text,
        w4d.event;
-import g4d.glfw.cursor,
-       g4d.math.vector;
+import g4d.glfw.cursor;
+import gl3n.linalg;
 
 alias ButtonPressHandler = EventHandler!( void );
 
@@ -36,7 +36,7 @@ class ButtonWidget : TextWidget
         onButtonPress.call();
     }
 
-    override @property Cursor cursor ()
+    override @property const(Cursor) cursor ()
     {
         return Cursor.Hand;
     }

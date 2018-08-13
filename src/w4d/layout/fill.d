@@ -4,7 +4,7 @@ module w4d.layout.fill;
 import w4d.layout.base,
        w4d.layout.exception,
        w4d.style.widget;
-import g4d.math.vector;
+import gl3n.linalg;
 
 class FillLayout : Layout
 {

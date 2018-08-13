@@ -4,7 +4,7 @@ module w4d.widget.panel;
 import w4d.layout.lineup,
        w4d.widget.base,
        w4d.exception;
-import g4d.math.vector;
+import gl3n.linalg;
 import std.algorithm;
 
 class PanelWidget : Widget

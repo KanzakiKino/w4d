@@ -14,15 +14,17 @@ import w4d.parser.colorset,
 import g4d.element.shape.rect,
        g4d.element.shape.regular,
        g4d.glfw.cursor,
-       g4d.math.vector,
        g4d.shader.base;
+import gl3n.linalg;
 import std.algorithm,
        std.math;
 
 alias ValueChangeHandler = EventHandler!( void, float );
 
-class SliderWidget(bool Horizon) : Widget
+class SliderWidget(bool H) : Widget
 {
+    alias Horizon = H;
+
     mixin Lockable;
 
     protected float _min, _max;
@@ -95,7 +97,7 @@ class SliderWidget(bool Horizon) : Widget
         return true;
     }
 
-    override @property Cursor cursor ()
+    override @property const(Cursor) cursor ()
     {
         static if ( Horizon ) {
             return Cursor.HResize;
@@ -128,8 +130,8 @@ class SliderWidget(bool Horizon) : Widget
     {
         pos -= style.clientLeftTop;
 
-        auto length = pos.length!Horizon;
-        auto rate   = length / _barLength;
+        const length = pos.getLength!H;
+        const rate   = length / _barLength;
 
         return rate*rangeSize + _min;
     }
@@ -170,13 +172,13 @@ class SliderWidget(bool Horizon) : Widget
         auto size = style.box.clientSize;
 
         auto barsz = size;
-        barsz.weightRef!Horizon /= 3f;
+        barsz.getWeight!H /= 3f;
         _bar.resize( barsz );
-        _barLength = barsz.length!Horizon;
-        _barWeight = barsz.weight!Horizon;
+        _barLength = barsz.getLength!H;
+        _barWeight = barsz.getWeight!H;
 
         _pointerSize =
-            (size.weight!Horizon - _barWeight)/2;
+            (size.getWeight!H - _barWeight) / 2;
         _pointer.resize( _pointerSize );
     }
     override vec2 layout ( vec2 pos, vec2 size )
@@ -188,15 +190,15 @@ class SliderWidget(bool Horizon) : Widget
     protected @property barLate ()
     {
         auto result = vec3(style.clientLeftTop,0);
-        result.lengthRef!Horizon += _barLength/2;
-        result.weightRef!Horizon += _barWeight/2;
+        result.getLength!H += _barLength / 2;
+        result.getWeight!H += _barWeight / 2;
         return result;
     }
     protected @property pointerLate ()
     {
         auto result = vec3(style.clientLeftTop,0);
-        result.lengthRef!Horizon += _barLength*valueRate;
-        result.weightRef!Horizon += _barWeight+_pointerSize;
+        result.getLength!H += _barLength * valueRate;
+        result.getWeight!H += _barWeight + _pointerSize;
         return result;
     }
     override void draw ( Window w, ColorSet parent )
@@ -206,12 +208,13 @@ class SliderWidget(bool Horizon) : Widget
         auto shader = w.shaders.fill3;
         auto saver  = ShaderStateSaver( shader );
 
-        shader.use( false );
-        shader.setVectors( barLate );
-        shader.color = colorset.foreground;
+        shader.use();
+        shader.matrix.late = barLate;
+        shader.color       = colorset.foreground;
         _bar.draw( shader );
 
-        shader.setVectors( pointerLate, vec3(0,0,PI) );
+        shader.matrix.late = pointerLate;
+        shader.matrix.rota = vec3( 0, 0, PI );
         _pointer.draw( shader );
     }
 

@@ -9,8 +9,8 @@ import w4d.layout.lineup,
        w4d.widget.popup.base,
        w4d.widget.wrapper,
        w4d.event;
-import g4d.ft.font,
-       g4d.math.vector;
+import g4d.ft.font;
+import gl3n.linalg;
 
 class PopupMenuWidget : PopupWidget
 {

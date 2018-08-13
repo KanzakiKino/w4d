@@ -7,7 +7,7 @@ import w4d.parser.colorset,
        w4d.widget.popup.base,
        w4d.widget.base,
        w4d.exception;
-import g4d.math.vector;
+import gl3n.linalg;
 
 class PopupDialogWidget : PopupWidget
 {

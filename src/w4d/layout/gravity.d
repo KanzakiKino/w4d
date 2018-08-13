@@ -4,7 +4,7 @@ module w4d.layout.gravity;
 import w4d.layout.exception,
        w4d.layout.base,
        w4d.layout.fill;
-import g4d.math.vector;
+import gl3n.linalg;
 
 class GravityLayout : FillLayout
 {
@@ -21,10 +21,10 @@ class GravityLayout : FillLayout
     {
         super.place( basept, newsz );
 
-        auto sz = style.box.collisionSize;
-        auto pt = basept;
-        pt.x += (newsz.x - sz.x)*_center.x;
-        pt.y += (newsz.y - sz.y)*_center.y;
+        const maxlate = newsz - style.box.collisionSize;
+        const late    = vec3( maxlate.x*_center.x, maxlate.y*_center.y, 0 );
+        const pt      = vec3( basept, 0 ) + late;
+
         style.x.alter( pt.x );
         style.y.alter( pt.y );
     }

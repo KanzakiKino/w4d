@@ -6,7 +6,7 @@ import w4d.style.box,
        w4d.style.exception,
        w4d.style.scalar,
        w4d.style.templates;
-import g4d.math.vector;
+import gl3n.linalg;
 
 struct WidgetStyleCalcContext
 {

@@ -7,10 +7,9 @@ import w4d.style.scalar,
        w4d.app,
        w4d.event,
        w4d.exception;
-import g4d.glfw.lib,
-       g4d.math.matrix,
-       g4d.math.vector;
+import g4d.glfw.lib;
 static import g4d;
+import gl3n.linalg;
 
 alias WindowHint  = g4d.WindowHint;
 alias MouseButton = g4d.MouseButton;
@@ -51,6 +50,9 @@ class Window : g4d.Window, Task
         _clip       = new ClipRect( shaders.fill3 );
         _root       = null;
         _cursorPos  = vec2(0,0);
+
+        g4d.ColorBuffer.enableBlend();
+        g4d.DepthBuffer.disable();
 
         handler.onWindowResize = delegate ( vec2i sz )
         {
@@ -94,15 +96,24 @@ class Window : g4d.Window, Task
 
     protected void recalcMatrix ()
     {
-        auto half = vec2(size)/2;
-        auto late = half*-1;
+        auto half = vec2( size ) / 2;
+        auto late = half * -1;
 
-        auto proj = mat4.orthographic( -half.x,half.x, -half.y,half.y, short.min,short.max )*
-            mat4.translate( late.x, late.y, 0 );
+        auto orth = mat4.orthographic( -half.x,half.x,
+                half.y,-half.y, short.min,short.max );
+
+        auto proj = orth * mat4.translation( vec3( late, 0 ) );
 
         foreach ( s; shaders.list ) {
-            s.projection = proj;
+            s.matrix.projection = proj;
         }
+    }
+
+    override void resetFrame ()
+    {
+        super.resetFrame();
+        g4d.ColorBuffer.clear();
+        g4d.DepthBuffer.clear();
     }
 
     override bool exec ( App app )
@@ -118,7 +129,7 @@ class Window : g4d.Window, Task
                 _root.draw( this );
                 applyFrame();
             }
-            setCursor( _root.cursor );
+            cursor = _root.cursor;
             return false;
         }
         return true;
@@ -183,7 +194,7 @@ interface WindowContent
     // Be called when focused and text was inputted.
     bool handleTextInput ( dchar );
 
-    @property g4d.Cursor cursor ();
+    @property const(g4d.Cursor) cursor ();
 
     @property bool needLayout ();
     @property bool needRedraw ();

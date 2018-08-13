@@ -8,7 +8,8 @@ import w4d.element.background,
        w4d.exception;
 import g4d.element.base,
        g4d.shader.base,
-       g4d;
+       g4d.shader.fill3d;
+import gl3n.linalg;
 import std.conv;
 
 class BoxElement : Element

@@ -1,10 +1,7 @@
 // Written under LGPL-3.0 in the D programming language.
 // Copyright 2018 KanzakiKino
 module w4d.util.clipping;
-import g4d.element.shape.rect,
-       g4d.gl.stencil,
-       g4d.math.vector,
-       g4d.shader.fill3d;
+import g4d;
 import std.algorithm;
 
 class ClipRect
@@ -72,19 +69,27 @@ class ClipRect
     void apply ()
     {
         if ( !isClipping ) {
-            Stencil.disable();
+            StencilBuffer.disable();
             return;
         }
 
-        Stencil.resetBuffer();
+        StencilBuffer.enable();
+        StencilBuffer.clear( 0 );
+
+        DepthBuffer.mask( false );
+        ColorBuffer.mask( false, false, false, false );
+
+        StencilBuffer.startModify( 1 );
 
         auto rc = currentRect;
         _elm.resize( rc.size );
 
-        _shader.use( false );
-        _shader.setVectors( vec3(rc.pos,0) );
+        _shader.use();
+        _shader.matrix.late = vec3( rc.pos, 0 );
         _elm.draw( _shader );
 
-        Stencil.applyBuffer();
+        StencilBuffer.startTest( 1 );
+        DepthBuffer.mask( true );
+        ColorBuffer.mask( true, true, true, true );
     }
 }

@@ -10,13 +10,14 @@ import w4d.layout.lineup,
        w4d.widget.panel,
        w4d.widget.scrollbar,
        w4d.util.vector;
-import g4d.math.matrix,
-       g4d.math.vector,
-       g4d.shader.base;
+import g4d.shader.base;
+import gl3n.linalg;
 import std.algorithm;
 
-class ScrollPanelWidget(bool Horizon) : PanelWidget
+class ScrollPanelWidget(bool H) : PanelWidget
 {
+    alias Horizon = H;
+
     protected class CustomScrollBarWidget : ScrollBarWidget!Horizon
     {
         this ()
@@ -26,7 +27,7 @@ class ScrollPanelWidget(bool Horizon) : PanelWidget
         override void handleScroll ( float v )
         {
             super.handleScroll( v );
-            _contents.setScroll( v*_contents.size.length!Horizon );
+            _contents.setScroll( v * _contents.size.getLength!H );
         }
     }
     protected class CustomPanelWidget : PanelWidget
@@ -54,7 +55,7 @@ class ScrollPanelWidget(bool Horizon) : PanelWidget
         void setScroll ( float len )
         {
             auto amount = vec2(0,0);
-            amount.lengthRef!Horizon = -(len-_scroll);
+            amount.getLength!H = -( len - _scroll );
             shiftChildren( amount );
 
             _scroll = len;

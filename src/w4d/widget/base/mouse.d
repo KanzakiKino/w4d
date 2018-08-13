@@ -17,7 +17,7 @@ template Mouse ()
         }
     }
 
-    @property Cursor cursor ()
+    @property const(Cursor) cursor ()
     {
         return _hovered? _hovered.cursor: Cursor.Arrow;
     }

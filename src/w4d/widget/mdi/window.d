@@ -109,7 +109,7 @@ template WindowOperations ()
     }
 
 
-    override @property Cursor cursor ()
+    override @property const(Cursor) cursor ()
     {
         return
             _draggingSides & Side.Left  ? Cursor.HResize:

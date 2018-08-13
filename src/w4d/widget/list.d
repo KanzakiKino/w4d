@@ -11,7 +11,7 @@ import w4d.layout.lineup,
        w4d.widget.wrapper,
        w4d.event,
        w4d.exception;
-import g4d.math.vector;
+import gl3n.linalg;
 import std.algorithm,
        std.array,
        std.conv;
