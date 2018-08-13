@@ -1,5 +1,9 @@
-// Written under LGPL-3.0 in the D programming language.
-// Copyright 2018 KanzakiKino
+// Written in the D programming language.
+/++
+ + Authors: KanzakiKino
+ + Copyright: KanzakiKino 2018
+ + License: LGPL-3.0
+++/
 module w4d.widget.input.checkbox;
 import w4d.layout.lineup,
        w4d.parser.colorset,
@@ -20,11 +24,13 @@ import g4d.element.shape.border,
 import gl3n.linalg;
 import std.math;
 
+/// A handler that handles changing checked.
 alias CheckHandler = EventHandler!( void, bool );
 
+/// A widget of checkbox.
 class CheckBoxWidget : Widget
 {
-    class CheckMarkWidget : Widget
+    protected class CheckMarkWidget : Widget
     {
         protected RegularNgonBorderElement!4 _border;
         protected RegularNgonElement!4       _mark;
@@ -61,10 +67,10 @@ class CheckBoxWidget : Widget
         {
             super.draw( w, parent );
 
-            auto shader = w.shaders.fill3;
-            auto saver  = ShaderStateSaver( shader );
-            auto late   = style.box.clientSize/2;
-            late       += style.clientLeftTop;
+            auto  shader = w.shaders.fill3;
+            const saver  = ShaderStateSaver( shader );
+            auto  late   = style.box.clientSize/2;
+            late        += style.clientLeftTop;
 
             shader.use();
             shader.matrix.late = vec3( late, 0 );
@@ -83,16 +89,20 @@ class CheckBoxWidget : Widget
     protected CheckMarkWidget _mark;
     protected TextWidget      _text;
 
+    ///
     override @property Widget[] children ()
     {
         return [ _mark, _text ];
     }
 
     protected bool _checked;
-    const @property checked () { return _checked; }
+    /// Checks if the checkbox is checked.
+    @property checked () { return _checked; }
 
+    ///
     CheckHandler onCheck;
 
+    ///
     override bool handleMouseButton ( MouseButton btn, bool status, vec2 pos )
     {
         if ( super.handleMouseButton( btn, status, pos ) ) return true;
@@ -106,6 +116,7 @@ class CheckBoxWidget : Widget
         return false;
     }
 
+    ///
     this ()
     {
         super();
@@ -121,10 +132,11 @@ class CheckBoxWidget : Widget
         style.box.borderWidth = Rect(1.pixel);
     }
 
+    /// Changes checked.
     void setChecked ( bool b )
     {
-        auto temp = _checked;
-        _checked  = b;
+        const temp = _checked;
+        _checked   = b;
 
         if ( _checked != temp ) {
             onCheck.call( _checked );
@@ -135,11 +147,14 @@ class CheckBoxWidget : Widget
         }
     }
 
+    /// Changes text.
     void loadText ( dstring text, FontFace face = null )
     {
         _text.loadText( text, face );
     }
 
-    override @property bool trackable () { return true; }
-    override @property bool focusable () { return true; }
+    ///
+    override const @property bool trackable () { return true; }
+    ///
+    override const @property bool focusable () { return true; }
 }

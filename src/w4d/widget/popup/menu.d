@@ -1,5 +1,9 @@
-// Written under LGPL-3.0 in the D programming language.
-// Copyright 2018 KanzakiKino
+// Written in the D programming language.
+/++
+ + Authors: KanzakiKino
+ + Copyright: KanzakiKino 2018
+ + License: LGPL-3.0
+++/
 module w4d.widget.popup.menu;
 import w4d.layout.lineup,
        w4d.parser.colorset,
@@ -12,8 +16,10 @@ import w4d.layout.lineup,
 import g4d.ft.font;
 import gl3n.linalg;
 
+/// A widget of popup menu.
 class PopupMenuWidget : PopupWidget
 {
+    ///
     override bool handleMouseButton ( MouseButton b, bool status, vec2 pos )
     {
         if ( super.handleMouseButton(b,status,pos) ) return true;
@@ -25,6 +31,7 @@ class PopupMenuWidget : PopupWidget
         return false;
     }
 
+    ///
     this ()
     {
         super();
@@ -35,29 +42,36 @@ class PopupMenuWidget : PopupWidget
     }
     mixin DisableModifyChildren;
 
+    /// Adds the item.
     void addItem ( MenuItemWidget i )
     {
         i._parentMenu = this;
         super.addChild( i );
     }
+    /// Removes the item.
     void removeItem ( MenuItemWidget i )
     {
         super.removeChild( i );
     }
+    /// Removes all items.
     void removeAllItems ()
     {
         super.removeAllChildren();
     }
 }
 
+/// A handler that handles pressing menu items.
 alias PressHandler = EventHandler!( bool );
 
+/// A widget of menu item.
 class MenuItemWidget : WrapperWidget
 {
     protected PopupMenuWidget _parentMenu;
 
+    ///
     PressHandler onPress;
 
+    ///
     override bool handleMouseButton ( MouseButton btn, bool status, vec2 pos )
     {
         if ( super.handleMouseButton(btn,status,pos) ) return true;
@@ -72,6 +86,7 @@ class MenuItemWidget : WrapperWidget
         return false;
     }
 
+    ///
     this ()
     {
         super();

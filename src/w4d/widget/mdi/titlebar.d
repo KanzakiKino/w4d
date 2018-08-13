@@ -1,7 +1,13 @@
-// Written under LGPL-3.0 in the D programming language.
-// Copyright 2018 KanzakiKino
+// Written in the D programming language.
+/++
+ + Authors: KanzakiKino
+ + Copyright: KanzakiKino 2018
+ + License: LGPL-3.0
+++/
 module w4d.widget.mdi.titlebar;
 
+/// A template that declares TitleBarWidget.
+/// (for MdiClientWidget)
 template TitleBar ()
 {
     protected class CloseButtonWidget : ButtonWidget

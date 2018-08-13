@@ -1,5 +1,9 @@
-// Written under LGPL-3.0 in the D programming language.
-// Copyright 2018 KanzakiKino.
+// Written in the D programming language.
+/++
+ + Authors: KanzakiKino
+ + Copyright: KanzakiKino 2018
+ + License: LGPL-3.0
+++/
 module w4d.task.window;
 import w4d.style.scalar,
        w4d.util.clipping,
@@ -11,17 +15,22 @@ import g4d.glfw.lib;
 static import g4d;
 import gl3n.linalg;
 
+///
 alias WindowHint  = g4d.WindowHint;
+///
 alias MouseButton = g4d.MouseButton;
+///
 alias Key         = g4d.Key;
+///
 alias KeyState    = g4d.KeyState;
 
+/// A window to place widgets.
 class Window : g4d.Window, Task
 {
     protected static void retrieveDisplayConfig ()
     {
-        auto mon = enforce!glfwGetPrimaryMonitor();
-        auto mod = enforce!glfwGetVideoMode( mon );
+        auto  mon = enforce!glfwGetPrimaryMonitor();
+        const mod = enforce!glfwGetVideoMode( mon );
 
         int mm_x = 0, mm_y = 0; // millimetres
         enforce!glfwGetMonitorPhysicalSize( mon, &mm_x, &mm_y );
@@ -31,14 +40,17 @@ class Window : g4d.Window, Task
     }
 
     protected Shaders _shaders;
+    /// A collection of shader.
     @property shaders () { return _shaders; }
 
     protected ClipRect _clip;
+    /// ClipRect utility object.
     @property clip () { return _clip; }
 
     protected WindowContent _root;
     protected vec2          _cursorPos;
 
+    ///
     this ( vec2i size, string text, WindowHint hint = WindowHint.None )
     {
         enforce( size.x > 0 && size.y > 0, "Window size is invalid." );
@@ -87,6 +99,8 @@ class Window : g4d.Window, Task
         };
     }
 
+    /// Sets contents(widget).
+    /// This method can be called only once.
     void setContent ( WindowContent content )
     {
         enforce( !_root, "Content is already setted." );
@@ -99,16 +113,19 @@ class Window : g4d.Window, Task
         auto half = vec2( size ) / 2;
         auto late = half * -1;
 
-        auto orth = mat4.orthographic( -half.x,half.x,
+        const orth = mat4.orthographic( -half.x,half.x,
                 half.y,-half.y, short.min,short.max );
 
-        auto proj = orth * mat4.translation( vec3( late, 0 ) );
+        const proj = orth * mat4.translation( vec3( late, 0 ) );
 
         foreach ( s; shaders.list ) {
             s.matrix.projection = proj;
         }
     }
 
+    /// Makes contexts current,
+    /// And clears color and depth buffer.
+    /// Warnings: Stencil buffer won't be cleared.
     override void resetFrame ()
     {
         super.resetFrame();
@@ -116,6 +133,8 @@ class Window : g4d.Window, Task
         g4d.DepthBuffer.clear();
     }
 
+    /// Updates window.
+    /// This method must be called by App object.
     override bool exec ( App app )
     {
         enforce( _root, "Content is null." );
@@ -136,7 +155,8 @@ class Window : g4d.Window, Task
     }
 }
 
-// One Shaders class is for only one Window.
+/// A struct of shader collection.
+/// One Shaders class is for only one Window.
 class Shaders
 {
     @("shader") {
@@ -145,13 +165,15 @@ class Shaders
         protected g4d.Fill3DShader  _fill3;
     }
 
+    /// FIXME: IDK how to fix these fucking codes.
+
     static foreach ( name; __traits(allMembers,typeof(this)) ) {
         static if ( "shader".isIn( __traits(getAttributes,mixin(name)) ) ) {
             mixin( "@property "~name[1..$]~"() { return "~name~"; }" );
         }
     }
 
-    // Call the constructor while a context of the objective window is active.
+    ///
     this ()
     {
         static foreach ( name; __traits(allMembers,typeof(this)) ) {
@@ -161,10 +183,10 @@ class Shaders
         }
     }
 
-    // Returns list of all shaders.
+    /// List of all shaders.
     @property list ()
     {
-        import g4d.shader.base;
+        import g4d.shader.base: Shader;
         Shader[] result;
 
         static foreach ( name; __traits(allMembers,typeof(this)) ) {
@@ -176,29 +198,35 @@ class Shaders
     }
 }
 
+/// An interface that objects placed in Window must inherit.
+/// Some handlers return true if event was handled.
 interface WindowContent
 {
-    // Some handlers return whether event was handled.
 
-    // Be called with true when cursor is entered.
+    /// Be called with true when cursor is entered.
     bool handleMouseEnter ( bool, vec2 );
-    // Be called when cursor is moved.
+    /// Be called when cursor is moved.
     bool handleMouseMove ( vec2 );
-    // Be called when mouse button is clicked.
+    /// Be called when mouse button is clicked.
     bool handleMouseButton ( MouseButton, bool, vec2 );
-    // Be called when mouse wheel is rotated.
+    /// Be called when mouse wheel is rotated.
     bool handleMouseScroll ( vec2, vec2 );
 
-    // Be called when key is pressed, repeated or released.
+    /// Be called when key is pressed, repeated or released.
     bool handleKey ( Key, KeyState );
-    // Be called when focused and text was inputted.
+    /// Be called when focused and text was inputted.
     bool handleTextInput ( dchar );
 
+    /// Current cursor.
     @property const(g4d.Cursor) cursor ();
 
+    /// Checks if the contents need window size.
     @property bool needLayout ();
+    /// Checks if the contents need redrawing.
     @property bool needRedraw ();
 
+    /// Be called with size of Window when needLayout is true.
     void layout ( vec2i );
+    /// Be called when needRedraw is true.
     void draw   ( Window );
 }

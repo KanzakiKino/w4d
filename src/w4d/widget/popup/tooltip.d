@@ -1,5 +1,9 @@
-// Written under LGPL-3.0 in the D programming language.
-// Copyright 2018 KanzakiKino
+// Written in the D programming language.
+/++
+ + Authors: KanzakiKino
+ + Copyright: KanzakiKino 2018
+ + License: LGPL-3.0
+++/
 module w4d.widget.popup.tooltip;
 import w4d.parser.colorset,
        w4d.style.rect,
@@ -9,10 +13,12 @@ import w4d.parser.colorset,
 import g4d.ft.font;
 import gl3n.linalg;
 
+/// A widget of tooltip.
 class PopupTooltipWidget : PopupWidget
 {
     protected TextWidget _text;
 
+    ///
     override bool handleMouseMove ( vec2 pos )
     {
         if ( super.handleMouseMove(pos) ) return true;
@@ -20,6 +26,7 @@ class PopupTooltipWidget : PopupWidget
         return true;
     }
 
+    ///
     this ()
     {
         super();
@@ -31,11 +38,13 @@ class PopupTooltipWidget : PopupWidget
         style.box.borderWidth = Rect(1.pixel);
     }
 
+    /// Changes tooltip text.
     void loadText ( dstring v, FontFace face = null )
     {
         _text.loadText( v, face );
     }
 
+    /// Moves to the pos.
     void move ( vec2 pos )
     {
         super.move( pos, _text.wantedSize );

@@ -1,5 +1,9 @@
-// Written under LGPL-3.0 in the D programming language.
-// Copyright 2018 KanzakiKino
+// Written in the D programming language.
+/++
+ + Authors: KanzakiKino
+ + Copyright: KanzakiKino 2018
+ + License: LGPL-3.0
+++/
 module w4d.widget.scroll;
 import w4d.layout.lineup,
        w4d.layout.split,
@@ -14,8 +18,10 @@ import g4d.shader.base;
 import gl3n.linalg;
 import std.algorithm;
 
+/// A widget of panel that can scroll..
 class ScrollPanelWidget(bool H) : PanelWidget
 {
+    /// Whether the scroll direction is horizon.
     alias Horizon = H;
 
     protected class CustomScrollBarWidget : ScrollBarWidget!Horizon
@@ -104,20 +110,16 @@ class ScrollPanelWidget(bool H) : PanelWidget
     protected CustomPanelWidget     _contents;
     protected CustomScrollBarWidget _scrollbar;
 
-    @property PanelWidget contents () { return _contents; }
+    /// Contents panel to be scrolled.
+    @property contents () { return _contents; }
 
-    // To override.
-    protected CustomPanelWidget createCustomPanel ()
-    {
-        return new CustomPanelWidget;
-    }
-
+    ///
     this ()
     {
         super();
         setLayout!( SplitLayout!(!Horizon) );
 
-        _contents  = createCustomPanel();
+        _contents  = new CustomPanelWidget;
         _scrollbar = new CustomScrollBarWidget;
 
         // Order of widgets is different between vertical and horizontal.
@@ -133,5 +135,7 @@ class ScrollPanelWidget(bool H) : PanelWidget
     mixin DisableModifyChildren;
 }
 
+/// A widget of panel that can scroll horizontally.
 alias HorizontalScrollPanelWidget = ScrollPanelWidget!true;
+/// A widget of panel that can scroll vertically.
 alias VerticalScrollPanelWidget   = ScrollPanelWidget!false;

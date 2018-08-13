@@ -1,5 +1,9 @@
-// Written under LGPL-3.0 in the D programming language.
-// Copyright 2018 KanzakiKino
+// Written in the D programming language.
+/++
+ + Authors: KanzakiKino
+ + Copyright: KanzakiKino 2018
+ + License: LGPL-3.0
+++/
 module w4d.widget.popup.dialog.text;
 import w4d.layout.lineup,
        w4d.widget.popup.dialog.base,
@@ -10,13 +14,15 @@ import w4d.layout.lineup,
        w4d.exception;
 import g4d.ft.font;
 
+/// An enum of dialog buttons.
 enum DialogButton
 {
     Ok,
     Cancel,
 }
 
-@property dstring toDString ( const DialogButton type )
+/// Converts DialogButton to dstring.
+@property dstring toDString ( DialogButton type )
 {
     final switch ( type ) with ( DialogButton ) {
         case Ok    : return "OK"d;
@@ -24,8 +30,10 @@ enum DialogButton
     }
 }
 
+/// A handler that handles closing the dialog.
 alias ResultHandler = EventHandler!( void, DialogButton );
 
+/// A widget of text dialog.
 class PopupTextDialogWidget : PopupDialogWidget
 {
     protected class CustomButton : ButtonWidget
@@ -49,14 +57,17 @@ class PopupTextDialogWidget : PopupDialogWidget
     protected TextWidget  _text;
     protected PanelWidget _buttons;
 
+    ///
     ResultHandler onResult;
 
+    ///
     void handleResult ( DialogButton btn )
     {
         close();
         onResult.call( btn );
     }
 
+    ///
     this ()
     {
         super();
@@ -70,11 +81,13 @@ class PopupTextDialogWidget : PopupDialogWidget
         addChild( _buttons );
     }
 
+    /// Changes text.
     void loadText ( dstring v, FontFace face = null )
     {
         _text.loadText( v, face );
     }
 
+    /// Changes the buttons.
     void setButtons ( DialogButton[] btns, FontFace face = null )
     {
         if ( !face ) {

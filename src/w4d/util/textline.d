@@ -1,35 +1,50 @@
-// Written under LGPL-3.0 in the D programming language.
-// Copyright 2018 KanzakiKino
+// Written in the D programming language.
+/++
+ + Authors: KanzakiKino
+ + Copyright: KanzakiKino 2018
+ + License: LGPL-3.0
+++/
 module w4d.util.textline;
 import w4d.event;
 import std.algorithm,
        std.conv;
 
+/// A handler of chainging text.
 alias TextChangeHandler = EventHandler!( void, dstring );
+/// A handler of cursor moving.
 alias CursorMoveHandler = EventHandler!( void, long );
 
+/// An object of editable text.
 class TextLine
 {
+    ///
     TextChangeHandler onTextChange;
+    ///
     CursorMoveHandler onCursorMove;
 
     protected dstring _text;
+    /// Current text.
     const @property text () { return _text; }
 
     protected bool _locked;
+    /// Checks if editing is locked.
     const @property isLocked () { return _locked; }
 
     protected long _cursorIndex;
+    /// Index of cursor.
     const @property cursorIndex () { return _cursorIndex; }
 
     protected long _selectionIndex;
+    /// Index that selection is beginning.
     const @property selectionIndex () { return _selectionIndex; }
 
+    /// Checks if text is selected.
     const @property isSelecting ()
     {
         return _selectionIndex >= 0 && _selectionIndex != _cursorIndex;
     }
 
+    ///
     this ()
     {
         _text           = ""d;
@@ -38,13 +53,13 @@ class TextLine
         _selectionIndex = 0;
     }
 
-    // absolutely
+    /// Moves cursor to absolute index.
     void moveCursorTo ( long i, bool selecting = false )
     {
         if ( selecting && !isSelecting ) {
             _selectionIndex = _cursorIndex;
         }
-        auto temp = _cursorIndex;
+        const temp = _cursorIndex;
         _cursorIndex = i.clamp( 0, _text.length );
 
         if ( !selecting ) {
@@ -54,23 +69,27 @@ class TextLine
             onCursorMove.call( _cursorIndex );
         }
     }
-    // relatively
+    /// Moves cursor to relative index.
     void moveCursor ( long i, bool selecting = false )
     {
         moveCursorTo( _cursorIndex+i, selecting );
     }
+    /// Moves cursor to left.
     void left ( bool selecting )
     {
         moveCursor( -1, selecting );
     }
+    /// Moves cursor to right.
     void right ( bool selecting )
     {
         moveCursor( 1, selecting );
     }
+    /// Moves cursor to home.
     void home ( bool selecting )
     {
         moveCursorTo( 0, selecting );
     }
+    /// Moves cursor to end.
     void end ( bool selecting )
     {
         moveCursorTo( _text.length, selecting );
@@ -93,6 +112,7 @@ class TextLine
         return _text[index.to!size_t .. $];
     }
 
+    /// Inserts text at cursor.
     void insert ( dstring v )
     {
         if ( isLocked ) return;
@@ -100,6 +120,7 @@ class TextLine
         setText( leftText ~v~ rightText );
         moveCursor( v.length );
     }
+    /// Removes a left char of cursor.
     void backspace ()
     {
         if ( isLocked ) return;
@@ -117,6 +138,7 @@ class TextLine
             setText( left~right );
         }
     }
+    /// Removes a right char of cursor.
     void del ()
     {
         if ( isLocked ) return;
@@ -134,6 +156,7 @@ class TextLine
         }
     }
 
+    /// Removes the selected text.
     void removeSelecting ()
     {
         if ( !isSelecting || isLocked ) return;
@@ -146,11 +169,13 @@ class TextLine
 
         moveCursor( cursorMove );
     }
+    /// Sets all text selected.
     void selectAll ()
     {
         moveCursorTo( 0 );
         moveCursorTo( _text.length, true );
     }
+    ///
     void deselect ()
     {
         moveCursor( 0 );
@@ -158,6 +183,7 @@ class TextLine
         // So requstRedraw won't be called.
     }
 
+    /// Changes text.
     void setText ( dstring v )
     {
         if ( _text != v ) {
@@ -168,10 +194,12 @@ class TextLine
         }
     }
 
+    /// Locks editing.
     void lock ()
     {
         _locked = true;
     }
+    /// Unlocks editing.
     void unlock ()
     {
         _locked = false;

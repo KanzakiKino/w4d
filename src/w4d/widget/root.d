@@ -1,5 +1,9 @@
-// Written under LGPL-3.0 in the D programming language.
-// Copyright 2018 KanzakiKino
+// Written in the D programming language.
+/++
+ + Authors: KanzakiKino
+ + Copyright: KanzakiKino 2018
+ + License: LGPL-3.0
+++/
 module w4d.widget.root;
 import w4d.parser.colorset,
        w4d.style.color,
@@ -9,14 +13,17 @@ import w4d.parser.colorset,
 import g4d.glfw.cursor;
 import gl3n.linalg;
 
+/// A widget to be placed root of all widgets.
 class RootWidget : PanelWidget
 {
+    ///
     override @property const(Cursor) cursor ()
     {
         auto popup = _context.popup;
         return popup? popup.cursor: super.cursor;
     }
 
+    ///
     this ()
     {
         super();
@@ -25,11 +32,13 @@ class RootWidget : PanelWidget
         parseColorSetsFromFile!"colorset/root.yaml"( style );
     }
 
+    ///
     override @property bool needLayout ()
     {
         auto popup = _context.popup;
         return (popup && popup.needLayout) || super.needLayout;
     }
+    ///
     override void layout ( vec2i size )
     {
         super.layout( size );
@@ -40,6 +49,7 @@ class RootWidget : PanelWidget
         }
     }
 
+    ///
     override @property bool needRedraw ()
     {
         auto popup = _context.popup;
@@ -52,6 +62,7 @@ class RootWidget : PanelWidget
 
         popup.draw( w );
     }
+    ///
     override void draw ( Window w, ColorSet parent )
     {
         super.draw( w, parent );

@@ -1,8 +1,13 @@
-// Written under LGPL-3.0 in the D programming language.
-// Copyright 2018 KanzakiKino
+// Written in the D programming language.
+/++
+ + Authors: KanzakiKino
+ + Copyright: KanzakiKino 2018
+ + License: LGPL-3.0
+++/
 module w4d.widget.mdi.window;
 import w4d.event;
 
+/// An enum of rectangle sides.
 enum Side
 {
     None   = 0b0000,
@@ -12,21 +17,23 @@ enum Side
     Bottom = 0b1000,
 }
 
+/// A handler that handles closing MdiClient.
 alias MdiClientCloseHandler = EventHandler!( bool );
 
+/// A template that declares methods related to operating Window.
 template WindowOperations ()
 {
     protected uint _draggingSides;
 
     protected void enableSideDragging ( vec2 pos )
     {
-        auto lt = style.translate +
+        const lt = style.translate +
             style.box.borderInsideLeftTop;
-        auto ltsz = vec2( style.box.paddings.left.calced,
+        const ltsz = vec2( style.box.paddings.left.calced,
                 style.box.paddings.top.calced );
 
-        auto rb = lt + ltsz + style.box.clientSize;
-        auto rbsz = vec2( style.box.paddings.right.calced,
+        const rb = lt + ltsz + style.box.clientSize;
+        const rbsz = vec2( style.box.paddings.right.calced,
                 style.box.paddings.bottom.calced );
 
         _draggingSides = Side.None;
@@ -46,8 +53,8 @@ template WindowOperations ()
 
     protected void resizeWithDragging ( vec2 cur )
     {
-        auto sides = _draggingSides;
-        auto size = _size, pos = _pos;
+        const sides = _draggingSides;
+        auto   size = _size, pos = _pos;
 
         if ( sides & Side.Left ) {
             size.x += pos.x-cur.x;
@@ -69,10 +76,10 @@ template WindowOperations ()
 
 
     protected vec2 _minSize;
-    @property vec2 minSize () { return _minSize; }
+    @property minSize () { return _minSize; }
 
     protected vec2 _maxSize;
-    @property vec2 maxSize () { return _maxSize; }
+    @property maxSize () { return _maxSize; }
 
     void limitSize ( vec2 min, vec2 max )
     {

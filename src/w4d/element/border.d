@@ -1,5 +1,9 @@
-// Written under LGPL-3.0 in the D programming language.
-// Copyright 2018 KanzakiKino
+// Written in the D programming language.
+/++
+ + Authors: KanzakiKino
+ + Copyright: KanzakiKino 2018
+ + License: LGPL-3.0
+++/
 module w4d.element.border;
 import w4d.style.box;
 import g4d.element.shape.rect,
@@ -8,14 +12,16 @@ import g4d.element.shape.rect,
 import gl3n.linalg;
 import std.algorithm;
 
+/// An element of border.
+/// 0:top, 1:right, 2:bottom, 3:left
 class BoxBorderElement : Element
 {
     protected vec3 _pos;
 
-    // 0:top, 1:right, 2:bottom, 3:left
     protected RectElement[4] _rects;
     protected float[4]       _lates;
 
+    ///
     this ()
     {
         _pos = vec3(0,0,0);
@@ -25,6 +31,7 @@ class BoxBorderElement : Element
         }
     }
 
+    ///
     void resize ( BoxStyle box )
     {
         auto outsz = box.borderOutsideSize;
@@ -44,12 +51,14 @@ class BoxBorderElement : Element
         _pos = vec3(box.collisionSize/2, 0);
     }
 
+    ///
     void clear ()
     {
         _rects.each!"a.clear()";
         _lates[] = 0;
     }
 
+    ///
     void draw ( Shader s )
     {
         s.matrix.late = s.matrix.late+_pos;

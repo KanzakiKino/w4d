@@ -1,5 +1,9 @@
-// Written under LGPL-3.0 in the D programming language.
-// Copyright 2018 KanzakiKino
+// Written in the D programming language.
+/++
+ + Authors: KanzakiKino
+ + Copyright: KanzakiKino 2018
+ + License: LGPL-3.0
+++/
 module w4d.widget.input.line;
 import w4d.parser.colorset,
        w4d.style.rect,
@@ -21,23 +25,44 @@ import std.algorithm,
        std.math,
        std.range;
 
+/// A handler that handles chainging text.
 alias TextChangeHandler = EventHandler!( void, dstring );
 
+/// A widget of line input.
 class LineInputWidget : TextWidget
 {
     protected TextLine _line;
     protected float    _cursorPos;
     protected float    _scrollLength;
     protected float    _selectionLength;
+
+    override @property dstring text () { return _line.text; }
+
     protected dchar    _passwordChar;
+    /// Character of password filed.
+    @property passwordChar () { return _passwordChar; }
+    /// Sets character of password field.
+    /// Deprecated: This method causes heavy method (loadText).
+    deprecated @property void passwordChar ( dchar c )
+    {
+        _passwordChar = c;
+        loadText(text);
+    }
+    /// Checks if the line input is password field.
+    @property isPasswordField ()
+    {
+        return _passwordChar != dchar.init;
+    }
 
     protected RectElement _cursorElm;
     protected RectElement _selectionElm;
 
     protected ButtonWidget _chainedButton;
 
+    ///
     TextChangeHandler onTextChange;
 
+    ///
     override bool handleMouseMove ( vec2 pos )
     {
         if ( super.handleMouseMove( pos ) ) {
@@ -49,6 +74,7 @@ class LineInputWidget : TextWidget
         }
         return false;
     }
+    ///
     override bool handleMouseButton ( MouseButton btn, bool status, vec2 pos )
     {
         if ( super.handleMouseButton( btn, status, pos ) ) {
@@ -62,11 +88,12 @@ class LineInputWidget : TextWidget
         }
         return false;
     }
+    ///
     override bool handleKey ( Key key, KeyState status )
     {
         if ( super.handleKey( key, status ) ) return true;
 
-        auto pressing = ( status != KeyState.Release );
+        const pressing = ( status != KeyState.Release );
 
         if ( key == Key.Backspace && pressing ) {
             _line.backspace();
@@ -100,6 +127,7 @@ class LineInputWidget : TextWidget
         return true;
     }
 
+    ///
     override bool handleTextInput ( dchar c )
     {
         if ( super.handleTextInput(c) ) return true;
@@ -108,6 +136,7 @@ class LineInputWidget : TextWidget
         return true;
     }
 
+    ///
     override void handleFocused ( bool status )
     {
         if ( !status ) {
@@ -117,11 +146,13 @@ class LineInputWidget : TextWidget
         super.handleFocused( status );
     }
 
+    ///
     override @property const(Cursor) cursor ()
     {
         return Cursor.IBeam;
     }
 
+    ///
     this ()
     {
         super();
@@ -161,13 +192,13 @@ class LineInputWidget : TextWidget
 
     protected long retrieveIndexFromAbsPos ( float pos )
     {
-        auto r_pos = pos - style.clientLeftTop.x + _scrollLength;
+        const r_pos = pos - style.clientLeftTop.x + _scrollLength;
         return retrieveIndexFromPos( r_pos );
     }
     protected long retrieveIndexFromPos ( float pos )
     {
         foreach ( i,poly; _textElm.polys ) {
-            auto border = vec2(poly.pos).x + poly.length/2;
+            const border = vec2(poly.pos).x + poly.length/2;
             if ( border >= pos ) {
                 return i;
             }
@@ -188,12 +219,24 @@ class LineInputWidget : TextWidget
         }
     }
 
-    override void loadText ( dstring v, FontFace font = null )
+    /// Changes the character of password field.
+    void changePasswordChar ( dchar c = dchar.init )
     {
-        super.loadText( isPasswordField ? passwordChar.repeat(v.length).to!dstring : v, font );
+        _passwordChar = c;
+        loadText( text );
+    }
+    ///
+    override void loadText ( dstring text, FontFace font = null )
+    {
+        auto display = text;
+        if ( isPasswordField ) {
+            display = passwordChar.
+                repeat( text.length ).to!dstring;
+        }
+        super.loadText( display, font );
 
-        _line.setText( v );
-        onTextChange.call( v );
+        _line.setText( text );
+        onTextChange.call( text );
 
         if ( font ) {
             style.box.size.height = lineHeight.pixel;
@@ -201,15 +244,19 @@ class LineInputWidget : TextWidget
         }
     }
 
+    /// Locks editing.
     void lock ()
     {
         _line.lock();
     }
+    /// Unlocks editing.
     void unlock ()
     {
         _line.unlock();
     }
 
+    /// Chains the button.
+    /// Chained button will be handled when Enter is pressed.
     void chainButton ( ButtonWidget btn )
     {
         _chainedButton = btn;
@@ -232,13 +279,13 @@ class LineInputWidget : TextWidget
     {
         if ( !_line.isSelecting ) return;
 
-        auto selectionPos = retrievePosFromIndex( _line.selectionIndex );
-        auto newLength    = _cursorPos - selectionPos;
+        const selectionPos = retrievePosFromIndex( _line.selectionIndex );
+        const newLength    = _cursorPos - selectionPos;
         if ( newLength == _selectionLength ) return;
 
         _selectionLength = newLength;
 
-        auto size = vec2( _selectionLength.abs, lineHeight );
+        const size = vec2( _selectionLength.abs, lineHeight );
         _selectionElm.resize( size );
     }
 
@@ -260,9 +307,9 @@ class LineInputWidget : TextWidget
     }
     protected void drawCursor ( Window w )
     {
-        auto shader = w.shaders.fill3;
-        auto saver  = ShaderStateSaver( shader );
-        auto late   = vec2(_cursorPos, lineHeight/2);
+        auto  shader = w.shaders.fill3;
+        const saver  = ShaderStateSaver( shader );
+        auto  late   = vec2(_cursorPos, lineHeight/2);
         late       += style.clientLeftTop;
 
         shader.use();
@@ -272,9 +319,9 @@ class LineInputWidget : TextWidget
     }
     protected void drawSelectionRect ( Window w )
     {
-        auto shader = w.shaders.fill3;
-        auto saver  = ShaderStateSaver( shader );
-        auto late   = vec2(_cursorPos, lineHeight/2);
+        auto  shader = w.shaders.fill3;
+        const saver  = ShaderStateSaver( shader );
+        auto  late   = vec2(_cursorPos, lineHeight/2);
         late       += style.clientLeftTop;
         late.x     -= _selectionLength/2;
 
@@ -284,12 +331,8 @@ class LineInputWidget : TextWidget
         _selectionElm.draw( shader );
     }
 
+    ///
     override @property bool trackable () { return true; }
+    ///
     override @property bool focusable () { return true; }
-
-    @property auto passwordChar () const { return _passwordChar; }
-    @property void passwordChar (dchar c) { _passwordChar = c; loadText(text); }
-    @property auto isPasswordField () const { return _passwordChar != dchar.init; }
-
-    override @property dstring text () { return _line.text; }
 }

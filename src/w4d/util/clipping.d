@@ -1,9 +1,14 @@
-// Written under LGPL-3.0 in the D programming language.
-// Copyright 2018 KanzakiKino
+// Written in the D programming language.
+/++
+ + Authors: KanzakiKino
+ + Copyright: KanzakiKino 2018
+ + License: LGPL-3.0
+++/
 module w4d.util.clipping;
 import g4d;
 import std.algorithm;
 
+/// A utility object that clips the draw area.
 class ClipRect
 {
     protected struct Rect
@@ -16,6 +21,7 @@ class ClipRect
     protected RectElement  _elm;
     protected Fill3DShader _shader;
 
+    ///
     this ( Fill3DShader s )
     {
         _rcStack = [];
@@ -23,11 +29,12 @@ class ClipRect
         _shader  = s;
     }
 
-    @property isClipping ()
+    /// Checks if clipping is enabled.
+    const @property isClipping ()
     {
         return !!_rcStack.length;
     }
-    protected @property currentRect ()
+    protected const @property currentRect ()
     {
         if ( isClipping ) {
             return _rcStack[$-1];
@@ -35,6 +42,7 @@ class ClipRect
         return Rect( vec2(0,0), vec2(int.max,int.max) );
     }
 
+    /// Adds clipping rect.
     void pushRect ( vec2 pos, vec2 size )
     {
         auto left   = pos.x;
@@ -58,6 +66,7 @@ class ClipRect
         apply();
     }
 
+    /// Removes the clipping rect added last.
     void popRect ()
     {
         if ( isClipping ) {
@@ -66,6 +75,7 @@ class ClipRect
         apply();
     }
 
+    /// Redraws the stencil buffer.
     void apply ()
     {
         if ( !isClipping ) {
@@ -81,7 +91,7 @@ class ClipRect
 
         StencilBuffer.startModify( 1 );
 
-        auto rc = currentRect;
+        const rc = currentRect;
         _elm.resize( rc.size );
 
         _shader.use();

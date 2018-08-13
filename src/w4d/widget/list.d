@@ -1,5 +1,9 @@
-// Written under LGPL-3.0 in the D programming language.
-// Copyright 2018 KanzakiKino
+// Written in the D programming language.
+/++
+ + Authors: KanzakiKino
+ + Copyright: KanzakiKino 2018
+ + License: LGPL-3.0
+++/
 module w4d.widget.list;
 import w4d.layout.lineup,
        w4d.parser.colorset,
@@ -16,13 +20,17 @@ import std.algorithm,
        std.array,
        std.conv;
 
+/// A handler that handles changing selection.
 alias SelectChangeHandler = EventHandler!( void, ListItemWidget[] );
 
+/// A widget of list.
 class ListWidget : Widget
 {
     protected ListItemWidget[] _items;
+    /// Child items.
     @property items () { return _items; }
 
+    /// All selected child items.
     @property selectedItems ()
     {
         ListItemWidget[] result;
@@ -34,18 +42,22 @@ class ListWidget : Widget
         }
         return result;
     }
+    ///
     override @property Widget[] children ()
     {
         return items.to!( Widget[] );
     }
 
     protected bool _multiselect;
-    const @property multiselectable () { return _multiselect; }
+    /// Whether the list widget is multi-selectable.
+    @property multiselectable () { return _multiselect; }
 
     protected Widget _dragging;
 
+    ///
     SelectChangeHandler onSelectChange;
 
+    ///
     override bool handleMouseButton ( MouseButton btn, bool status, vec2 pos )
     {
         if ( super.handleMouseButton(btn,status,pos) ) return true;
@@ -63,6 +75,7 @@ class ListWidget : Widget
         return false;
     }
 
+    ///
     this ()
     {
         super();
@@ -72,27 +85,32 @@ class ListWidget : Widget
         _multiselect = false;
     }
 
+    /// Changes multi-selectable.
     void setMultiselectable ( bool b )
     {
         deselect();
         _multiselect = b;
     }
 
+    /// Adds an item.
     void addItem ( ListItemWidget w )
     {
         enforce( w, "Null is invalid." );
         _items ~= w;
         w.setParent( this );
     }
+    /// Removes an item.
     void removeItem ( ListItemWidget w )
     {
         _items = _items.remove!( x => x is w );
     }
+    /// Removes all items.
     void removeAllItems ()
     {
         _items = [];
     }
 
+    /// Unselects all items.
     void deselect ()
     {
         foreach ( i; items ) {
@@ -101,6 +119,7 @@ class ListWidget : Widget
         }
     }
 
+    /// Selects the item.
     void selectItem ( ListItemWidget w )
     {
         if ( w.isSelected ) return;
@@ -109,6 +128,7 @@ class ListWidget : Widget
         w.enableState( WidgetState.Selected );
         onSelectChange.call( selectedItems );
     }
+    /// Unselects the item.
     void unselectItem ( ListItemWidget w )
     {
         if ( !w.isSelected ) return;
@@ -116,6 +136,7 @@ class ListWidget : Widget
         w.disableState( WidgetState.Selected );
         onSelectChange.call( selectedItems );
     }
+    /// Toggles selected state of the item.
     void toggleItem ( ListItemWidget w )
     {
         if ( w.isSelected ) {
@@ -125,12 +146,16 @@ class ListWidget : Widget
         }
     }
 
+    ///
     override @property bool trackable () { return false; }
+    ///
     override @property bool focusable () { return true; }
 }
 
+/// A widget of list item.
 class ListItemWidget : WrapperWidget
 {
+    ///
     this ()
     {
         super();
@@ -140,18 +165,24 @@ class ListItemWidget : WrapperWidget
         style.box.paddings   = Rect( 1.mm );
     }
 
-    @property bool isSelected ()
+    /// Checks if the item is selected.
+    @property isSelected ()
     {
         return !!(status & WidgetState.Selected);
     }
+    /// Selected child items. (for tree item widget).
     @property ListItemWidget[] selectedItems ()
     {
         return [];
     }
 
+    /// Changes the parent list widget.
     void setParent ( ListWidget ) { }
-    void deselect  ()             { }
+    /// Unselects all child items. (for tree item widget).
+    void deselect () { }
 
+    ///
     override @property bool trackable () { return false; }
+    ///
     override @property bool focusable () { return false; }
 }

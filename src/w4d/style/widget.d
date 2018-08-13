@@ -1,5 +1,9 @@
-// Written under LGPL-3.0 in the D programming language.
-// Copyright 2018 KanzakiKino
+// Written in the D programming language.
+/++
+ + Authors: KanzakiKino
+ + Copyright: KanzakiKino 2018
+ + License: LGPL-3.0
+++/
 module w4d.style.widget;
 import w4d.style.box,
        w4d.style.color,
@@ -8,14 +12,19 @@ import w4d.style.box,
        w4d.style.templates;
 import gl3n.linalg;
 
+/// A context of widget style calculation.
 struct WidgetStyleCalcContext
 {
+    /// Size of the parent widget.
     vec2 parentSize = vec2(0,0);
+    /// Position the widget should be placed.
     vec2 pos        = vec2(0,0);
+    /// Size the widget should be resized.
     vec2 size       = vec2(0,0);
 }
 
-// Upper state is rarer to occur.
+/// An enum of widget state.
+/// Upper state is rarer to occur.
 enum WidgetState : uint
 {
     Focused  = 0b00001,
@@ -28,14 +37,21 @@ enum WidgetState : uint
     None     = 0b00000,
 }
 
+/// A style data of widget.
 class WidgetStyle
 {
     @("attr") {
+        /// Left top position.
+        /// This shouldn't be specified.,
         Scalar   x, y;
+        /// Box style.
         BoxStyle box;
     }
+    /// Colorset data.
+    /// Please inherit the parent's before using.
     ColorSet[WidgetState] colorsets;
 
+    ///
     this ()
     {
         colorsets.clear();
@@ -44,15 +60,18 @@ class WidgetStyle
 
     mixin AttributesUtilities;
 
-    @property translate ()
+    /// Left top position.
+    const @property translate ()
     {
         return vec2( x.calced, y.calced );
     }
-    @property clientLeftTop ()
+    /// Left top position + margins + border + paddings.
+    const @property clientLeftTop ()
     {
         return translate + box.clientLeftTop;
     }
 
+    /// Calculates the all styles.
     void calc ( WidgetStyleCalcContext ctx )
     {
         x.calc( ScalarUnitBase(ctx.pos.x, ctx.parentSize.x) );
@@ -60,7 +79,8 @@ class WidgetStyle
         box.calc( ctx.parentSize, ctx.size );
     }
 
-    ColorSet getColorSet ( uint status )
+    /// Calculates colorset from status.
+    const ColorSet getColorSet ( uint status )
     {
         ColorSet result;
 
@@ -73,7 +93,8 @@ class WidgetStyle
         return result;
     }
 
-    bool isPointInside ( vec2 pt )
+    /// Checks if pt is inside of border.
+    const bool isPointInside ( vec2 pt )
     {
         pt -= translate + box.borderInsideLeftTop;
         if ( pt.x < 0 || pt.y < 0 ) {
@@ -83,7 +104,8 @@ class WidgetStyle
         return pt.x <= 0 && pt.y <= 0;
     }
 
-    bool isWidgetInside ( WidgetStyle target )
+    /// Checks if target is outside of border.
+    const bool isWidgetInside ( in WidgetStyle target )
     {
         auto targetLT = target.translate +
             target.box.borderOutsideLeftTop;
@@ -102,6 +124,7 @@ class WidgetStyle
                true;
     }
 
+    /// Moves x and y scalars.
     void shift ( vec2 size )
     {
         x.alter( x.calced+size.x );
