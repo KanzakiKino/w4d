@@ -1,5 +1,9 @@
-// Written under LGPL-3.0 in the D programming language.
-// Copyright 2018 KanzakiKino
+// Written in the D programming language.
+/++
+ + Authors: KanzakiKino
+ + Copyright: KanzakiKino 2018
+ + License: LGPL-3.0
+++/
 module w4d.widget.input.slider;
 import w4d.parser.colorset,
        w4d.style.color,
@@ -19,10 +23,13 @@ import gl3n.linalg;
 import std.algorithm,
        std.math;
 
+/// A handler that handles changing value of slider.
 alias ValueChangeHandler = EventHandler!( void, float );
 
+/// A widget of slider.
 class SliderWidget(bool H) : Widget
 {
+    /// Whether this slider is horizon.
     alias Horizon = H;
 
     mixin Lockable;
@@ -38,6 +45,7 @@ class SliderWidget(bool H) : Widget
     protected float                _pointerSize;
     protected RegularNgonElement!3 _pointer;
 
+    ///
     ValueChangeHandler onValueChange;
 
     protected @property magnification ()
@@ -46,6 +54,7 @@ class SliderWidget(bool H) : Widget
         return _context.shift? 10f: 2f;
     }
 
+    ///
     override bool handleMouseMove ( vec2 pos )
     {
         if ( super.handleMouseMove( pos ) ) return true;
@@ -56,6 +65,7 @@ class SliderWidget(bool H) : Widget
         }
         return false;
     }
+    ///
     override bool handleMouseButton ( MouseButton btn, bool status, vec2 pos )
     {
         if ( super.handleMouseButton( btn, status, pos ) ) return true;
@@ -67,21 +77,23 @@ class SliderWidget(bool H) : Widget
         }
         return false;
     }
+    ///
     override bool handleMouseScroll ( vec2 amount, vec2 pos )
     {
         if ( super.handleMouseScroll( amount, pos ) ) return true;
         if ( isLocked ) return false;
 
-        auto a = (amount.x != 0)? amount.x: amount.y;
+        const a = (amount.x != 0)? amount.x: amount.y;
         setValue( _value - a*_unit*magnification );
         return true;
     }
+    ///
     override bool handleKey ( Key key, KeyState status )
     {
         if ( super.handleKey( key, status ) ) return true;
         if ( !isFocused || isLocked ) return false;
 
-        auto pressing = status != KeyState.Release;
+        const pressing = status != KeyState.Release;
         if ( key == Key.Left && pressing ) {
             setValue( _value - _unit*magnification );
         } else if ( key == Key.Right && pressing ) {
@@ -97,6 +109,7 @@ class SliderWidget(bool H) : Widget
         return true;
     }
 
+    ///
     override @property const(Cursor) cursor ()
     {
         static if ( Horizon ) {
@@ -106,6 +119,7 @@ class SliderWidget(bool H) : Widget
         }
     }
 
+    ///
     this ()
     {
         super();
@@ -136,15 +150,18 @@ class SliderWidget(bool H) : Widget
         return rate*rangeSize + _min;
     }
 
-    const @property rangeSize ()
+    ///
+    @property rangeSize ()
     {
         return _max - _min;
     }
-    const @property valueRate ()
+    ///
+    @property valueRate ()
     {
         return (_value-_min) / rangeSize;
     }
 
+    /// Sets range of slider value.
     void setRange ( float min, float max, float unit )
     {
         enforce( min < max, "Min must be less than max." );
@@ -156,11 +173,12 @@ class SliderWidget(bool H) : Widget
         setValue( _value ); // to re-clamp value
         requestRedraw();
     }
+    /// Changes value.
     void setValue ( float v )
     {
-        v        -= v%_unit;
-        auto temp = _value;
-        _value    = v.clamp( _min, _max );
+        v         -= v%_unit;
+        const temp = _value;
+        _value     = v.clamp( _min, _max );
         if ( _value != temp ) {
             onValueChange.call( _value );
             requestRedraw();
@@ -169,9 +187,9 @@ class SliderWidget(bool H) : Widget
 
     protected void resizeElements ()
     {
-        auto size = style.box.clientSize;
+        const size = style.box.clientSize;
 
-        auto barsz = size;
+        auto barsz = vec2( size );
         barsz.getWeight!H /= 3f;
         _bar.resize( barsz );
         _barLength = barsz.getLength!H;
@@ -181,6 +199,7 @@ class SliderWidget(bool H) : Widget
             (size.getWeight!H - _barWeight) / 2;
         _pointer.resize( _pointerSize );
     }
+    ///
     override vec2 layout ( vec2 pos, vec2 size )
     {
         scope(success) resizeElements();
@@ -201,12 +220,13 @@ class SliderWidget(bool H) : Widget
         result.getWeight!H += _barWeight + _pointerSize;
         return result;
     }
+    ///
     override void draw ( Window w, ColorSet parent )
     {
         super.draw( w, parent );
 
-        auto shader = w.shaders.fill3;
-        auto saver  = ShaderStateSaver( shader );
+        auto  shader = w.shaders.fill3;
+        const saver  = ShaderStateSaver( shader );
 
         shader.use();
         shader.matrix.late = barLate;
@@ -218,9 +238,13 @@ class SliderWidget(bool H) : Widget
         _pointer.draw( shader );
     }
 
+    ///
     override @property bool trackable () { return true; }
+    ///
     override @property bool focusable () { return true; }
 }
 
+/// A widget of horizontal slider.
 alias HorizontalSliderWidget = SliderWidget!true;
+/// A widget of vertical slider.
 alias VerticalSliderWidget   = SliderWidget!false;

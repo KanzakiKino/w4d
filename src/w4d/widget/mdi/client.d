@@ -1,5 +1,9 @@
-// Written under LGPL-3.0 in the D programming language.
-// Copyright 2018 KanzakiKino
+// Written in the D programming language.
+/++
+ + Authors: KanzakiKino
+ + Copyright: KanzakiKino 2018
+ + License: LGPL-3.0
+++/
 module w4d.widget.mdi.client;
 import w4d.layout.gravity,
        w4d.layout.lineup,
@@ -21,6 +25,7 @@ import g4d.ft.font,
 import gl3n.linalg;
 import std.algorithm;
 
+/// A client widget for MDI.
 class MdiClientWidget : PanelWidget, MdiClient
 {
     mixin TitleBar;
@@ -30,8 +35,10 @@ class MdiClientWidget : PanelWidget, MdiClient
     protected TitleBarWidget _titlebar;
 
     protected PanelWidget _contents;
+    /// Contents widget.
     @property contents () { return _contents; }
 
+    ///
     this ()
     {
         super();
@@ -60,25 +67,30 @@ class MdiClientWidget : PanelWidget, MdiClient
 
     mixin WindowOperations;
 
+    ///
     @property Widget widget ()
     {
         return cast(Widget) this;
     }
+    ///
     void setHost ( MdiHostWidget host )
     {
         _host = host;
     }
 
+    /// Changes title text.
     void loadText ( dstring v, FontFace face = null )
     {
         _titlebar._title.loadText( v, face );
     }
 
+    ///
     override void requestLayout ()
     {
         super.requestLayout();
         requestRedraw();
     }
+    ///
     override vec2 layout ( vec2 basept, vec2 size )
     {
         _size.x = _size.x.clamp( minSize.x, min( maxSize.x, size.x ) );
@@ -90,5 +102,6 @@ class MdiClientWidget : PanelWidget, MdiClient
         return super.layout( basept+_pos, _size );
     }
 
+    ///
     override @property bool trackable () { return true; }
 }

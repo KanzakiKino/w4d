@@ -1,11 +1,16 @@
-// Written under LGPL-3.0 in the D programming language.
-// Copyright 2018 KanzakiKino
+// Written in the D programming language.
+/++
+ + Authors: KanzakiKino
+ + Copyright: KanzakiKino 2018
+ + License: LGPL-3.0
+++/
 module w4d.widget.input.templates;
 
+/// A template for lockable widgets.
 template Lockable ()
 {
     protected bool _locked;
-    const @property isLocked () { return _locked; }
+    @property isLocked () { return _locked; }
 
     void lock ()
     {

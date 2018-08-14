@@ -1,5 +1,9 @@
-// Written under LGPL-3.0 in the D programming language.
-// Copyright 2018 KanzakiKino
+// Written in the D programming language.
+/++
+ + Authors: KanzakiKino
+ + Copyright: KanzakiKino 2018
+ + License: LGPL-3.0
+++/
 module w4d.parser.colorset;
 import w4d.parser.exception,
        w4d.style.color,
@@ -23,6 +27,7 @@ private @property WidgetState toState ( string v )
     }
 }
 
+/// Parses Node as color.
 vec4 parseColor ( Node seq )
 {
     enforce( seq.isSequence, "Color must be specified by sequence." );
@@ -43,6 +48,7 @@ vec4 parseColor ( Node seq )
     }
 }
 
+/// Parses Node as colorset.
 void parseColorSet ( Node block, ref ColorSet colorset )
 {
     foreach ( string name, Node node; block ) {
@@ -50,6 +56,7 @@ void parseColorSet ( Node block, ref ColorSet colorset )
     }
 }
 
+/// Parses Node as collection of colorset.
 void parseColorSets ( Node root, WidgetStyle style )
 {
     foreach ( string name, Node node; root ) {
@@ -61,10 +68,12 @@ void parseColorSets ( Node root, WidgetStyle style )
     }
 }
 
+/// Parses file as collection of colorset dynamically.
 void parseColorSetsFromFile ( string path, WidgetStyle style )
 {
     Loader.fromFile(path).load().parseColorSets( style );
 }
+/// Parses file as collection of colorset statically.
 void parseColorSetsFromFile ( string path ) ( WidgetStyle style )
 {
     Loader.fromString(import(path)).load().parseColorSets( style );

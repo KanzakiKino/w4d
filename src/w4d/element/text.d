@@ -1,21 +1,29 @@
-// Written under LGPL-3.0 in the D programming language.
-// Copyright 2018 KanzakiKino
+// Written in the D programming language.
+/++
+ + Authors: KanzakiKino
+ + Copyright: KanzakiKino 2018
+ + License: LGPL-3.0
+++/
 module w4d.element.text;
 import g4d.element.text,
        g4d.shader.base;
 import gl3n.linalg;
 import std.math;
 
+/// An element of horizontal text.
 class TextElement : HTextElement
 {
+    /// Rate of the origin.
     vec2 originRate;
 
+    ///
     this ()
     {
         super();
         originRate = vec2(0,0);
     }
 
+    ///
     override void draw ( Shader s )
     {
         const saver = ShaderStateSaver(s);

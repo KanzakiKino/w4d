@@ -1,5 +1,9 @@
-// Written under LGPL-3.0 in the D programming language.
-// Copyright 2018 KanzakiKino
+// Written in the D programming language.
+/++
+ + Authors: KanzakiKino
+ + Copyright: KanzakiKino 2018
+ + License: LGPL-3.0
+++/
 module w4d.widget.base;
 import w4d.element.box,
        w4d.layout.base,
@@ -21,17 +25,21 @@ import std.algorithm,
 
 mixin Context;
 
+/// An empty widget.
 class Widget : WindowContent, Layoutable
 {
     protected uint _status;
-    const @property status () { return _status; }
+    /// Current status.
+    @property status () { return _status; }
 
     protected WindowContext _context;
 
     protected WidgetStyle _style;
-    @property WidgetStyle style    () { return _style; }
+    /// Style of the widget.
+    @property WidgetStyle style () { return _style; }
 
     protected ColorSet _colorset;
+    /// Current colorset.
     @property colorset () { return _colorset; }
 
     protected Layout        _layout;
@@ -53,10 +61,12 @@ class Widget : WindowContent, Layoutable
     mixin Mouse;
     mixin Keyboard;
 
+    ///
     void handlePopup ( bool, WindowContext )
     {
     }
 
+    ///
     this ()
     {
         _status = WidgetState.None;
@@ -71,18 +81,22 @@ class Widget : WindowContent, Layoutable
         setLayout!FillLayout();
     }
 
+    ///
     @property vec2 wantedSize ()
     {
         return vec2(-1,-1);
     }
+    /// Child widgets.
     @property Widget[] children ()
     {
         return [];
     }
+    /// Child widgets that have no uncalculated style properties.
     @property Widget[] calcedChildren ()
     {
         return children.filter!"a.style.isCalced".array;
     }
+    /// Child widgets that are converted to Layoutables.
     @property Layoutable[] childLayoutables ()
     {
         return children.to!( Layoutable[] );
@@ -94,33 +108,41 @@ class Widget : WindowContent, Layoutable
         children.each!( x => x._context = _context );
     }
 
+    /// Enables the state.
     void enableState ( WidgetState state )
     {
         _status |= state;
         requestRedraw();
     }
+    /// Disables the state.
     void disableState ( WidgetState state )
     {
         _status &= ~state;
         requestRedraw();
     }
 
+    /// Changes Layout object.
     void setLayout (L,Args...) ( Args args )
     {
         _layout = new L(this,args);
     }
+    /// Checks if the widget needs re-layout.
     @property bool needLayout ()
     {
         return _needLayout || children.canFind!"a.needLayout" || !style.isCalced;
     }
+    /// Set needLayout true.
     void requestLayout ()
     {
         _needLayout = true;
     }
+    /// Re-layouts the widget.
+    /// Be called only by Window.
     void layout ( vec2i size )
     {
         layout( vec2(0,0), vec2(size) );
     }
+    /// Re-layouts the widget.
     vec2 layout ( vec2 pos, vec2 size )
     {
         infectWindowContext();
@@ -134,6 +156,7 @@ class Widget : WindowContent, Layoutable
 
         return style.box.collisionSize;
     }
+    /// Moves all children.
     void shiftChildren ( vec2 size )
     {
         foreach ( c; calcedChildren ) {
@@ -143,10 +166,12 @@ class Widget : WindowContent, Layoutable
         requestRedraw();
     }
 
+    /// Checks if the widget needs redrawing.
     @property bool needRedraw ()
     {
         return _context && _context.needRedraw;
     }
+    /// Sets needRedraw true.
     void requestRedraw ()
     {
         if ( _context ) {
@@ -155,8 +180,8 @@ class Widget : WindowContent, Layoutable
     }
     protected void drawBox ( Window win )
     {
-        auto shader = win.shaders.fill3;
-        auto saver  = ShaderStateSaver( shader );
+        auto  shader = win.shaders.fill3;
+        const saver  = ShaderStateSaver( shader );
 
         shader.use();
         shader.matrix.late = vec3( style.translate, 0 );
@@ -166,8 +191,18 @@ class Widget : WindowContent, Layoutable
     }
     protected void drawChildren ( Window win )
     {
-        children.each!(x => x.draw(win,colorset));
+        //children.each!( x => x.draw(win,colorset) );
+        foreach ( child; children ) {
+            child.draw( win, colorset );
+        }
     }
+    /// Draws the widget.
+    /// Be called only by Window.
+    void draw ( Window win )
+    {
+        draw( win, ColorSet() );
+    }
+    /// Draws the widget.
     void draw ( Window win, ColorSet parent )
     {
         _colorset = style.getColorSet(status);
@@ -176,9 +211,5 @@ class Widget : WindowContent, Layoutable
         drawBox( win );
         drawChildren( win );
         _context.setNoNeedRedraw();
-    }
-    void draw ( Window win )
-    {
-        draw( win, ColorSet() );
     }
 }

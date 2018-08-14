@@ -1,5 +1,9 @@
-// Written under LGPL-3.0 in the D programming language.
-// Copyright 2018 KanzakiKino
+// Written in the D programming language.
+/++
+ + Authors: KanzakiKino
+ + Copyright: KanzakiKino 2018
+ + License: LGPL-3.0
+++/
 module w4d.widget.popup.dialog.base;
 import w4d.parser.colorset,
        w4d.style.rect,
@@ -9,8 +13,10 @@ import w4d.parser.colorset,
        w4d.exception;
 import gl3n.linalg;
 
+/// A base widget of popup dialog.
 class PopupDialogWidget : PopupWidget
 {
+    ///
     override void handlePopup ( bool opened, WindowContext w )
     {
         if ( opened ) {
@@ -19,6 +25,7 @@ class PopupDialogWidget : PopupWidget
         super.handlePopup( opened, w );
     }
 
+    ///
     this ()
     {
         super();
@@ -28,16 +35,18 @@ class PopupDialogWidget : PopupWidget
         style.box.paddings    = Rect(2.mm);
     }
 
+    ///
     override void move ( vec2, vec2 )
     {
         throw new W4dException( "Cannot move the dialog." );
     }
 
+    ///
     override vec2 layout ( vec2 pos, vec2 parentSize )
     {
-        auto size = .Widget.layout( pos, parentSize );
-        auto late = (parentSize-size)/2 + pos;
-        late     -= style.translate;
+        const size = .Widget.layout( pos, parentSize );
+        auto  late = (parentSize-size)/2 + pos;
+        late      -= style.translate;
 
         shiftChildren( late - style.translate );
         style.x.alter( style.x.calced + late.x );

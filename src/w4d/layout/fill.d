@@ -1,13 +1,22 @@
-// Written under LGPL-3.0 in the D programming language.
-// Copyright 2018 KanzakiKino
+// Written in the D programming language.
+/++
+ + Authors: KanzakiKino
+ + Copyright: KanzakiKino 2018
+ + License: LGPL-3.0
+++/
 module w4d.layout.fill;
 import w4d.layout.base,
        w4d.layout.exception,
        w4d.style.widget;
 import gl3n.linalg;
 
+/// A layout object that fills the parent with the owner.
+/// This layout doesn't support children.
+/// You can specify Scalar.Auto at width or height to respect wantedSize.
+/// And you can also specify Scalar.None to fill the parent.
 class FillLayout : Layout
 {
+    ///
     this ( Layoutable owner )
     {
         super( owner );
@@ -32,6 +41,7 @@ class FillLayout : Layout
         style.calc( ctx );
     }
 
+    ///
     override void place ( vec2 pt, vec2 sz )
     {
         enforce( !children.length,

@@ -1,5 +1,9 @@
-// Written under LGPL-3.0 in the D programming language.
-// Copyright 2018 KanzakiKino
+// Written in the D programming language.
+/++
+ + Authors: KanzakiKino
+ + Copyright: KanzakiKino 2018
+ + License: LGPL-3.0
+++/
 module w4d.widget.text;
 import w4d.element.text,
        w4d.style.color,
@@ -13,24 +17,34 @@ import g4d.ft.font,
 import gl3n.linalg;
 import std.math;
 
+/// A widget of text.
 class TextWidget : Widget
 {
     protected TextElement _textElm;
     protected dstring     _text;
     protected FontFace    _font;
 
-    @property ref textOriginRate () { return _textElm.originRate; }
+    /// Rate of text origin.
+    @property ref textOriginRate ()
+    {
+        return _textElm.originRate;
+    }
 
+    /// Text.
     @property dstring text () { return _text; }
+    /// Font.
     @property FontFace font () { return _font; }
 
+    /// Rate of text position.
     vec2 textPosRate;
 
+    ///
     override @property vec2 wantedSize ()
     {
         return _textElm.size;
     }
 
+    ///
     this ()
     {
         super();
@@ -44,6 +58,7 @@ class TextWidget : Widget
         style.box.size.height = Scalar.Auto;
     }
 
+    /// Changes text.
     void loadText ( dstring v, FontFace f = null )
     {
         if ( f ) {
@@ -78,12 +93,15 @@ class TextWidget : Widget
         shader.color       = colorset.foreground;
         _textElm.draw( shader );
     }
+    ///
     override void draw ( Window win, ColorSet parent )
     {
         super.draw( win, parent );
         drawText( win );
     }
 
+    ///
     override @property bool trackable () { return false; }
+    ///
     override @property bool focusable () { return false; }
 }

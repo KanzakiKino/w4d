@@ -1,5 +1,9 @@
-// Written under LGPL-3.0 in the D programming language.
-// Copyright 2018 KanzakiKino
+// Written in the D programming language.
+/++
+ + Authors: KanzakiKino
+ + Copyright: KanzakiKino 2018
+ + License: LGPL-3.0
+++/
 module w4d.widget.popup.base;
 import w4d.widget.base,
        w4d.widget.panel,
@@ -7,13 +11,15 @@ import w4d.widget.base,
        w4d.exception;
 import gl3n.linalg;
 
+/// A base widget of popup.
 class PopupWidget : RootWidget
 {
-    // WindowContext of target of popup.
+    /// WindowContext of the popup target.
     protected WindowContext _objectContext;
 
     protected vec2 _pos, _size;
 
+    ///
     override void handlePopup ( bool opened, WindowContext w )
     {
         if ( opened ) {
@@ -24,6 +30,7 @@ class PopupWidget : RootWidget
         }
     }
 
+    ///
     this ()
     {
         super();
@@ -33,12 +40,14 @@ class PopupWidget : RootWidget
         _size = vec2(0,0);
     }
 
+    /// Moves the popup to the pos and resize to the size.
     void move ( vec2 pos, vec2 size )
     {
         _pos  = pos;
         _size = size;
         requestLayout();
     }
+    /// Closes the popup.
     void close ()
     {
         enforce( _objectContext,
@@ -46,14 +55,15 @@ class PopupWidget : RootWidget
         _objectContext.setPopup( null );
     }
 
+    ///
     override vec2 layout ( vec2 rootlt, vec2 rootsz )
     {
         .Widget.layout( _pos, _size );
 
-        auto rootrb = rootlt + rootsz;
+        const rootrb = rootlt + rootsz;
 
-        auto lt = style.translate;
-        auto rb = lt + style.box.collisionSize;
+        const lt = style.translate;
+        const rb = lt + style.box.collisionSize;
 
         auto late = vec2(0,0);
         if ( lt.x < rootlt.x ) {

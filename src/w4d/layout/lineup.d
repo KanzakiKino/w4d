@@ -1,5 +1,9 @@
-// Written under LGPL-3.0 in the D programming language.
-// Copyright 2018 KanzakiKino
+// Written in the D programming language.
+/++
+ + Authors: KanzakiKino
+ + Copyright: KanzakiKino 2018
+ + License: LGPL-3.0
+++/
 module w4d.layout.lineup;
 import w4d.layout.base,
        w4d.layout.exception,
@@ -9,14 +13,19 @@ import w4d.layout.base,
 import gl3n.linalg;
 import std.algorithm;
 
+/// A layout object that lineups children.
+/// You can specify Scalar.Auto at width or height to respect wantedSize.
+/// And you can also specify Scalar.None to shrink as small as possible.
 class LineupLayout (bool H) : FillLayout
 {
+    /// Direction of lineup.
     alias Horizon = H;
 
     protected vec2 _childSize;
     protected vec2 _basePoint;
     protected vec2 _usedSize;
 
+    ///
     this ( Layoutable owner )
     {
         super( owner );
@@ -30,8 +39,8 @@ class LineupLayout (bool H) : FillLayout
     }
     protected void updateStatus ( vec2 placedSize )
     {
-        auto length = placedSize.getLength!H;
-        auto weight = placedSize.getWeight!H;
+        const length = placedSize.getLength!H;
+        const weight = placedSize.getWeight!H;
 
         _basePoint.getLength!H += length;
         _usedSize .getLength!H += length;
@@ -40,6 +49,7 @@ class LineupLayout (bool H) : FillLayout
             max( _usedSize.getWeight!H, weight );
     }
 
+    ///
     override void place ( vec2 basepos, vec2 parentSize )
     {
         fill( basepos, parentSize );
@@ -52,5 +62,7 @@ class LineupLayout (bool H) : FillLayout
     }
 }
 
+/// A layout object that lineups horizontally.
 alias HorizontalLineupLayout = LineupLayout!true;
+/// A layout object that lineups vertically.
 alias VerticalLineupLayout   = LineupLayout!false;

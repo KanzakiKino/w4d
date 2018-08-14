@@ -1,5 +1,9 @@
-// Written under LGPL-3.0 in the D programming language.
-// Copyright 2018 KanzakiKino
+// Written in the D programming language.
+/++
+ + Authors: KanzakiKino
+ + Copyright: KanzakiKino 2018
+ + License: LGPL-3.0
+++/
 module w4d.widget.button;
 import w4d.parser.colorset,
        w4d.style.rect,
@@ -10,12 +14,16 @@ import w4d.parser.colorset,
 import g4d.glfw.cursor;
 import gl3n.linalg;
 
+/// A handler that handles pressing buttons.
 alias ButtonPressHandler = EventHandler!( void );
 
+/// A widget of button.
 class ButtonWidget : TextWidget
 {
+    ///
     ButtonPressHandler onButtonPress;
 
+    ///
     override bool handleMouseButton ( MouseButton btn, bool status, vec2 pos )
     {
         if ( super.handleMouseButton( btn, status, pos ) ) {
@@ -31,16 +39,19 @@ class ButtonWidget : TextWidget
         return false;
     }
 
+    ///
     void handleButtonPress ()
     {
         onButtonPress.call();
     }
 
+    ///
     override @property const(Cursor) cursor ()
     {
         return Cursor.Hand;
     }
 
+    ///
     this ()
     {
         super();
@@ -53,6 +64,8 @@ class ButtonWidget : TextWidget
         style.box.borderWidth = Rect(1.pixel);
     }
 
+    ///
     override @property bool trackable () { return true; }
+    ///
     override @property bool focusable () { return true; }
 }

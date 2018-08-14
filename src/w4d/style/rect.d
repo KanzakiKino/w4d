@@ -1,11 +1,16 @@
-// Written under LGPL-3.0 in the D programming language.
-// Copyright 2018 KanzakiKino
+// Written in the D programming language.
+/++
+ + Authors: KanzakiKino
+ + Copyright: KanzakiKino 2018
+ + License: LGPL-3.0
+++/
 module w4d.style.rect;
 import w4d.style.exception,
        w4d.style.scalar,
        w4d.style.templates;
 import gl3n.linalg;
 
+///
 unittest
 {
     auto rc = Rect( Scalar(50f,ScalarUnit.Percent) );
@@ -18,20 +23,29 @@ unittest
     assert( rc.left  .calced == 150f );
 }
 
+/// A style data of each sides' width.
 struct Rect
 {
-    enum Auto = Rect();
+    /// A preset of rectangle that all sides are not specified.
+    enum None = Rect( Scalar.None, Scalar.None, Scalar.None, Scalar.None );
+    /// A preset of rectangle that all sides are specified as auto.
+    enum Auto = Rect( Scalar.Auto, Scalar.Auto, Scalar.Auto, Scalar.Auto );
 
     @("attr") {
-        Scalar top    = Scalar.None,
-               right  = Scalar.None,
-               bottom = Scalar.None,
-               left   = Scalar.None;
+        /// Top side.
+        Scalar top    = Scalar.None;
+        /// Right side.
+        Scalar right  = Scalar.None;
+        /// Bottom side.
+        Scalar bottom = Scalar.None;
+        /// Left side.
+        Scalar left   = Scalar.None;
     }
 
+    /// Order of arguments is the same to CSS.
     this ( Scalar[] args... )
     {
-        enforce( args.length < 4, "Args are too many to initialize Rect." );
+        enforce( args.length <= 4, "Args are too many to initialize Rect." );
 
         if ( args.length == 1 ) {
             top    = args[0];
@@ -58,6 +72,7 @@ struct Rect
 
     mixin AttributesUtilities;
 
+    /// Calculates all relative values.
     void calc ( vec2 parentSize, vec2 def = vec2(0,0) )
     {
         const xBase = ScalarUnitBase( def.x, parentSize.x );

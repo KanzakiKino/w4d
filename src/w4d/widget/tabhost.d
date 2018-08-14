@@ -1,5 +1,9 @@
-// Written under LGPL-3.0 in the D programming language.
-// Copyright 2018 KanzakiKino
+// Written in the D programming language.
+/++
+ + Authors: KanzakiKino
+ + Copyright: KanzakiKino 2018
+ + License: LGPL-3.0
+++/
 module w4d.widget.tabhost;
 import w4d.layout.lineup,
        w4d.layout.split,
@@ -16,6 +20,7 @@ import std.algorithm,
        std.array,
        std.conv;
 
+/// A widget of host for tabs.
 class TabHostWidget : Widget
 {
     protected class TabHeaderWidget : ButtonWidget
@@ -85,6 +90,7 @@ class TabHostWidget : Widget
 
     protected TabHeaderPanelWidget _headers;
 
+    ///
     override @property Widget[] children ()
     {
         Widget[] result = [_headers];
@@ -94,6 +100,7 @@ class TabHostWidget : Widget
         return result;
     }
 
+    ///
     this ()
     {
         super();
@@ -103,12 +110,13 @@ class TabHostWidget : Widget
         _headers = new TabHeaderPanelWidget;
     }
 
+    /// Changes the font of tab headers.
     void setFontFace ( FontFace face )
     {
         _fontface = face;
     }
 
-    protected long indexOf ( Tab t )
+    protected long indexOf ( in Tab t )
     {
         return _tabs.countUntil!"a is b"(t);
     }
@@ -117,6 +125,7 @@ class TabHostWidget : Widget
         return _tabs.countUntil!"a.id == b"(id);
     }
 
+    /// A tab that is activated.
     @property activatedTab ()
     {
         if ( _activatedIndex >= 0 ) {
@@ -125,12 +134,14 @@ class TabHostWidget : Widget
         return null;
     }
 
+    /// Finds a tab that matched the id.
     Tab findTabWithId ( int id )
     {
         auto index = indexOf( id );
         return index >= 0? _tabs[index.to!uint]: null;
     }
 
+    /// Adds the tab.
     void addTab ( int id, dstring title, Widget contents )
     {
         enforce( indexOf(id) < 0, "Id is duplicated." );
@@ -140,11 +151,13 @@ class TabHostWidget : Widget
             activateTab( _tabs[0] );
         }
     }
-    void removeTab ( Tab t )
+    /// Removes the tab.
+    void removeTab ( in Tab t )
     {
         _tabs = _tabs.remove!( x => x is t );
     }
 
+    /// Activates the tab.
     void activateTab ( Tab t )
     {
         auto index = indexOf(t);
@@ -159,6 +172,8 @@ class TabHostWidget : Widget
         requestLayout();
     }
 
+    ///
     override @property bool trackable () { return false; }
+    ///
     override @property bool focusable () { return false; }
 }

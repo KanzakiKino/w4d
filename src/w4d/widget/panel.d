@@ -1,5 +1,9 @@
-// Written under LGPL-3.0 in the D programming language.
-// Copyright 2018 KanzakiKino
+// Written in the D programming language.
+/++
+ + Authors: KanzakiKino
+ + Copyright: KanzakiKino 2018
+ + License: LGPL-3.0
+++/
 module w4d.widget.panel;
 import w4d.layout.lineup,
        w4d.widget.base,
@@ -7,20 +11,25 @@ import w4d.layout.lineup,
 import gl3n.linalg;
 import std.algorithm;
 
+/// A widget of panel.
+/// PanelWidget can have children.
 class PanelWidget : Widget
 {
     protected Widget[] _children;
+    ///
     override @property Widget[] children ()
     {
         return _children.dup;
     }
 
+    ///
     this ()
     {
         super();
         setLayout!VerticalLineupLayout;
     }
 
+    /// Adds the child.
     Widget addChild ( Widget child )
     {
         enforce( child, "Append child is null." );
@@ -28,6 +37,7 @@ class PanelWidget : Widget
         requestLayout();
         return child;
     }
+    /// Swaps the children.
     void swapChild ( Widget c1, Widget c2 )
     {
         auto i1 = _children.countUntil!"a is b"(c1);
@@ -36,12 +46,14 @@ class PanelWidget : Widget
         _children.swapAt( i1, i2 );
         requestLayout();
     }
+    /// Removes all children.
     void removeAllChildren ()
     {
         _children.each!( x => _context.forget(x) );
         _children = [];
         requestLayout();
     }
+    /// Removes the child.
     void removeChild ( Widget child )
     {
         _context.forget( child );
@@ -51,8 +63,8 @@ class PanelWidget : Widget
 
     protected static template DisableModifyChildren ()
     {
-        import w4d.widget.base,
-               w4d.exception;
+        import w4d.widget.base: Widget;
+        import w4d.exception: W4dException;
 
         enum DisableModifyChildren_ErrorMes = "Modifying children is not allowed.";
 
@@ -74,6 +86,8 @@ class PanelWidget : Widget
         }
     }
 
+    ///
     override @property bool trackable () { return false; }
+    ///
     override @property bool focusable () { return false; }
 }

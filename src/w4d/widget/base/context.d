@@ -1,7 +1,12 @@
-// Written under LGPL-3.0 in the D programming language.
-// Copyright 2018 KanzakiKino
+// Written in the D programming language.
+/++
+ + Authors: KanzakiKino
+ + Copyright: KanzakiKino 2018
+ + License: LGPL-3.0
+++/
 module w4d.widget.base.context;
 
+/// A template that declares WindowContext.
 template Context ()
 {
     enum Modkey
@@ -22,7 +27,7 @@ template Context ()
         }
 
         protected bool _needRedraw;
-        @property needRedraw () { return _needRedraw; }
+        const @property needRedraw () { return _needRedraw; }
 
         void requestRedraw ()
         {
@@ -36,11 +41,11 @@ template Context ()
 
         protected uint _modkey;
 
-        @property bool ctrl ()
+        const @property ctrl ()
         {
             return !!( _modkey & Modkey.Ctrl );
         }
-        @property bool shift ()
+        const @property shift ()
         {
             return !!( _modkey & Modkey.Shift );
         }
@@ -57,7 +62,7 @@ template Context ()
 
         protected Widget _tracked;
 
-        @property tracked ()
+        inout @property tracked ()
         {
             return _popup? _popup: _tracked;
         }
@@ -75,7 +80,7 @@ template Context ()
 
         protected Widget _focused;
 
-        @property focused ()
+        inout @property focused ()
         {
             return _popup? _popup: _focused;
         }
@@ -93,7 +98,7 @@ template Context ()
 
         protected Widget _popup;
 
-        @property popup () { return _popup; }
+        inout @property popup () { return _popup; }
 
         void setPopup ( Widget w )
         {
@@ -107,7 +112,7 @@ template Context ()
         }
 
 
-        void forget ( Widget w )
+        void forget ( in Widget w )
         {
             if ( tracked is w ) {
                 setTracked( null );

@@ -1,5 +1,9 @@
-// Written under LGPL-3.0 in the D programming language.
-// Copyright 2018 KanzakiKino
+// Written in the D programming language.
+/++
+ + Authors: KanzakiKino
+ + Copyright: KanzakiKino 2018
+ + License: LGPL-3.0
+++/
 module w4d.widget.tree;
 import w4d.layout.lineup,
        w4d.style.scalar,
@@ -9,6 +13,7 @@ import w4d.layout.lineup,
        w4d.widget.panel;
 import gl3n.linalg;
 
+/// A widget of tree list item.
 class TreeListItemWidget : ListItemWidget
 {
     protected class ContentsWidget : PanelWidget
@@ -67,14 +72,18 @@ class TreeListItemWidget : ListItemWidget
     protected ListWidget _parent;
     protected bool       _opened;
 
+    /// Whether the tree item is expanded.
     @property opened () { return _opened; }
 
     protected ContentsWidget _contents;
     protected TreeListWidget _childList;
 
+    /// Contents panel of the tree item.
     @property contents () { return _contents; }
-    @property list     () { return _childList; }
+    /// Children list of the tree item.
+    @property list () { return _childList; }
 
+    ///
     this ()
     {
         super();
@@ -91,25 +100,30 @@ class TreeListItemWidget : ListItemWidget
     }
     mixin DisableModifyChild;
 
+    ///
     override @property ListItemWidget[] selectedItems ()
     {
         return list.selectedItems;
     }
 
+    ///
     override void setParent ( ListWidget w )
     {
         _parent = w;
     }
+    ///
     override void deselect ()
     {
         return list.deselect();
     }
 
+    /// Expands and reveals the children list.
     void open ()
     {
         _opened = true;
         requestLayout();
     }
+    /// Closes and hides the children list.
     void close ()
     {
         _opened = false;

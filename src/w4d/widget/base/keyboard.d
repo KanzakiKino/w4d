@@ -1,7 +1,12 @@
-// Written under LGPL-3.0 in the D programming language.
-// Copyright 2018 KanzakiKino
+// Written in the D programming language.
+/++
+ + Authors: KanzakiKino
+ + Copyright: KanzakiKino 2018
+ + License: LGPL-3.0
+++/
 module w4d.widget.base.keyboard;
 
+/// A template that declares methods related to Keyboard.
 template Keyboard ()
 {
     protected Widget _focusChain;
@@ -60,7 +65,7 @@ template Keyboard ()
             }
         }
 
-        auto pressing = status != KeyState.Release;
+        const pressing = status != KeyState.Release;
         if ( key == Key.LeftShift ) {
             _context.setModkeyStatus( Modkey.Shift, pressing );
         } else if ( key == Key.LeftControl ) {

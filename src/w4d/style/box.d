@@ -1,5 +1,9 @@
-// Written under LGPL-3.0 in the D programming language.
-// Copyright 2018 KanzakiKino
+// Written in the D programming language.
+/++
+ + Authors: KanzakiKino
+ + Copyright: KanzakiKino 2018
+ + License: LGPL-3.0
+++/
 module w4d.style.box;
 import w4d.style.rect,
        w4d.style.scalar,
@@ -7,6 +11,7 @@ import w4d.style.rect,
        w4d.style.templates;
 import gl3n.linalg;
 
+///
 unittest
 {
     auto box = BoxStyle();
@@ -22,27 +27,35 @@ unittest
     assert( box.margins.left.calced == 300*0.05f );
 }
 
+/// A style data of box.
 struct BoxStyle
 {
     @("attr") {
+        /// Size of the client.
         Size size;
+        /// Width of the paddings.
         Rect paddings;
+        /// Width of the border.
         Rect borderWidth;
+        /// Width of the margins.
         Rect margins;
     }
 
     mixin AttributesUtilities;
 
-    @property clientSize ()
+    ///
+    const @property clientSize ()
     {
         return size.vector;
     }
-    @property clientLeftTop ()
+    /// Left top position of the client area.
+    const @property clientLeftTop ()
     {
         return borderInsideLeftTop +
             vec2( paddings.left.calced, paddings.top.calced );
     }
-    @property clientAdditionalSize ()
+    /// Size of margins + border + paddings.
+    const @property clientAdditionalSize ()
     {
         auto result = borderInsideAdditionalSize;
         result.x += paddings.left.calced + paddings.right .calced;
@@ -50,19 +63,22 @@ struct BoxStyle
         return result;
     }
 
-    @property borderInsideSize ()
+    /// Size of clientArea + paddings.
+    const @property borderInsideSize ()
     {
         auto result = size.vector;
         result.x += paddings.left.calced + paddings.right .calced;
         result.y += paddings.top .calced + paddings.bottom.calced;
         return result;
     }
-    @property borderInsideLeftTop ()
+    /// Left top position of inside of the border.
+    const @property borderInsideLeftTop ()
     {
         return borderOutsideLeftTop +
             vec2( borderWidth.left.calced, borderWidth.top.calced );
     }
-    @property borderInsideAdditionalSize ()
+    /// Size of margins + border.
+    const @property borderInsideAdditionalSize ()
     {
         auto result = borderOutsideAdditionalSize;
         result.x += borderWidth.left.calced + borderWidth.right .calced;
@@ -70,25 +86,28 @@ struct BoxStyle
         return result;
     }
 
-    @property borderOutsideSize ()
+    /// Size of border + paddings + clienatArea.
+    const @property borderOutsideSize ()
     {
         auto result = borderInsideSize;
         result.x += borderWidth.left.calced + borderWidth.right .calced;
         result.y += borderWidth.top .calced + borderWidth.bottom.calced;
         return result;
     }
-    @property borderOutsideLeftTop ()
+    /// Left top position of outside of border.
+    const @property borderOutsideLeftTop ()
     {
         return vec2( margins.left.calced, margins.top.calced );
     }
-    @property borderOutsideAdditionalSize ()
+    /// Size of margins.
+    const @property borderOutsideAdditionalSize ()
     {
         return vec2( margins.left.calced + margins.right.calced,
                margins.top.calced + margins.bottom.calced );
     }
 
-    // Collision size will be sum of size, borderWidth and margins.
-    @property collisionSize ()
+    /// Size of margins + border + paddings + clientArea.
+    const @property collisionSize ()
     {
         auto result = borderOutsideSize;
         result.x += margins.left.calced + margins.right .calced;
@@ -96,13 +115,14 @@ struct BoxStyle
         return result;
     }
 
+    /// Calculates all styles.
     void calc ( vec2 parentSize, vec2 def = vec2(0,0) )
     {
         paddings   .calc( parentSize );
         borderWidth.calc( parentSize );
         margins    .calc( parentSize );
 
-        auto expand = parentSize - clientAdditionalSize;
+        const expand = parentSize - clientAdditionalSize;
         if ( size.width.isNone || def.x <= 0 ) {
             def.x = expand.x;
         }

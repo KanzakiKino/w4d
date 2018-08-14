@@ -1,5 +1,9 @@
-// Written under LGPL-3.0 in the D programming language.
-// Copyright 2018 KanzakiKino
+// Written in the D programming language.
+/++
+ + Authors: KanzakiKino
+ + Copyright: KanzakiKino 2018
+ + License: LGPL-3.0
+++/
 module w4d.widget.scrollbar;
 import w4d.parser.colorset,
        w4d.style.color,
@@ -13,27 +17,32 @@ import g4d.element.shape.rect,
 import gl3n.linalg;
 import std.algorithm;
 
+/// A handler that handles scrolling.
 alias ScrollHandler = EventHandler!( void, float );
 
+/// A widget of scroll bar.
 class ScrollBarWidget (bool H) : Widget
 {
+    /// Whether direction of the scroll bar is horizon.
     alias Horizon = H;
 
+    /// Magnification of wheel.
     enum WheelMagnification = 0.1;
 
+    ///
     ScrollHandler onScroll;
 
-    // Bar length. (>0)
+    /// Bar length. (>0)
     protected float _barLength;
-    // Current value.
+    /// Current value.
     protected float _value;
 
-    // Bar element.
+    /// Bar element.
     protected RectElement _bar;
-    // Translate.
+    /// Translate.
     protected vec2 _translate;
 
-    // Dragging offset.
+    /// Dragging offset.
     protected float _dragOffset;
 
     protected float getValueAt ( vec2 pos )
@@ -42,6 +51,7 @@ class ScrollBarWidget (bool H) : Widget
         return pos.getLength!H / size.getLength!H;
     }
 
+    ///
     override bool handleMouseMove ( vec2 pos )
     {
         if ( super.handleMouseMove(pos) ) return true;
@@ -53,6 +63,7 @@ class ScrollBarWidget (bool H) : Widget
         }
         return false;
     }
+    ///
     override bool handleMouseButton ( MouseButton btn, bool status, vec2 pos )
     {
         if ( super.handleMouseButton(btn,status,pos) ) return true;
@@ -71,6 +82,7 @@ class ScrollBarWidget (bool H) : Widget
         }
         return false;
     }
+    ///
     override bool handleMouseScroll ( vec2 amount, vec2 pos )
     {
         if ( super.handleMouseScroll( amount, pos ) ) return true;
@@ -81,11 +93,13 @@ class ScrollBarWidget (bool H) : Widget
         return true;
     }
 
+    ///
     void handleScroll ( float v )
     {
         onScroll.call( v );
     }
 
+    ///
     this ()
     {
         super();
@@ -104,11 +118,13 @@ class ScrollBarWidget (bool H) : Widget
         }
     }
 
+    /// Checks if drawing the bar is needed.
     @property needDrawBar ()
     {
         return _barLength < 1f;
     }
 
+    /// Changes length of the bar.
     void setBarLength ( float newlen )
     {
         newlen = newlen.clamp( 0f, 1f );
@@ -122,6 +138,7 @@ class ScrollBarWidget (bool H) : Widget
             resizeElements();
         }
     }
+    /// Changes value of the bar.
     void setValue ( float value )
     {
         auto temp = _value;
@@ -161,12 +178,14 @@ class ScrollBarWidget (bool H) : Widget
                 size.getLength!H * _value;
         }
     }
+    ///
     override vec2 layout ( vec2 pos, vec2 size )
     {
         scope(success) resizeElements();
         return super.layout( pos, size );
     }
 
+    ///
     override void draw ( Window w, ColorSet parent )
     {
         super.draw( w, parent );
@@ -182,9 +201,13 @@ class ScrollBarWidget (bool H) : Widget
         _bar.draw( shader );
     }
 
+    ///
     override @property bool trackable () { return true; }
+    ///
     override @property bool focusable () { return true; }
 }
 
+/// A widget of horizontal scroll bar.
 alias HorizontalScrollBarWidget = ScrollBarWidget!true;
+/// A widget of vertical scroll bar.
 alias VerticalScrollBarWidget   = ScrollBarWidget!false;
