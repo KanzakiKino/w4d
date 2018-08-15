@@ -94,7 +94,7 @@ class TextWidget : Widget
         _textElm.draw( shader );
     }
     ///
-    override void draw ( Window win, ColorSet parent )
+    override void draw ( Window win, in ColorSet parent )
     {
         super.draw( win, parent );
         drawText( win );

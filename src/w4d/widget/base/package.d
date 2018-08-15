@@ -30,20 +30,20 @@ class Widget : WindowContent, Layoutable
 {
     protected uint _status;
     /// Current status.
-    @property status () { return _status; }
+    const @property status () { return _status; }
 
     protected WindowContext _context;
 
     protected WidgetStyle _style;
     /// Style of the widget.
-    @property WidgetStyle style () { return _style; }
+    inout @property inout(WidgetStyle) style () { return _style; }
 
     protected ColorSet _colorset;
     /// Current colorset.
-    @property colorset () { return _colorset; }
+    const @property colorset () { return _colorset; }
 
-    protected Layout        _layout;
-    protected BoxElement    _box;
+    protected Layout     _layout;
+    protected BoxElement _box;
 
     protected bool _needLayout;
 
@@ -69,8 +69,9 @@ class Widget : WindowContent, Layoutable
     ///
     this ()
     {
-        _status = WidgetState.None;
-        _style  = new WidgetStyle;
+        _status   = WidgetState.None;
+        _style    = new WidgetStyle;
+        _colorset = new ColorSet;
 
         _context = null;
         _box     = new BoxElement;
@@ -193,20 +194,23 @@ class Widget : WindowContent, Layoutable
     {
         //children.each!( x => x.draw(win,colorset) );
         foreach ( child; children ) {
-            child.draw( win, colorset );
+            child.draw( win, _colorset );
         }
     }
     /// Draws the widget.
     /// Be called only by Window.
     void draw ( Window win )
     {
-        draw( win, ColorSet() );
+        draw( win, null );
     }
     /// Draws the widget.
-    void draw ( Window win, ColorSet parent )
+    void draw ( Window win, in ColorSet parent )
     {
-        _colorset = style.getColorSet(status);
-        _colorset.inherit( parent );
+        _colorset.clear();
+        style.inheritColorSet( _colorset, status );
+        if ( parent ) {
+            _colorset.inherit( parent );
+        }
 
         drawBox( win );
         drawChildren( win );

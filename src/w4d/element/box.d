@@ -39,7 +39,7 @@ class BoxElement : Element
         _border.resize( box );
     }
     ///
-    void setColor ( ColorSet col )
+    void setColor ( in ColorSet col )
     {
         _bgColor     = col.background;
         _borderColor = col.border;

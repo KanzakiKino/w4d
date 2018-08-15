@@ -63,7 +63,7 @@ class CheckBoxWidget : Widget
             }
             return super.layout( pos, size );
         }
-        override void draw ( Window w, ColorSet parent )
+        override void draw ( Window w, in ColorSet parent )
         {
             super.draw( w, parent );
 

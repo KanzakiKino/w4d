@@ -99,7 +99,7 @@ class ScrollPanelWidget(bool H) : PanelWidget
                 filter!( x => style.isWidgetInside(x.style) ).
                 each!( x => x.draw( w, colorset ) );
         }
-        override void draw ( Window w, ColorSet parent )
+        override void draw ( Window w, in ColorSet parent )
         {
             w.clip.pushRect( style.clientLeftTop, style.box.clientSize );
             super.draw( w, parent );

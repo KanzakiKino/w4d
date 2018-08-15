@@ -9,9 +9,44 @@ import w4d.style.exception;
 import gl3n.linalg;
 
 /// A collection of color configurations.
-struct ColorSet
+class ColorSet
 {
     protected vec4[string] _colors;
+
+    ///
+    this ( in ColorSet src )
+    {
+        foreach ( k,v; src._colors ) {
+            _colors[k] = v;
+        }
+    }
+    ///
+    this ()
+    {
+        _colors.clear();
+    }
+
+    /// Copyies the colorset.
+    const ColorSet copy ()
+    {
+        return new ColorSet( this );
+    }
+
+    /// Clears all color specifications.
+    void clear ()
+    {
+        _colors.clear();
+    }
+
+    /// Copies the unspecified colors from parent.
+    void inherit ( in ColorSet parent )
+    {
+        foreach ( key,val; parent._colors ) {
+            if ( key !in _colors ) {
+                _colors[key] = val;
+            }
+        }
+    }
 
     ///
     inout vec4 opIndex ( string v )
@@ -29,15 +64,5 @@ struct ColorSet
     inout vec4 opDispatch ( string v ) ()
     {
         return this[v];
-    }
-
-    /// Copies the unspecified colors from parent.
-    void inherit ( in ColorSet parent )
-    {
-        foreach ( key,val; parent._colors ) {
-            if ( key !in _colors ) {
-                _colors[key] = val;
-            }
-        }
     }
 }

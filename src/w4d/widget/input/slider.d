@@ -221,7 +221,7 @@ class SliderWidget(bool H) : Widget
         return result;
     }
     ///
-    override void draw ( Window w, ColorSet parent )
+    override void draw ( Window w, in ColorSet parent )
     {
         super.draw( w, parent );
 

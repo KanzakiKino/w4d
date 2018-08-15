@@ -85,7 +85,7 @@ class MdiHostWidget : Widget
     }
 
     ///
-    override void draw ( Window w, ColorSet parent )
+    override void draw ( Window w, in ColorSet parent )
     {
         layoutQuickly();
 

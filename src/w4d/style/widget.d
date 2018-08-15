@@ -55,7 +55,7 @@ class WidgetStyle
     this ()
     {
         colorsets.clear();
-        colorsets[WidgetState.None] = ColorSet();
+        colorsets[WidgetState.None] = new ColorSet();
     }
 
     mixin AttributesUtilities;
@@ -79,18 +79,16 @@ class WidgetStyle
         box.calc( ctx.parentSize, ctx.size );
     }
 
-    /// Calculates colorset from status.
-    const ColorSet getColorSet ( uint status )
+    /// Make src inherit the colorset.
+    const ColorSet inheritColorSet ( return ColorSet src, uint status )
     {
-        ColorSet result;
-
         static foreach ( v; __traits(allMembers,WidgetState) ) with (WidgetState) {
             enum S = mixin(v);
             if ( ((status & S) || !S) && (S in colorsets) ) {
-                result.inherit( colorsets[S] );
+                src.inherit( colorsets[S] );
             }
         }
-        return result;
+        return src;
     }
 
     /// Checks if pt is inside of border.

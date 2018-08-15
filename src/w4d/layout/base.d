@@ -44,7 +44,7 @@ abstract class Layout
 interface Layoutable
 {
     /// Style data.
-    @property WidgetStyle style ();
+    inout @property inout(WidgetStyle) style ();
 
     /// Children.
     @property Layoutable[] childLayoutables ();

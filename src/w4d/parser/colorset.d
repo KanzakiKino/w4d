@@ -62,7 +62,7 @@ void parseColorSets ( Node root, WidgetStyle style )
     foreach ( string name, Node node; root ) {
         auto state = name.toState;
         if ( state !in style.colorsets ) {
-            style.colorsets[state] = ColorSet();
+            style.colorsets[state] = new ColorSet();
         }
         parseColorSet( node, style.colorsets[state] );
     }

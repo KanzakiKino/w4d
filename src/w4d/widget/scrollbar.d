@@ -186,7 +186,7 @@ class ScrollBarWidget (bool H) : Widget
     }
 
     ///
-    override void draw ( Window w, ColorSet parent )
+    override void draw ( Window w, in ColorSet parent )
     {
         super.draw( w, parent );
         if ( !needDrawBar ) return;
