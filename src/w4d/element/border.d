@@ -64,7 +64,7 @@ class BoxBorderElement : Element
         s.matrix.late = s.matrix.late+_pos;
 
         foreach ( i,rc; _rects ) {
-            vec3 late;
+            auto late = vec3(0,0,0);
             if ( i%2 == 0 ) {
                 late.y = _lates[i];
             } else {

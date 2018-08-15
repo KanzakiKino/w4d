@@ -2,12 +2,8 @@
 # Copyright 2018 KanzakiKino
 
 default:
-    background: [0.4]
+    background: [0.25]
     border    : [0.2]
 
 focused:
-    background: [0.45]
     border    : [0.4,0.4,0.8,0.5]
-
-tracked:
-    background: [0.5]
