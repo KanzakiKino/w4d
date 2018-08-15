@@ -8,7 +8,8 @@ module w4d.layout.split;
 import w4d.layout.base,
        w4d.layout.exception,
        w4d.layout.lineup,
-       w4d.util.vector;
+       w4d.util.vector,
+       w4d.log;
 import gl3n.linalg;
 
 /// A layout object that lineups children and splits the parent.
@@ -25,8 +26,7 @@ class SplitLayout (bool H) : LineupLayout!H
         auto remainedLength = &_childSize.getLength!H;
 
         if ( length > *remainedLength ) {
-            import std.stdio: writeln; // TODO
-            "The child protrudes to the outside of the owner.".writeln;
+            Log.error( "The child protrudes to the outside of the owner." );
             length = *remainedLength;
         }
 

@@ -92,7 +92,7 @@ class W4dLogger
     }
 
     /// Changes output file. Specify stdout to output to the terminal.
-    void setOutputFile ( in File f )
+    void setOutputFile ( File f )
     {
         _output = f;
     }

@@ -5,7 +5,8 @@
  + License: LGPL-3.0
 ++/
 module w4d.style.scalar;
-import w4d.style.exception;
+import w4d.style.exception,
+       w4d.log;
 import std.math;
 
 ///
@@ -146,8 +147,7 @@ struct Scalar
     void alter ( float v, bool force = false )
     {
         if ( isSpecified && !force ) {
-            import std.stdio: writeln;
-            "Tried to alter the specified value.".writeln; // TODO
+            Log.info( "Tried to alter the specified value." );
             return;
         }
         _calculated = v;
