@@ -1,6 +1,8 @@
 w4d
 ====
 
+![w4d](https://user-images.githubusercontent.com/35886963/44156173-40c78548-a0ea-11e8-8148-f234afe2376a.png)
+
 w4d is a widgets library for dlang.
 
 ## Requirements
