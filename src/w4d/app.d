@@ -19,12 +19,14 @@ alias ExceptionHandler = EventHandler!( bool, Exception );
 class App
 {
     protected Task[]   _tasks;
-    protected string[] _args;
 
     /// Duration in milliseconds to sleep in each frames.
     uint sleepDuration;
     /// Status code that main function returns.
     int returnCode;
+
+    // Arguments of main function.
+    immutable string[] args;
 
     /// A handler to catch the exception thrown at inside of main loop.
     ExceptionHandler onThrown;
@@ -32,7 +34,7 @@ class App
     ///
     this ( in string[] args )
     {
-        _args         = args.dup;
+        this.args     = args.idup;
         sleepDuration = 10;
     }
 
