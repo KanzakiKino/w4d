@@ -39,7 +39,8 @@ public
            w4d.widget.text,
            w4d.widget.tree,
            w4d.widget.wrapper;
-    import w4d.app;
+    import w4d.app,
+           w4d.log;
     // TODO Import useful modules.
 
     import g4d.ft.font;
