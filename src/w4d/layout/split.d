@@ -21,11 +21,16 @@ class SplitLayout (bool H) : LineupLayout!H
     }
     protected override void updateStatus ( vec2 placedSize )
     {
-        auto length = placedSize.getLength!H;
-        enforce( length <= _childSize.getLength!H,
-              "Failed to place the too big child." );
+        auto length         = placedSize.getLength!H;
+        auto remainedLength = &_childSize.getLength!H;
 
-        _childSize.getLength!H -= length;
+        if ( length > *remainedLength ) {
+            import std.stdio: writeln; // TODO
+            "The child protrudes to the outside of the owner.".writeln;
+            length = *remainedLength;
+        }
+
+        *remainedLength -= length;
         super.updateStatus( placedSize );
     }
 }

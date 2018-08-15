@@ -19,6 +19,7 @@ class TestRootWidget : RootWidget
         addChild( btn );
 
         auto host = new MdiHostWidget;
+        host.style.box.size.height = 150.percent;
         addChild( host );
 
         btn.onButtonPress = () {
