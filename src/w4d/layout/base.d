@@ -46,6 +46,8 @@ abstract class Layout
     /// Moves the owner and the children.
     void shift ( vec2 size )
     {
+        if ( size == vec2(0,0) ) return;
+
         _beforeBasePos += size;
         style.shift( size );
         children.each!( x => x.shift( size ) );

@@ -45,6 +45,8 @@ class TableLayout : FillLayout
     ///
     override void place ( vec2 basePoint, vec2 parentSize )
     {
+        if ( placeEasily( basePoint, parentSize ) ) return;
+
         fill( basePoint, parentSize );
 
         auto   size      = childSize;
