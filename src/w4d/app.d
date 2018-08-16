@@ -5,7 +5,8 @@
  + License: LGPL-3.0
 ++/
 module w4d.app;
-import w4d.event;
+import w4d.event,
+       w4d.log;
 import std.algorithm,
        std.stdio;
 import core.thread;
@@ -45,6 +46,7 @@ class App
     Task addTask ( Task newTask )
     {
         _tasks ~= newTask;
+        Log.trace( newTask, "was added as Task." );
         return newTask;
     }
 
@@ -61,10 +63,11 @@ class App
 
                 g4d.Window.pollEvents();
                 Thread.sleep( dur!"msecs"( sleepDuration ) );
+
             } catch ( Exception e ) {
                 if ( !onThrown.call( e ) ) {
-                    e.writeln;
-                    break;
+                    Log.info( "An exception wasn't caught by anyone." );
+                    throw e;
                 }
             }
         }
@@ -76,6 +79,7 @@ class App
     void terminate ()
     {
         _tasks = [];
+        Log.warn( "App is terminating forcibly." );
     }
 }
 
