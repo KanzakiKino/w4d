@@ -44,6 +44,8 @@ class FillLayout : Layout
     ///
     override void place ( vec2 pt, vec2 sz )
     {
+        if ( placeEasily( pt, sz ) ) return;
+
         enforce( !children.length,
               "FillLayout doesn't support children." );
         fill( pt, sz );

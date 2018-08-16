@@ -161,13 +161,10 @@ class Widget : WindowContent, Layoutable
 
         return style.box.collisionSize;
     }
-    /// Moves all children.
-    void shiftChildren ( vec2 size )
+    ///
+    void shift ( vec2 size )
     {
-        foreach ( c; calcedChildren ) {
-            c.style.shift( size );
-            c.shiftChildren( size );
-        }
+        _layout.shift( size );
         requestRedraw();
     }
 

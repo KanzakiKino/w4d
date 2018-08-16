@@ -62,7 +62,7 @@ class ScrollPanelWidget(bool H) : PanelWidget
         {
             auto amount = vec2(0,0);
             amount.getLength!H = -( len - _scroll );
-            shiftChildren( amount );
+            children.each!( x => x.shift( amount ) );
 
             _scroll = len;
         }
@@ -90,6 +90,7 @@ class ScrollPanelWidget(bool H) : PanelWidget
                 _scroll = 0;
                 updatePageSize();
             }
+            requestLayout(); // To force to layout completely whenever.
             return super.layout( pos, size );
         }
 

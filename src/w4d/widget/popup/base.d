@@ -77,8 +77,7 @@ class PopupWidget : RootWidget
             late.y = rootrb.y - rb.y;
         }
 
-        style.shift( late );
-        shiftChildren( late );
+        shift( late );
         return vec2(0,0);
     }
 }
