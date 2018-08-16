@@ -12,9 +12,10 @@ import std.conv,
        std.string;
 
 /// An enum of log levels.
-enum LogLevel
+/// The uint value is priority of the level.
+enum LogLevel : uint
 {
-    Trace,
+    Trace = 0,
     Info,
     Warn,
     Error,
@@ -75,6 +76,9 @@ class W4dLogger
     protected File _output;
     protected bool _colored;
 
+    protected LogLevel _outputThreshold;
+    protected LogLevel _throwThreshold;
+
     ///
     this ()
     {
@@ -84,6 +88,9 @@ class W4dLogger
         _output  = stdout;
         _colored = true;
 
+        _outputThreshold = LogLevel.Trace;
+        _throwThreshold  = LogLevel.Fatal;
+
         trace( "W4dLogger has been initialized." );
     }
     ~this ()
@@ -92,14 +99,17 @@ class W4dLogger
     }
 
     /// Changes output file. Specify stdout to output to the terminal.
-    void setOutputFile ( File f )
+    /// When colored is true, logs will be colored for the terminal.
+    void setOutputFile ( File f, bool colored = false )
     {
-        _output = f;
+        _output  = f;
+        _colored = colored;
     }
-    /// Changes whether colors the output logs.
-    void setColored ( bool b )
+    /// Changes threshold levels for handling logs.
+    void setThreshold ( LogLevel out_, LogLevel throw_ )
     {
-        _colored = b;
+        _outputThreshold = out_;
+        _throwThreshold  = throw_;
     }
 
     protected string formatLog ( LogLevel lv, string text,
@@ -114,13 +124,22 @@ class W4dLogger
         ( string file = __FILE__, size_t line = __LINE__, string func = __FUNCTION__, Args... )
         ( LogLevel lv, Args args )
     {
+        if ( lv < _outputThreshold ) return;
+
         string text;
         foreach ( arg; args ) {
             text ~= arg.to!string ~ " ";
         }
+        text = text.chop;
+
         auto formattedText = formatLog(
-                lv, text.chop, file, line, func );
+                lv, text, file, line, func );
         _output.writeln( formattedText );
+
+        if ( lv >= _throwThreshold ) {
+            auto msg = "%s (%s)".format( text, func );
+            throw new W4dException( msg, file, line );
+        }
     }
 
     /// Makes new trace log.
