@@ -113,13 +113,17 @@ class Widget : WindowContent, Layoutable
     void enableState ( WidgetState state )
     {
         _status |= state;
-        requestRedraw();
+        if ( state in style.colorsets ) {
+            requestRedraw();
+        }
     }
     /// Disables the state.
     void disableState ( WidgetState state )
     {
         _status &= ~state;
-        requestRedraw();
+        if ( state in style.colorsets ) {
+            requestRedraw();
+        }
     }
 
     /// Changes Layout object.
