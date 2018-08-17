@@ -10,6 +10,13 @@ import w4d.layout.exception,
 import gl3n.linalg;
 import std.algorithm;
 
+enum LayoutState
+{
+    None,
+    Dirty,
+    Clean,
+}
+
 /// A baseclass of Layout object.
 /// Layout object decides children position to place
 /// and calculates all styles.
@@ -30,6 +37,8 @@ abstract class Layout
         return _owner.childLayoutables;
     }
 
+    protected LayoutState _status;
+
     protected vec2 _beforeBasePos;
     protected vec2 _beforeParentSize;
 
@@ -39,6 +48,7 @@ abstract class Layout
         enforce( owner, "Owner is null." );
         _owner = owner;
 
+        _status           = LayoutState.None;
         _beforeBasePos    = vec2(0,0);
         _beforeParentSize = vec2(-1,-1);
     }
@@ -53,10 +63,19 @@ abstract class Layout
         children.each!( x => x.shift( size ) );
     }
 
-    /// Checks if need to layout completely.
-    protected @property needLayoutCompletely ()
+    protected bool updateDirtyState ()
     {
-        return _owner.needLayout;
+        auto dirty = false;
+        foreach ( child; children ) {
+            if ( child.layoutObject.updateDirtyState() ) {
+                dirty = true;
+            }
+        }
+        if ( !dirty ) {
+            dirty = _owner.checkNeedLayout( false );
+        }
+        _status = dirty? LayoutState.Dirty: LayoutState.Clean;
+        return dirty;
     }
 
     /// Just moves the owner and the children to pos
@@ -65,11 +84,15 @@ abstract class Layout
     protected bool placeEasily ( vec2 basepos, vec2 parentSize )
     {
         scope(exit) {
+            _status           = LayoutState.None;
             _beforeBasePos    = basepos;
             _beforeParentSize = parentSize;
         }
+        if ( _status == LayoutState.None ) {
+            updateDirtyState();
+        }
 
-        alias dirty = needLayoutCompletely; // To evaluate lazily.
+        auto dirty = (_status != LayoutState.Clean);
         if ( _beforeParentSize != parentSize || dirty ) {
             return false;
         }
@@ -88,6 +111,9 @@ interface Layoutable
     /// Style data.
     inout @property inout(WidgetStyle) style ();
 
+    /// Layout object.
+    inout @property inout(Layout) layoutObject ();
+
     /// Children.
     @property Layoutable[] childLayoutables ();
 
@@ -95,7 +121,8 @@ interface Layoutable
     @property vec2 wantedSize ();
 
     /// Checks if need to layout completely.
-    @property bool needLayout ();
+    /// Set the first argument true to check recursively.
+    bool checkNeedLayout ( bool );
 
     /// Places at the pos with the size.
     vec2 layout ( vec2, vec2 );

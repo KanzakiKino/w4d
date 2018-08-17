@@ -42,10 +42,13 @@ class Widget : WindowContent, Layoutable
     /// Current colorset.
     const @property colorset () { return _colorset; }
 
-    protected Layout     _layout;
-    protected BoxElement _box;
+    protected Layout _layout;
+    /// Layout object.
+    inout @property inout(Layout) layoutObject () { return _layout; }
 
     protected bool _needLayout;
+
+    protected BoxElement _box;
 
     protected Widget findChildAt ( vec2 pt )
     {
@@ -132,9 +135,19 @@ class Widget : WindowContent, Layoutable
         _layout = new L(this,args);
     }
     /// Checks if the widget needs re-layout.
+    bool checkNeedLayout ( bool recursively )
+    {
+        if ( recursively ) {
+            return _needLayout ||
+                   children.canFind!"a.needLayout" ||
+                   !style.isCalced;
+        }
+        return _needLayout;
+    }
+    /// Checks if the widget needs re-layout.
     @property bool needLayout ()
     {
-        return _needLayout || children.canFind!"a.needLayout" || !style.isCalced;
+        return checkNeedLayout( true );
     }
     /// Set needLayout true.
     void requestLayout ()
