@@ -71,25 +71,14 @@ class MdiHostWidget : Widget
     }
 
     ///
-    override @property bool needLayout ()
+    override vec2 layout ( vec2 basept, vec2 parentSize )
     {
-        return _needLayout;
-    }
-    /// Re-layouts child clients only that need layout.
-    void layoutQuickly ()
-    {
-        auto pos  = style.clientLeftTop;
-        auto size = style.box.clientSize;
-
-        children.filter!"a.needLayout"().
-            each!( x => x.layout(pos,size) );
+        return super.layout( basept, parentSize );
     }
 
     ///
     override void draw ( Window w, in ColorSet parent )
     {
-        layoutQuickly();
-
         auto leftTop = style.translate +
             style.box.borderInsideLeftTop;
 
