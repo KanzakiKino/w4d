@@ -12,7 +12,7 @@ alias DownloadFinishHandler = EventHandler!( void, char[] );
 
 class DownloadTask : Thread, Task
 {
-    const string url;
+    immutable string url;
 
     protected char[] _result;
 

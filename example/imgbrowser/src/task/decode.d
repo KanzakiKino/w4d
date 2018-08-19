@@ -31,13 +31,17 @@ class DecodeTask : Thread, Task
     protected void task ()
     {
         foreach ( url; urls ) {
-            auto media = new MediaFile( url );
-            auto bmp   = media.decodeNextImage();
+            try {
+                auto media = new MediaFile( url );
+                auto bmp   = media.decodeNextImage();
 
-            synchronized ( _mutex ) {
-                _stack ~= bmp;
+                synchronized ( _mutex ) {
+                    _stack ~= bmp;
+                }
+                media.dispose();
+            } catch ( Exception e ) {
+                Log.info( "Failed to retrieve image from", url );
             }
-            media.dispose();
         }
     }
 

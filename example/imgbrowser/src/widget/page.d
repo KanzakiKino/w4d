@@ -18,7 +18,7 @@ class PageWidget : VerticalScrollPanelWidget
 
         auto task = new DownloadTask( url );
         task.onFinish = ( char[] src ) {
-            _searcher = new ImgSearcher( url );
+            _searcher = new ImgSearcher( src );
             reload();
         };
         ImgBrowser.app.addTask( task );
