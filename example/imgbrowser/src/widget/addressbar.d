@@ -10,7 +10,7 @@ class AddressBarWidget : PanelWidget
     this ( FontFace face )
     {
         super();
-        setLayout!HorizontalSplitLayout();
+        setLayout!( FillLayout, HorizontalSplitPlacer );
 
         auto input = new LineInputWidget;
         input.loadText( "", face );

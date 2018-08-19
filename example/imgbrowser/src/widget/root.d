@@ -13,7 +13,7 @@ class ImgBrowserRootWidget : RootWidget
     this ()
     {
         super();
-        setLayout!VerticalSplitLayout();
+        setLayout!( FillLayout, VerticalSplitPlacer );
 
         auto font = new Font( ImgBrowser.fontPath );
         _face = new FontFace( font, vec2i(16,16) );

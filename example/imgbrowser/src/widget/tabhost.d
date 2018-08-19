@@ -31,7 +31,7 @@ class MainTabHostWidget : TabHostWidget, MainTabHost
     protected Widget createAbout ( FontFace face )
     {
         auto panel = new PanelWidget;
-        panel.setLayout!VerticalLineupLayout;
+        panel.setLayout!( FillLayout, VerticalLineupPlacer );
         panel.style.box.size.width  = Scalar.Auto;
         panel.style.box.size.height = Scalar.Auto;
         panel.style.box.paddings    = Rect(2.mm);

@@ -32,7 +32,7 @@ class DownloadTask : Thread, Task
             _result = url.get();
         } catch ( Exception e ) {
             _result = [];
-            "%s (%s)".writeln( url, e.msg );
+            Log.info( "Failed to download from", url );
         }
     }
 
