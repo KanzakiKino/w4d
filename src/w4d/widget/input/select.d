@@ -25,13 +25,6 @@ class SelectInputWidget : PanelWidget
 {
     protected class CustomPopupMenuWidget : PopupMenuWidget
     {
-        override void handlePopup ( bool opened, WindowContext w )
-        {
-            if ( !opened ) {
-                .SelectInputWidget.requestLayout();
-            }
-            super.handlePopup( opened, w );
-        }
         this ()
         {
             super();

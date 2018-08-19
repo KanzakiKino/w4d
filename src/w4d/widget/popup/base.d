@@ -22,10 +22,11 @@ class PopupWidget : RootWidget
     ///
     override void handlePopup ( bool opened, WindowContext w )
     {
+        w.requestRedraw();
+
         if ( opened ) {
             _objectContext = w;
         } else {
-            _objectContext.requestRedraw();
             _objectContext = null;
         }
     }
