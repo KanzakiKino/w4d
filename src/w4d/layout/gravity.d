@@ -11,6 +11,7 @@ import w4d.layout.placer.base,
 import gl3n.linalg;
 
 /// A layout object that moves the center pos.
+/// You should set a parent of the owner not to shrink. (Specify Scalar.Auto)
 class GravityLayout : FillLayout
 {
     protected vec2 _center;
@@ -22,13 +23,14 @@ class GravityLayout : FillLayout
         _center = center;
     }
 
-    override protected void fill ( vec2 pt, vec2 sz )
+    override void place ( vec2 pt, vec2 sz )
     {
-        super.fill( pt, sz );
+        super.place( pt, sz );
 
         auto late = sz - style.box.collisionSize;
         late.x   *= _center.x;
         late.y   *= _center.y;
         shift( late );
+        _beforeBasePos -= late;
     }
 }

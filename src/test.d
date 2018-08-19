@@ -34,66 +34,29 @@ class TestRootWidget : RootWidget
 
     protected Widget createInputPage ( FontFace face )
     {
-        auto scroll = new VerticalScrollPanelWidget;
+        auto page = new PanelWidget;
+        page.style.box.size.width  = Scalar.Auto;
+        page.style.box.size.height = Scalar.Auto;
 
-        auto page = scroll.contents;
+        auto panel = new PanelWidget;
+        import w4d.style.widget;
+        panel.setLayout!( GravityLayout, HorizontalLineupPlacer )( vec2(0.5,0.5) );
+        page.addChild( panel );
 
-        foreach ( c; 0..30 ) {
-            {
-                auto line = new PanelWidget;
-                line.setLayout!( FillLayout, HorizontalLineupPlacer );
-                page.addChild( line );
+        auto text1 = new TextWidget;
+        text1.loadText( "input: ", face );
+        panel.addChild( text1 );
 
-                auto checkbox1 = new CheckBoxWidget;
-                checkbox1.style.box.margins = Rect(1.mm); // TODO
-                checkbox1.loadText( "CheckBoxWidget"d, face );
-                line.addChild( checkbox1 );
+        auto input1 = new LineInputWidget;
+        input1.loadText( "hogehoge", face );
+        input1.style.box.size.width = 50.percent;
+        panel.addChild( input1 );
 
-                auto checkbox2 = new CheckBoxWidget;
-                checkbox2.style.box.margins = Rect(1.mm); // TODO
-                checkbox2.loadText( "CheckBoxWidget"d, face );
-                line.addChild( checkbox2 );
-            }
-            {
-                auto line = new PanelWidget;
-                line.setLayout!( FillLayout, HorizontalMonospacedPlacer );
-                page.addChild( line );
+        auto text2 = new TextWidget;
+        text2.loadText( "kusoga", face );
+        page.addChild( text2 );
 
-                auto input1 = new LineInputWidget;
-                input1.style.box.margins = Rect(1.mm); // TODO
-                input1.loadText( "normal - LineInputWidget"d, face );
-                line.addChild( input1 );
-
-                auto input2 = new LineInputWidget;
-                input2.style.box.margins = Rect(1.mm); // TODO
-                input2.loadText( "locked - LineInputWidget"d, face );
-                input2.lock();
-                line.addChild( input2 );
-            }
-            {
-                auto line = new PanelWidget;
-                line.setLayout!( FillLayout, HorizontalSplitPlacer );
-                page.addChild( line );
-
-                auto select = new SelectInputWidget;
-                foreach ( i; 0..5 ) {
-                    auto item = new MenuItemWidget;
-                    select.addItem( item );
-                    auto text = new TextWidget;
-                    item.setChild( text );
-
-                    if ( i == 0 ) {
-                        select.select( item );
-                    }
-                    text.loadText( "item to be selected (%d)"d.format(i), face );
-                }
-                line.addChild( select );
-
-                auto slider = new HorizontalSliderWidget;
-                line.addChild( slider );
-            }
-        }
-        return scroll;
+        return page;
     }
 }
 
