@@ -5,8 +5,9 @@
  + License: LGPL-3.0
 ++/
 module w4d.widget.tabhost;
-import w4d.layout.lineup,
-       w4d.layout.split,
+import w4d.layout.placer.monospaced,
+       w4d.layout.placer.split,
+       w4d.layout.fill,
        w4d.parser.colorset,
        w4d.style.rect,
        w4d.style.scalar,
@@ -54,7 +55,7 @@ class TabHostWidget : Widget
         this ()
         {
             super();
-            setLayout!( HorizontalMonospacedSplitLayout );
+            setLayout!( FillLayout, HorizontalMonospacedPlacer );
             style.box.size.height = 10.mm;
         }
     }
@@ -106,7 +107,7 @@ class TabHostWidget : Widget
         super();
         _tabs = [];
 
-        setLayout!( VerticalSplitLayout );
+        setLayout!( FillLayout, VerticalSplitPlacer );
         _headers = new TabHeaderPanelWidget;
     }
 

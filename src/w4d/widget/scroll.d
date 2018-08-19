@@ -5,8 +5,9 @@
  + License: LGPL-3.0
 ++/
 module w4d.widget.scroll;
-import w4d.layout.lineup,
-       w4d.layout.split,
+import w4d.layout.placer.lineup,
+       w4d.layout.placer.split,
+       w4d.layout.fill,
        w4d.style.color,
        w4d.style.scalar,
        w4d.task.window,
@@ -53,7 +54,7 @@ class ScrollPanelWidget(bool H) : PanelWidget
             _scroll = 0f;
             size   = vec2(0,0);
 
-            setLayout!( LineupLayout!Horizon );
+            setLayout!( FillLayout, LineupPlacer!Horizon );
             style.box.size.width  = Scalar.Auto;
             style.box.size.height = Scalar.Auto;
         }
@@ -118,7 +119,7 @@ class ScrollPanelWidget(bool H) : PanelWidget
     this ()
     {
         super();
-        setLayout!( SplitLayout!(!Horizon) );
+        setLayout!( FillLayout, SplitPlacer!(!Horizon) );
 
         _contents  = new CustomPanelWidget;
         _scrollbar = new CustomScrollBarWidget;

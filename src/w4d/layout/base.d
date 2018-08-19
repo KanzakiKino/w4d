@@ -5,7 +5,8 @@
  + License: LGPL-3.0
 ++/
 module w4d.layout.base;
-import w4d.layout.exception,
+import w4d.layout.placer.base,
+       w4d.layout.exception,
        w4d.style.widget;
 import gl3n.linalg;
 import std.algorithm;
@@ -22,31 +23,35 @@ enum LayoutState
 /// and calculates all styles.
 abstract class Layout
 {
-    protected Layoutable _owner;
+    protected Placer _placer;
 
+    /// Placer of the layout.
+    inout @property inout(Placer) placer () { return _placer; }
+
+    protected Layoutable _owner;
     /// Owner of the layout.
     inout @property owner () { return _owner; }
-
-    protected @property style ()
-    {
-        return _owner.style;
-    }
-
-    protected @property children ()
-    {
-        return _owner.childLayoutables;
-    }
 
     protected LayoutState _status;
 
     protected vec2 _beforeBasePos;
     protected vec2 _beforeParentSize;
 
+    protected @property children ()
+    {
+        return _owner.childLayoutables;
+    }
+    protected @property style ()
+    {
+        return _owner.style;
+    }
+
     ///
-    this ( Layoutable owner )
+    this ( Placer placer, Layoutable owner )
     {
         enforce( owner, "Owner is null." );
-        _owner = owner;
+        _placer = placer;
+        _owner  = owner;
 
         _status           = LayoutState.None;
         _beforeBasePos    = vec2(0,0);
@@ -106,15 +111,12 @@ abstract class Layout
 }
 
 /// An interface of layoutable objects.
-interface Layoutable
+interface Layoutable : PlacerOwner
 {
-    /// Style data.
-    inout @property inout(WidgetStyle) style ();
-
     /// Layout object.
     inout @property inout(Layout) layoutObject ();
 
-    /// Children.
+    /// Child layoutables.
     @property Layoutable[] childLayoutables ();
 
     /// Wanted size.
@@ -123,9 +125,6 @@ interface Layoutable
     /// Checks if need to layout completely.
     /// Set the first argument true to check recursively.
     bool checkNeedLayout ( bool );
-
-    /// Places at the pos with the size.
-    vec2 layout ( vec2, vec2 );
 
     /// Moves the owner and the children.
     void shift ( vec2 );

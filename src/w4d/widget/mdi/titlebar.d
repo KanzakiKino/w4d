@@ -23,7 +23,7 @@ template TitleBar ()
             style.box.paddings    = Rect(0.mm);
             style.box.size.width  = 4.mm;
             style.box.size.height = 4.mm;
-            setLayout!GravityLayout( vec2(1,0) );
+            setLayout!( GravityLayout, HorizontalLineupPlacer )( vec2(1,0) );
         }
     }
 
@@ -62,7 +62,7 @@ template TitleBar ()
             super();
 
             style.box.size.width = Scalar.Auto;
-            setLayout!HorizontalSplitLayout;
+            setLayout!( FillLayout, HorizontalSplitPlacer );
 
             _title = new TextWidget;
             addChild( _title );

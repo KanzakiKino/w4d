@@ -5,7 +5,8 @@
  + License: LGPL-3.0
 ++/
 module w4d.widget.tree;
-import w4d.layout.lineup,
+import w4d.layout.placer.lineup,
+       w4d.layout.fill,
        w4d.style.scalar,
        w4d.task.window,
        w4d.widget.base,
@@ -96,7 +97,7 @@ class TreeListItemWidget : ListItemWidget
 
         super.setChild( new CustomPanelWidget );
 
-        setLayout!VerticalLineupLayout;
+        setLayout!( FillLayout, VerticalLineupPlacer );
     }
     mixin DisableModifyChild;
 

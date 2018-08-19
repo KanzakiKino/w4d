@@ -31,7 +31,7 @@ class DemoRootWidget : RootWidget
         foreach ( c; 0..30 ) {
             {
                 auto line = new PanelWidget;
-                line.setLayout!HorizontalLineupLayout;
+                line.setLayout!( FillLayout, HorizontalLineupPlacer );
                 page.addChild( line );
 
                 auto checkbox1 = new CheckBoxWidget;
@@ -46,7 +46,7 @@ class DemoRootWidget : RootWidget
             }
             {
                 auto line = new PanelWidget;
-                line.setLayout!HorizontalMonospacedSplitLayout;
+                line.setLayout!( FillLayout, HorizontalMonospacedPlacer );
                 page.addChild( line );
 
                 auto input1 = new LineInputWidget;
@@ -62,7 +62,7 @@ class DemoRootWidget : RootWidget
             }
             {
                 auto line = new PanelWidget;
-                line.setLayout!HorizontalMonospacedSplitLayout;
+                line.setLayout!( FillLayout, HorizontalMonospacedPlacer );
                 page.addChild( line );
 
                 auto input1 = new LineInputWidget;
@@ -81,7 +81,7 @@ class DemoRootWidget : RootWidget
             }
             {
                 auto line = new PanelWidget;
-                line.setLayout!HorizontalSplitLayout;
+                line.setLayout!( FillLayout, HorizontalSplitPlacer );
                 page.addChild( line );
 
                 auto select = new SelectInputWidget;

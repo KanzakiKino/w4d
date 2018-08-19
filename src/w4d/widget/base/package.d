@@ -6,6 +6,8 @@
 ++/
 module w4d.widget.base;
 import w4d.element.box,
+       w4d.layout.placer.base,
+       w4d.layout.placer.lineup,
        w4d.layout.base,
        w4d.layout.fill,
        w4d.parser.colorset,
@@ -82,7 +84,7 @@ class Widget : WindowContent, Layoutable
         _needLayout = true;
 
         parseColorSetsFromFile!"colorset/widget.yaml"( style );
-        setLayout!FillLayout();
+        setLayout!( FillLayout, HorizontalLineupPlacer )();
     }
 
     ///
@@ -100,7 +102,12 @@ class Widget : WindowContent, Layoutable
     {
         return children.filter!"a.style.isCalced".array;
     }
-    /// Child widgets that are converted to Layoutables.
+    /// Child widgets that are casted to PlacerOwner.
+    @property PlacerOwner[] childPlacerOwners ()
+    {
+        return children.to!( PlacerOwner[] );
+    }
+    /// Child widgets that are casted to Layoutable.
     @property Layoutable[] childLayoutables ()
     {
         return children.to!( Layoutable[] );
@@ -130,9 +137,9 @@ class Widget : WindowContent, Layoutable
     }
 
     /// Changes Layout object.
-    void setLayout (L,Args...) ( Args args )
+    void setLayout (L,P,Args...) ( Args args )
     {
-        _layout = new L(this,args);
+        _layout = new L( new P( this ), this, args );
     }
     /// Checks if the widget needs re-layout.
     bool checkNeedLayout ( bool recursively )

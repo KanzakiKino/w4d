@@ -5,7 +5,8 @@
  + License: LGPL-3.0
 ++/
 module w4d.layout.fill;
-import w4d.layout.base,
+import w4d.layout.placer.base,
+       w4d.layout.base,
        w4d.layout.exception,
        w4d.style.widget;
 import gl3n.linalg;
@@ -17,19 +18,9 @@ import gl3n.linalg;
 class FillLayout : Layout
 {
     ///
-    this ( Layoutable owner )
+    this ( Placer placer, Layoutable owner )
     {
-        super( owner );
-    }
-
-    protected void alterSize ( vec2 sz )
-    {
-        if ( style.box.size.width.isNone ) {
-            style.box.size.width.alter( sz.x );
-        }
-        if ( style.box.size.height.isNone ) {
-            style.box.size.height.alter( sz.y );
-        }
+        super( placer, owner );
     }
 
     protected void fill ( vec2 pt, vec2 sz )
@@ -40,14 +31,24 @@ class FillLayout : Layout
         ctx.size       = owner.wantedSize;
         style.calc( ctx );
     }
+    protected void shrinkSize ( vec2 sz )
+    {
+        if ( style.box.size.width.isNone ) {
+            style.box.size.width.alter( sz.x );
+        }
+        if ( style.box.size.height.isNone ) {
+            style.box.size.height.alter( sz.y );
+        }
+    }
 
     ///
     override void place ( vec2 pt, vec2 sz )
     {
         if ( placeEasily( pt, sz ) ) return;
-
-        enforce( !children.length,
-              "FillLayout doesn't support children." );
         fill( pt, sz );
+
+        if ( children.length ) {
+            shrinkSize( placer.placeChildren() );
+        }
     }
 }

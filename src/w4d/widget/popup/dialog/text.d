@@ -5,7 +5,8 @@
  + License: LGPL-3.0
 ++/
 module w4d.widget.popup.dialog.text;
-import w4d.layout.lineup,
+import w4d.layout.placer.lineup,
+       w4d.layout.fill,
        w4d.widget.popup.dialog.base,
        w4d.widget.button,
        w4d.widget.panel,
@@ -71,13 +72,13 @@ class PopupTextDialogWidget : PopupDialogWidget
     this ()
     {
         super();
-        setLayout!VerticalLineupLayout;
+        setLayout!( FillLayout, VerticalLineupPlacer );
 
         _text = new TextWidget;
         addChild( _text );
 
         _buttons = new PanelWidget;
-        _buttons.setLayout!HorizontalLineupLayout;
+        _buttons.setLayout!( FillLayout, HorizontalLineupPlacer );
         addChild( _buttons );
     }
 

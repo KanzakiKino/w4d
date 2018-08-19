@@ -5,9 +5,10 @@
  + License: LGPL-3.0
 ++/
 module w4d.widget.mdi.client;
-import w4d.layout.gravity,
-       w4d.layout.lineup,
-       w4d.layout.split,
+import w4d.layout.placer.lineup,
+       w4d.layout.placer.split,
+       w4d.layout.fill,
+       w4d.layout.gravity,
        w4d.parser.colorset,
        w4d.style.rect,
        w4d.style.scalar,
@@ -62,7 +63,7 @@ class MdiClientWidget : PanelWidget, MdiClient
         parseColorSetsFromFile!"colorset/mdiclient.yaml"( style );
         style.box.paddings    = Rect(1.mm);
         style.box.borderWidth = Rect(1.pixel);
-        setLayout!VerticalSplitLayout;
+        setLayout!( FillLayout, VerticalSplitPlacer );
     }
 
     mixin WindowOperations;

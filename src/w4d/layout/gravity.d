@@ -5,35 +5,30 @@
  + License: LGPL-3.0
 ++/
 module w4d.layout.gravity;
-import w4d.layout.exception,
+import w4d.layout.placer.base,
        w4d.layout.base,
        w4d.layout.fill;
 import gl3n.linalg;
 
-/// A layout object that moves the owner to center point.
-/// This layout doesn't support children.
+/// A layout object that moves the center pos.
 class GravityLayout : FillLayout
 {
-    /// Rate of center point;
     protected vec2 _center;
 
     ///
-    this ( Layoutable owner, vec2 center )
+    this ( Placer placer, Layoutable owner, vec2 center )
     {
-        super( owner );
+        super( placer, owner );
         _center = center;
     }
 
-    ///
-    override void place ( vec2 basept, vec2 newsz )
+    override protected void fill ( vec2 pt, vec2 sz )
     {
-        super.place( basept, newsz );
+        super.fill( pt, sz );
 
-        const maxlate = newsz - style.box.collisionSize;
-        const late    = vec3( maxlate.x*_center.x, maxlate.y*_center.y, 0 );
-        const pt      = vec3( basept, 0 ) + late;
-
-        style.x.alter( pt.x );
-        style.y.alter( pt.y );
+        auto late = sz - style.box.collisionSize;
+        late.x   *= _center.x;
+        late.y   *= _center.y;
+        shift( late );
     }
 }

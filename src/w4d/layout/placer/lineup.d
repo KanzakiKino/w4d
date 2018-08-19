@@ -4,21 +4,16 @@
  + Copyright: KanzakiKino 2018
  + License: LGPL-3.0
 ++/
-module w4d.layout.lineup;
-import w4d.layout.base,
-       w4d.layout.exception,
-       w4d.layout.fill,
-       w4d.style.widget,
+module w4d.layout.placer.lineup;
+import w4d.layout.placer.base,
        w4d.util.vector;
 import gl3n.linalg;
 import std.algorithm;
 
-/// A layout object that lineups children.
-/// You can specify Scalar.Auto at width or height to respect wantedSize.
-/// And you can also specify Scalar.None to shrink as small as possible.
-class LineupLayout (bool H) : FillLayout
+/// A Placer object that lineups the children.
+class LineupPlacer(bool H) : Placer
 {
-    /// Direction of lineup.
+    /// Whether the Placer lineups horizontally.
     alias Horizon = H;
 
     protected vec2 _childSize;
@@ -26,7 +21,7 @@ class LineupLayout (bool H) : FillLayout
     protected vec2 _usedSize;
 
     ///
-    this ( Layoutable owner )
+    this ( PlacerOwner owner )
     {
         super( owner );
     }
@@ -50,19 +45,16 @@ class LineupLayout (bool H) : FillLayout
     }
 
     ///
-    override void place ( vec2 basepos, vec2 parentSize )
+    override vec2 placeChildren ()
     {
-        fill( basepos, parentSize );
         clearStatus();
         foreach ( child; children ) {
-            auto size = child.layout( _basePoint, _childSize );
-            updateStatus( size );
+            updateStatus( child.layout( _basePoint, _childSize ) );
         }
-        alterSize( _usedSize );
+        return _usedSize;
     }
 }
-
-/// A layout object that lineups horizontally.
-alias HorizontalLineupLayout = LineupLayout!true;
-/// A layout object that lineups vertically.
-alias VerticalLineupLayout   = LineupLayout!false;
+/// A Placer object that lineups the children horizontally.
+alias HorizontalLineupPlacer = LineupPlacer!true;
+/// A Placer object that lineups the children vertically.
+alias VerticalLineupPlacer = LineupPlacer!false;

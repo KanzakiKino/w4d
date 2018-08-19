@@ -5,7 +5,8 @@
  + License: LGPL-3.0
 ++/
 module w4d.widget.input.checkbox;
-import w4d.layout.lineup,
+import w4d.layout.placer.lineup,
+       w4d.layout.fill,
        w4d.parser.colorset,
        w4d.style.color,
        w4d.style.rect,
@@ -120,7 +121,7 @@ class CheckBoxWidget : Widget
     this ()
     {
         super();
-        setLayout!HorizontalLineupLayout;
+        setLayout!( FillLayout, HorizontalLineupPlacer );
 
         _mark = new CheckMarkWidget;
         _text = new TextWidget;

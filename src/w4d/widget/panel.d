@@ -5,7 +5,8 @@
  + License: LGPL-3.0
 ++/
 module w4d.widget.panel;
-import w4d.layout.lineup,
+import w4d.layout.placer.lineup,
+       w4d.layout.fill,
        w4d.widget.base,
        w4d.exception;
 import gl3n.linalg;
@@ -26,7 +27,7 @@ class PanelWidget : Widget
     this ()
     {
         super();
-        setLayout!VerticalLineupLayout;
+        setLayout!( FillLayout, VerticalLineupPlacer );
     }
 
     /// Adds the child.

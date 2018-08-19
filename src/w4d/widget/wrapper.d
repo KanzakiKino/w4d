@@ -5,7 +5,8 @@
  + License: LGPL-3.0
 ++/
 module w4d.widget.wrapper;
-import w4d.layout.lineup,
+import w4d.layout.placer.lineup,
+       w4d.layout.fill,
        w4d.widget.base,
        w4d.exception;
 import std.conv;
@@ -30,7 +31,7 @@ class WrapperWidget : Widget
     this ()
     {
         super();
-        setLayout!VerticalLineupLayout;
+        setLayout!( FillLayout, VerticalLineupPlacer );
 
         _child = null;
     }

@@ -8,11 +8,11 @@ module w4d;
 
 public
 {
-    import w4d.layout.fill,
+    import w4d.layout.placer.lineup,
+           w4d.layout.placer.monospaced,
+           w4d.layout.placer.split,
            w4d.layout.gravity,
-           w4d.layout.lineup,
-           w4d.layout.split,
-           w4d.layout.table;
+           w4d.layout.fill;
     import w4d.task.window;
     import w4d.style.rect,
            w4d.style.scalar,

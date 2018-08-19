@@ -5,10 +5,11 @@
  + License: LGPL-3.0
 ++/
 module w4d.widget.mdi.host;
-import w4d.style.color,
+import w4d.layout.placer.fill,
+       w4d.layout.fill,
+       w4d.style.color,
        w4d.style.widget,
        w4d.task.window,
-       w4d.widget.mdi.layout,
        w4d.widget.base,
        w4d.exception;
 import gl3n.linalg;
@@ -32,7 +33,7 @@ class MdiHostWidget : Widget
     this ()
     {
         super();
-        setLayout!MdiLayout();
+        setLayout!( FillLayout, FillPlacer );
 
         _clients = [];
     }

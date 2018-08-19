@@ -5,7 +5,8 @@
  + License: LGPL-3.0
 ++/
 module w4d.widget.popup.menu;
-import w4d.layout.lineup,
+import w4d.layout.placer.lineup,
+       w4d.layout.fill,
        w4d.parser.colorset,
        w4d.style.rect,
        w4d.style.scalar,
@@ -37,7 +38,7 @@ class PopupMenuWidget : PopupWidget
         super();
 
         parseColorSetsFromFile!"colorset/menu.yaml"( style );
-        setLayout!VerticalLineupLayout;
+        setLayout!( FillLayout, VerticalLineupPlacer );
         style.box.borderWidth = Rect(1.pixel);
     }
     mixin DisableModifyChildren;
@@ -94,7 +95,7 @@ class MenuItemWidget : WrapperWidget
         _parentMenu = null;
 
         parseColorSetsFromFile!"colorset/menuitem.yaml"( style );
-        setLayout!HorizontalLineupLayout;
+        setLayout!( FillLayout, HorizontalLineupPlacer );
         style.box.paddings = Rect(1.mm);
     }
 }
