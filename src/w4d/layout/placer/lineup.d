@@ -49,7 +49,10 @@ class LineupPlacer(bool H) : Placer
     {
         clearStatus();
         foreach ( child; children ) {
-            updateStatus( child.layout( _basePoint, _childSize ) );
+            auto sz = child.layout( _basePoint, _childSize );
+            if ( !child.style.floating ) {
+                updateStatus( sz );
+            }
         }
         return _usedSize;
     }

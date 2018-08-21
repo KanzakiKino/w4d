@@ -26,6 +26,7 @@ class GravityLayout : FillLayout
     override void place ( vec2 pt, vec2 sz )
     {
         super.place( pt, sz );
+        style.floating = true;
 
         auto late = sz - style.box.collisionSize;
         late.x   *= _center.x;

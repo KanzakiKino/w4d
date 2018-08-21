@@ -51,11 +51,17 @@ class WidgetStyle
     /// Please inherit the parent's before using.
     ColorSet[WidgetState] colorsets;
 
+    /// Whether the widget is floating.
+    /// When true, spaces for the widget won't be reserved.
+    bool floating;
+
     ///
     this ()
     {
         colorsets.clear();
         colorsets[WidgetState.None] = new ColorSet();
+
+        floating = false;
     }
 
     mixin AttributesUtilities;
