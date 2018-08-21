@@ -88,6 +88,10 @@ class Window : g4d.Window, Task
             recalcMatrix();
             _root.layout( sz );
         };
+        handler.onWindowRefresh = delegate ()
+        {
+            _root.requestRedraw();
+        };
         handler.onMouseEnter = delegate ( bool entered )
         {
             _root.handleMouseEnter( entered, _cursorPos );
@@ -242,6 +246,8 @@ interface WindowContent
     @property bool needLayout ();
     /// Checks if the contents need redrawing.
     @property bool needRedraw ();
+    /// Sets the content redraw next frame.
+    void requestRedraw ();
 
     /// Be called with size of Window when needLayout is true.
     void layout ( vec2i );
