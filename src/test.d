@@ -53,7 +53,7 @@ class TestRootWidget : RootWidget
         panel.addChild( input1 );
 
         auto text2 = new TextWidget;
-        text2.loadText( "kusoga", face );
+        text2.loadText( "hoge", face );
         page.addChild( text2 );
 
         return page;
