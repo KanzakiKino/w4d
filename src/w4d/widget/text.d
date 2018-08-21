@@ -77,7 +77,7 @@ class TextWidget : Widget
         }
     }
 
-    protected void drawText ( Window win )
+    protected void drawText ( Window win, float xshift = 0 )
     {
         if ( !_text.length ) return;
 
@@ -86,7 +86,8 @@ class TextWidget : Widget
 
         auto size = _style.box.clientSize;
         auto late = _style.clientLeftTop;
-        late += vec2( size.x*textPosRate.x, size.y*textPosRate.y );
+        late     += vec2( size.x*textPosRate.x, size.y*textPosRate.y );
+        late.x   += xshift;
 
         shader.use();
         shader.matrix.late = vec3( late, 0 );

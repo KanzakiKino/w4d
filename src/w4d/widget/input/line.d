@@ -294,13 +294,13 @@ class LineInputWidget : TextWidget
         _selectionElm.resize( size );
     }
 
-    protected override void drawText ( Window w )
+    protected override void drawText ( Window w, float xshift = 0 )
     {
         auto pos = style.box.
             borderInsideLeftTop + style.translate;
         w.clip.pushRect( pos, style.box.borderInsideSize );
 
-        super.drawText( w );
+        super.drawText( w, -_scrollLength+xshift );
         if ( isFocused ) {
             drawCursor( w );
         }
@@ -315,7 +315,8 @@ class LineInputWidget : TextWidget
         auto  shader = w.shaders.fill3;
         const saver  = ShaderStateSaver( shader );
         auto  late   = vec2(_cursorPos, lineHeight/2);
-        late       += style.clientLeftTop;
+        late        += style.clientLeftTop;
+        late.x      -= _scrollLength;
 
         shader.use();
         shader.matrix.late = vec3( late, 0 );
@@ -327,8 +328,8 @@ class LineInputWidget : TextWidget
         auto  shader = w.shaders.fill3;
         const saver  = ShaderStateSaver( shader );
         auto  late   = vec2(_cursorPos, lineHeight/2);
-        late       += style.clientLeftTop;
-        late.x     -= _selectionLength/2;
+        late        += style.clientLeftTop;
+        late.x      -= _scrollLength + _selectionLength/2;
 
         shader.use();
         shader.matrix.late = vec3( late, 0 );
