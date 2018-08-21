@@ -95,21 +95,32 @@ class TextLine
         moveCursorTo( _text.length, selecting );
     }
 
-    protected @property leftText ()
+    const @property leftText ()
     {
-        auto index = _cursorIndex;
+        long index = _cursorIndex;
         if ( isSelecting ) {
             index = min( _cursorIndex, _selectionIndex );
         }
         return _text[0 .. index.to!size_t];
     }
-    protected @property rightText ()
+    const @property rightText ()
     {
-        auto index = _cursorIndex;
+        long index = _cursorIndex;
         if ( isSelecting ) {
             index = max( _cursorIndex, _selectionIndex );
         }
         return _text[index.to!size_t .. $];
+    }
+    const @property dstring selectedText ()
+    {
+        if ( !isSelecting ) return ""d;
+
+        long left  = _cursorIndex;
+        long right = _selectionIndex;
+        if ( left > right ) {
+            swap( left, right );
+        }
+        return _text[left .. right];
     }
 
     /// Inserts text at cursor.

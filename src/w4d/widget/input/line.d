@@ -117,7 +117,7 @@ class LineInputWidget : TextWidget
             requestRedraw();
 
         } else if ( key == Key.C && pressing && _context.ctrl ) {
-            //TODO
+            Window.setClipboard( _line.selectedText );
         } else if ( key == Key.V && pressing && _context.ctrl ) {
             _line.insert( Window.getClipboard() );
 
