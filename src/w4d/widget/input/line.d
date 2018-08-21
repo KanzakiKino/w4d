@@ -116,6 +116,11 @@ class LineInputWidget : TextWidget
             _line.deselect();
             requestRedraw();
 
+        } else if ( key == Key.C && pressing && _context.ctrl ) {
+            //TODO
+        } else if ( key == Key.V && pressing && _context.ctrl ) {
+            _line.insert( Window.getClipboard() );
+
         } else if ( key == Key.Enter && pressing ) {
             if ( _chainedButton ) {
                 _chainedButton.onButtonPress.call();

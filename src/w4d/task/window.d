@@ -39,6 +39,22 @@ class Window : g4d.Window, Task
         ScalarUnitBase.inch = mod.width*1f / mm_x / 25.4f;
     }
 
+    protected __gshared Window _aliveWindow;
+
+    static dstring getClipboard ()
+    {
+        if ( _aliveWindow ) {
+            return _aliveWindow.clipboard;
+        }
+        return ""d;
+    }
+    static void setClipboard ( dstring v )
+    {
+        if ( _aliveWindow ) {
+            _aliveWindow.clipboard = v;
+        }
+    }
+
     protected Shaders _shaders;
     /// A collection of shader.
     @property shaders () { return _shaders; }
@@ -140,6 +156,8 @@ class Window : g4d.Window, Task
         enforce( _root, "Content is null." );
 
         if ( alive ) {
+            _aliveWindow = this;
+
             if ( _root.needLayout ) {
                 _root.layout( size );
             }
