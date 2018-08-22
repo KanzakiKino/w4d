@@ -48,12 +48,14 @@ class MdiHostWidget : Widget
 
         unfocusAllClients();
         cli.widget.enableState( WidgetState.Focused );
+        requestRedraw();
     }
     /// Removes the client widget.
     void removeClient ( MdiClient cli )
     {
         _context.forget( cli.widget );
         _clients = _clients.remove!( x => x is cli );
+        requestRedraw();
     }
 
     protected void unfocusAllClients ()
@@ -68,6 +70,7 @@ class MdiHostWidget : Widget
         enforce( cli, "The client is invalid." );
         removeClient( cli );
         addClient( cli );
+        requestRedraw();
     }
 
     ///
