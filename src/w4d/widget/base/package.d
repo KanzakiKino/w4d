@@ -206,7 +206,8 @@ class Widget : WindowContent, Layoutable
         const saver  = ShaderStateSaver( shader );
 
         shader.use();
-        shader.matrix.late = vec3( style.translate, 0 );
+        shader.matrix.late = vec3(
+                style.clientLeftTop + style.box.clientSize/2, 0 );
 
         _box.setColor( colorset );
         _box.draw( shader );

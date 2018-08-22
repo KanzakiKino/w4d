@@ -19,7 +19,6 @@ class BoxBorderElement : Element
 {
     enum Indices = [0,1,2,3,4,5,6,7,0,1];
 
-    protected vec3 _pos;
     protected bool _isZero;
 
     protected ElementArrayBuffer _indicesBuf;
@@ -28,7 +27,6 @@ class BoxBorderElement : Element
     ///
     this ()
     {
-        _pos    = vec3(0,0,0);
         _isZero = true;
 
         _indicesBuf = new ElementArrayBuffer( Indices );
@@ -69,8 +67,6 @@ class BoxBorderElement : Element
             ileft-leftw, ibottom+bottomw, 0f, 1f,
             ileft      , ibottom        , 0f, 1f,
         ] );
-
-        _pos = vec3(box.collisionSize/2, 0);
     }
 
     ///
@@ -83,8 +79,6 @@ class BoxBorderElement : Element
     void draw ( Shader s )
     {
         if ( _isZero ) return;
-
-        s.matrix.late = s.matrix.late+_pos;
 
         s.uploadPositionBuffer( _posBuf );
         s.drawElementsStrip( _indicesBuf, 10 );

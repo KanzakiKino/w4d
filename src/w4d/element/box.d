@@ -5,12 +5,12 @@
  + License: LGPL-3.0
 ++/
 module w4d.element.box;
-import w4d.element.background,
-       w4d.element.border,
+import w4d.element.border,
        w4d.style.box,
        w4d.style.color,
        w4d.exception;
-import g4d.element.base,
+import g4d.element.shape.rect,
+       g4d.element.base,
        g4d.shader.base,
        g4d.shader.fill3d;
 import gl3n.linalg;
@@ -22,20 +22,23 @@ class BoxElement : Element
     protected vec4 _bgColor;
     protected vec4 _borderColor;
 
-    protected BackgroundElement _bg;
+    protected RectElement       _bg;
     protected BoxBorderElement  _border;
 
     ///
     this ()
     {
-        _bg     = new BackgroundElement;
+        _bgColor     = vec4(0,0,0,0);
+        _borderColor = vec4(0,0,0,0);
+
+        _bg     = new RectElement;
         _border = new BoxBorderElement;
     }
 
     ///
     void resize ( BoxStyle box )
     {
-        _bg    .resize( box );
+        _bg    .resize( box.borderInsideSize );
         _border.resize( box );
     }
     ///
