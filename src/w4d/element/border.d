@@ -8,6 +8,7 @@ module w4d.element.border;
 import w4d.style.box;
 import g4d.element.shape.rect,
        g4d.element.base,
+       g4d.gl.buffer,
        g4d.shader.base;
 import gl3n.linalg;
 import std.algorithm;
@@ -16,37 +17,58 @@ import std.algorithm;
 /// 0:top, 1:right, 2:bottom, 3:left
 class BoxBorderElement : Element
 {
-    protected vec3 _pos;
+    enum Indices = [0,1,2,3,4,5,6,7,0,1];
 
-    protected RectElement[4] _rects;
-    protected float[4]       _lates;
+    protected vec3 _pos;
+    protected bool _isZero;
+
+    protected ElementArrayBuffer _indicesBuf;
+    protected ArrayBuffer        _posBuf;
 
     ///
     this ()
     {
-        _pos = vec3(0,0,0);
+        _pos    = vec3(0,0,0);
+        _isZero = true;
 
-        foreach ( ref rc; _rects ) {
-            rc = new RectElement;
-        }
+        _indicesBuf = new ElementArrayBuffer( Indices );
+        _posBuf     = new ArrayBuffer( new float[8*4] );
     }
 
     ///
     void resize ( BoxStyle box )
     {
-        auto outsz = box.borderOutsideSize;
-        auto insz  = box.borderInsideSize;
-        auto width = box.borderWidth;
+        const insz = box.borderInsideSize;
+        const float iright  = insz.x/2;
+        const float ileft   = -iright;
+        const float itop    = insz.y/2;
+        const float ibottom = -itop;
 
-        _rects[0].resize( vec2(outsz.x, width.top   .calced) );
-        _rects[2].resize( vec2(outsz.x, width.bottom.calced) );
-        _rects[1].resize( vec2(width.right.calced, insz.y  ) );
-        _rects[3].resize( vec2(width.left .calced, insz.y  ) );
+        const bwidth  = box.borderWidth;
+        const leftw   = bwidth.left.calced;
+        const topw    = bwidth.top.calced;
+        const rightw  = bwidth.right.calced;
+        const bottomw = bwidth.bottom.calced;
 
-        _lates[0] = -(insz.y + width.top   .calced)/2;
-        _lates[2] =  (insz.y + width.bottom.calced)/2;
-        _lates[1] =  (insz.x + width.right .calced)/2;
-        _lates[3] = -(insz.x + width.left  .calced)/2;
+        if ( leftw+topw+rightw+bottomw == 0 ) {
+            _isZero = true;
+            return;
+        }
+        _isZero = false;
+
+        _posBuf.overwrite( [
+            ileft-leftw, itop-topw, 0f, 1f,
+            ileft      , itop     , 0f, 1f,
+
+            iright+rightw, itop-topw, 0f, 1f,
+            iright       , itop     , 0f, 1f,
+
+            iright+rightw, ibottom+bottomw, 0f, 1f,
+            iright       , ibottom        , 0f, 1f,
+
+            ileft-leftw, ibottom+bottomw, 0f, 1f,
+            ileft      , ibottom        , 0f, 1f,
+        ] );
 
         _pos = vec3(box.collisionSize/2, 0);
     }
@@ -54,26 +76,17 @@ class BoxBorderElement : Element
     ///
     void clear ()
     {
-        _rects.each!"a.clear()";
-        _lates[] = 0;
+        _isZero = true;
     }
 
     ///
     void draw ( Shader s )
     {
+        if ( _isZero ) return;
+
         s.matrix.late = s.matrix.late+_pos;
 
-        foreach ( i,rc; _rects ) {
-            auto late = vec3(0,0,0);
-            if ( i%2 == 0 ) {
-                late.y = _lates[i];
-            } else {
-                late.x = _lates[i];
-            }
-
-            s.matrix.late = s.matrix.late + late;
-            rc.draw( s );
-            s.matrix.late = s.matrix.late - late;
-        }
+        s.uploadPositionBuffer( _posBuf );
+        s.drawElementsStrip( _indicesBuf, 10 );
     }
 }
