@@ -34,36 +34,93 @@ class TestRootWidget : RootWidget
 
     protected Widget createInputPage ( FontFace face )
     {
-        auto page = new PanelWidget;
-        page.style.box.size.width  = Scalar.Auto;
-        page.style.box.size.height = Scalar.Auto;
+        auto scroll = new VerticalScrollPanelWidget;
 
-        auto panel = new PanelWidget;
-        import w4d.style.widget;
-        panel.setLayout!( GravityLayout, HorizontalLineupPlacer )( vec2(0.5,0.5) );
-        page.addChild( panel );
+        auto page = scroll.contents;
 
-        auto text1 = new TextWidget;
-        text1.loadText( "input: ", face );
-        panel.addChild( text1 );
+        foreach ( c; 0..30 ) {
+            {
+                auto line = new PanelWidget;
+                line.setLayout!( FillLayout, HorizontalLineupPlacer );
+                page.addChild( line );
 
-        auto input1 = new LineInputWidget;
-        input1.loadText( "hogehoge", face );
-        input1.style.box.size.width = 50.percent;
-        panel.addChild( input1 );
+                auto checkbox1 = new CheckBoxWidget;
+                checkbox1.style.box.margins = Rect(1.mm); // TODO
+                checkbox1.loadText( "CheckBoxWidget"d, face );
+                line.addChild( checkbox1 );
 
-        auto text2 = new TextWidget;
-        text2.loadText( "hoge", face );
-        page.addChild( text2 );
+                auto checkbox2 = new CheckBoxWidget;
+                checkbox2.style.box.margins = Rect(1.mm); // TODO
+                checkbox2.loadText( "CheckBoxWidget"d, face );
+                line.addChild( checkbox2 );
+            }
+            {
+                auto line = new PanelWidget;
+                line.setLayout!( FillLayout, HorizontalMonospacedPlacer );
+                page.addChild( line );
 
-        return page;
+                auto input1 = new LineInputWidget;
+                input1.style.box.margins = Rect(1.mm); // TODO
+                input1.loadText( "normal - LineInputWidget"d, face );
+                line.addChild( input1 );
+
+                auto input2 = new LineInputWidget;
+                input2.style.box.margins = Rect(1.mm); // TODO
+                input2.loadText( "locked - LineInputWidget"d, face );
+                input2.lock();
+                line.addChild( input2 );
+            }
+            {
+                auto line = new PanelWidget;
+                line.setLayout!( FillLayout, HorizontalMonospacedPlacer );
+                page.addChild( line );
+
+                auto input1 = new LineInputWidget;
+                input1.style.box.margins = Rect(1.mm); // TODO
+                input1.loadText( "password - LineInputWidget"d, face );
+                input1.passwordChar = '*';
+                line.addChild( input1 );
+
+                auto input2 = new LineInputWidget;
+                input2.style.box.margins = Rect(1.mm); // TODO
+                input2.loadText( input1.text, face );
+                input2.lock();
+                line.addChild( input2 );
+
+                input1.onTextChange = ((input2) => (dstring text) { input2.loadText(text); })(input2);
+            }
+            {
+                auto line = new PanelWidget;
+                line.setLayout!( FillLayout, HorizontalSplitPlacer );
+                page.addChild( line );
+
+                auto select = new SelectInputWidget;
+                foreach ( i; 0..5 ) {
+                    auto item = new MenuItemWidget;
+                    select.addItem( item );
+                    auto text = new TextWidget;
+                    item.setChild( text );
+
+                    if ( i == 0 ) {
+                        select.select( item );
+                    }
+                    text.loadText( "item to be selected (%d)"d.format(i), face );
+                }
+                line.addChild( select );
+
+                auto slider = new HorizontalSliderWidget;
+                line.addChild( slider );
+            }
+        }
+
+        return scroll;
     }
 }
 
 int main ( string[] args )
 {
     auto app = new App( args );
-    app.sleepDuration = 1;
+    app.sleepDuration = 5;
 
     auto win = new Window( vec2i(640,480), "TEST", WindowHint.Resizable );
     win.setContent( new TestRootWidget );
