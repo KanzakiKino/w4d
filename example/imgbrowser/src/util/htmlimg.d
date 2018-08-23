@@ -5,18 +5,6 @@ import std.net.curl,
        std.conv,
        std.string;
 
-unittest
-{
-    auto searcher = new ImgSearcher( "http://moeimg.net/12029.html" );
-    while ( true ) {
-        auto url = searcher.pop;
-        if ( url == "" ) break;
-
-        import std.stdio;
-        url.writeln;
-    }
-}
-
 class ImgSearcher
 {
     const string source;
