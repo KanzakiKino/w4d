@@ -176,9 +176,9 @@ class TextLine
         if ( _cursorIndex > _selectionIndex ) {
             cursorMove = -(_cursorIndex-_selectionIndex);
         }
-        setText( leftText ~ rightText );
-
+        auto text = leftText ~ rightText;
         moveCursor( cursorMove );
+        setText( text );
     }
     /// Sets all text selected.
     void selectAll ()
