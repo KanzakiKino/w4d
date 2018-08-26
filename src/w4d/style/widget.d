@@ -27,14 +27,16 @@ struct WidgetStyleCalcContext
 /// Upper state is rarer to occur.
 enum WidgetState : uint
 {
-    Focused  = 0b00001,
-    Tracked  = 0b00010,
-    Pressed  = 0b00100,
-    Hovered  = 0b01000,
+    Focused  = 0b0000001,
+    Tracked  = 0b0000010,
+    Pressed  = 0b0000100,
+    Hovered  = 0b0001000,
 
-    Selected = 0b10000,
+    Selected = 0b0010000,
+    Locked   = 0b0100000,
+    Disabled = 0b1000000,
 
-    None     = 0b00000,
+    None     = 0b0000000,
 }
 
 /// A style data of widget.
