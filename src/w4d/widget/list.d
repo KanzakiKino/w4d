@@ -36,7 +36,7 @@ class ListWidget : Widget
     {
         ListItemWidget[] result;
         foreach ( item; items ) {
-            if ( item.isSelected ) {
+            if ( item.status.selected ) {
                 result ~= item;
             }
             result ~= item.selectedItems;
@@ -123,24 +123,24 @@ class ListWidget : Widget
     /// Selects the item.
     void selectItem ( ListItemWidget w )
     {
-        if ( w.isSelected ) return;
+        if ( w.status.selected ) return;
         if ( !multiselectable ) deselect();
 
-        w.enableState( WidgetState.Selected );
+        w.status.selected = true;
         onSelectChange.call( selectedItems );
     }
     /// Unselects the item.
     void unselectItem ( ListItemWidget w )
     {
-        if ( !w.isSelected ) return;
+        if ( !w.status.selected ) return;
 
-        w.disableState( WidgetState.Selected );
+        w.status.selected = false;
         onSelectChange.call( selectedItems );
     }
     /// Toggles selected state of the item.
     void toggleItem ( ListItemWidget w )
     {
-        if ( w.isSelected ) {
+        if ( w.status.selected ) {
             unselectItem( w );
         } else {
             selectItem( w );
@@ -166,11 +166,6 @@ class ListItemWidget : WrapperWidget
         style.box.paddings   = Rect( 1.mm );
     }
 
-    /// Checks if the item is selected.
-    @property isSelected ()
-    {
-        return !!(status & WidgetState.Selected);
-    }
     /// Selected child items. (for tree item widget).
     @property ListItemWidget[] selectedItems ()
     {

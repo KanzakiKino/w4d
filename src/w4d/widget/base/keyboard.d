@@ -87,6 +87,6 @@ template Keyboard ()
 
     void handleFocused ( bool a )
     {
-        (a? &enableState: &disableState)( WidgetState.Focused );
+        _status.focused = a;
     }
 }

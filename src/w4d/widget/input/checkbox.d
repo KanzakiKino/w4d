@@ -142,8 +142,7 @@ class CheckBoxWidget : Widget
         if ( _checked != temp ) {
             onCheck.call( _checked );
 
-            (_checked? &enableState: &disableState)
-                ( WidgetState.Selected );
+            _status.selected = _checked;
             requestRedraw();
         }
     }

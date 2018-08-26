@@ -17,6 +17,7 @@ import w4d.element.box,
        w4d.widget.base.context,
        w4d.widget.base.keyboard,
        w4d.widget.base.mouse,
+       w4d.widget.base.status,
        w4d.exception;
 import g4d.glfw.cursor,
        g4d.shader.base;
@@ -30,9 +31,8 @@ mixin Context;
 /// An empty widget.
 class Widget : WindowContent, Layoutable
 {
-    protected uint _status;
-    /// Current status.
-    const @property status () { return _status; }
+    protected WidgetStatus _status;
+    inout @property ref inout(WidgetStatus) status () { return _status; }
 
     protected WindowContext _context;
 
@@ -67,6 +67,14 @@ class Widget : WindowContent, Layoutable
     mixin Keyboard;
 
     ///
+    void handleChangeStatus ( WidgetState s, bool )
+    {
+        if ( s in style.colorsets ) {
+            requestRedraw();
+        }
+    }
+
+    ///
     void handlePopup ( bool, WindowContext )
     {
     }
@@ -74,7 +82,7 @@ class Widget : WindowContent, Layoutable
     ///
     this ()
     {
-        _status   = WidgetState.None;
+        _status   = WidgetStatus();
         _style    = new WidgetStyle;
         _colorset = new ColorSet;
 
@@ -82,6 +90,8 @@ class Widget : WindowContent, Layoutable
         _box     = new BoxElement;
 
         _needLayout = true;
+
+        _status.onChangeStatus = &handleChangeStatus;
 
         parseColorSetsFromFile!"colorset/widget.yaml"( style );
         setLayout!( FillLayout, HorizontalLineupPlacer )();
@@ -117,23 +127,6 @@ class Widget : WindowContent, Layoutable
     {
         enforce( _context, "WindowContext is null." );
         children.each!( x => x._context = _context );
-    }
-
-    /// Enables the state.
-    void enableState ( WidgetState state )
-    {
-        _status |= state;
-        if ( state in style.colorsets ) {
-            requestRedraw();
-        }
-    }
-    /// Disables the state.
-    void disableState ( WidgetState state )
-    {
-        _status &= ~state;
-        if ( state in style.colorsets ) {
-            requestRedraw();
-        }
     }
 
     /// Changes Layout object.
@@ -229,7 +222,7 @@ class Widget : WindowContent, Layoutable
     void draw ( Window win, in ColorSet parent )
     {
         _colorset.clear();
-        style.inheritColorSet( _colorset, status );
+        style.inheritColorSet( _colorset, status.flags );
         if ( parent ) {
             _colorset.inherit( parent );
         }

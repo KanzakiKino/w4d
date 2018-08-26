@@ -47,7 +47,7 @@ class MdiHostWidget : Widget
         infectWindowContext();
 
         unfocusAllClients();
-        cli.widget.enableState( WidgetState.Focused );
+        cli.widget.status.focused = true;
         requestRedraw();
     }
     /// Removes the client widget.
@@ -61,7 +61,7 @@ class MdiHostWidget : Widget
     protected void unfocusAllClients ()
     {
         foreach ( cli; _clients ) {
-            cli.widget.disableState( WidgetState.Focused );
+            cli.widget.status.focused = false;
         }
     }
     /// Focuses to the client.

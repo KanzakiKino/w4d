@@ -166,8 +166,8 @@ class TabHostWidget : Widget
 
         _activatedIndex = index;
 
-        _tabs.each!( x => x.header.disableState( WidgetState.Selected ) );
-        t.header.enableState( WidgetState.Selected );
+        _tabs.each!( x => x.header.status.selected = false );
+        t.header.status.selected = true;
 
         _context.setFocused( null ); // drop the focus focibly
         requestLayout();

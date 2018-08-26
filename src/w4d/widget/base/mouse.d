@@ -57,10 +57,10 @@ template Mouse ()
         }
 
         if ( entered ) {
-            enableState( WidgetState.Hovered );
+            _status.hovered = true;
         } else {
             setHovered( null, pos );
-            disableState( WidgetState.Hovered );
+            _status.hovered = false;
         }
         return false;
     }
@@ -100,12 +100,12 @@ template Mouse ()
         }
 
         if ( btn == MouseButton.Left && status ) {
-            enableState( WidgetState.Pressed );
+            _status.pressed = true;
             track();
             focus();
         } else if ( btn == MouseButton.Left && !status ) {
             if ( isTracked ) refuseTrack();
-            disableState( WidgetState.Pressed );
+            _status.pressed = false;
         }
         return false;
     }
@@ -127,6 +127,6 @@ template Mouse ()
 
     void handleTracked ( bool a )
     {
-        (a? &enableState: &disableState)( WidgetState.Tracked );
+        _status.tracked = a;
     }
 }
