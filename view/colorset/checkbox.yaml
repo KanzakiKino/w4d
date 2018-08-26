@@ -7,3 +7,7 @@ default:
 
 hovered:
     foreground: [0.85]
+
+# To force redrawing when selected status is changed.
+selected:
+    background: []
