@@ -8,6 +8,7 @@ module w4d.widget.input.line;
 import w4d.parser.colorset,
        w4d.style.rect,
        w4d.style.scalar,
+       w4d.style.widget,
        w4d.task.window,
        w4d.util.clipping,
        w4d.util.textline,
@@ -152,6 +153,12 @@ class LineInputWidget : TextWidget
     }
 
     ///
+    override void handleChangeStatus ( WidgetState s, bool e )
+    {
+        e? _line.lock(): _line.unlock();
+    }
+
+    ///
     override @property const(Cursor) cursor ()
     {
         return Cursor.IBeam;
@@ -173,7 +180,7 @@ class LineInputWidget : TextWidget
         _chainedButton = null;
 
         _line.onTextChange = ( dstring v ) {
-            loadText(v);
+            loadText( v );
         };
         _line.onCursorMove = ( long i ) {
             _cursorPos    = retrievePosFromIndex(i);
@@ -247,17 +254,6 @@ class LineInputWidget : TextWidget
             style.box.size.height = lineHeight.pixel;
             _cursorElm.resize( vec2(1,lineHeight) );
         }
-    }
-
-    /// Locks editing.
-    void lock ()
-    {
-        _line.lock();
-    }
-    /// Unlocks editing.
-    void unlock ()
-    {
-        _line.unlock();
     }
 
     /// Chains the button.

@@ -96,9 +96,8 @@ class CheckBoxWidget : Widget
         return [ _mark, _text ];
     }
 
-    protected bool _checked;
     /// Checks if the checkbox is checked.
-    @property checked () { return _checked; }
+    const @property checked () { return status.selected; }
 
     ///
     CheckHandler onCheck;
@@ -111,7 +110,7 @@ class CheckBoxWidget : Widget
         if ( !style.isPointInside(pos) ) return false;
 
         if ( btn == MouseButton.Left && !status ) {
-            setChecked( !_checked );
+            setChecked( !checked );
             return true;
         }
         return false;
@@ -126,8 +125,6 @@ class CheckBoxWidget : Widget
         _mark = new CheckMarkWidget;
         _text = new TextWidget;
 
-        _checked = false;
-
         parseColorSetsFromFile!"colorset/checkbox.yaml"( style );
         style.box.margins     = Rect(1.mm);
         style.box.borderWidth = Rect(1.pixel);
@@ -136,14 +133,13 @@ class CheckBoxWidget : Widget
     /// Changes checked.
     void setChecked ( bool b )
     {
-        const temp = _checked;
-        _checked   = b;
+        if ( status.locked ) return;
 
-        if ( _checked != temp ) {
-            onCheck.call( _checked );
+        const temp      = status.selected;
+        status.selected = b;
 
-            _status.selected = _checked;
-            requestRedraw();
+        if ( b != temp ) {
+            onCheck.call( b );
         }
     }
 
