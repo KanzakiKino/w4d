@@ -42,13 +42,6 @@ class LineInputWidget : TextWidget
     protected dchar    _passwordChar;
     /// Character of password filed.
     @property passwordChar () { return _passwordChar; }
-    /// Sets character of password field.
-    /// Deprecated: This method causes heavy method (loadText).
-    deprecated @property void passwordChar ( dchar c )
-    {
-        _passwordChar = c;
-        loadText(text);
-    }
     /// Checks if the line input is password field.
     @property isPasswordField ()
     {

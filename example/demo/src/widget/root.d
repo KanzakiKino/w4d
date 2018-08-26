@@ -68,7 +68,7 @@ class DemoRootWidget : RootWidget
                 auto input1 = new LineInputWidget;
                 input1.style.box.margins = Rect(1.mm); // TODO
                 input1.loadText( "password - LineInputWidget"d, face );
-                input1.passwordChar = '*';
+                input1.changePasswordChar( '*' );
                 line.addChild( input1 );
 
                 auto input2 = new LineInputWidget;
