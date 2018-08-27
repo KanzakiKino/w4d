@@ -57,7 +57,7 @@ class DemoRootWidget : RootWidget
                 auto input2 = new LineInputWidget;
                 input2.style.box.margins = Rect(1.mm); // TODO
                 input2.loadText( "locked - LineInputWidget"d, face );
-                input2.lock();
+                input2.status.locked = true;
                 line.addChild( input2 );
             }
             {
@@ -74,7 +74,7 @@ class DemoRootWidget : RootWidget
                 auto input2 = new LineInputWidget;
                 input2.style.box.margins = Rect(1.mm); // TODO
                 input2.loadText( input1.text, face );
-                input2.lock();
+                input2.status.locked = true;
                 line.addChild( input2 );
 
                 input1.onTextChange = ((input2) => (dstring text) { input2.loadText(text); })(input2);
