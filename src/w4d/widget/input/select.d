@@ -25,6 +25,11 @@ class SelectInputWidget : PanelWidget
 {
     protected class CustomPopupMenuWidget : PopupMenuWidget
     {
+        override void handlePopup ( bool opened, WindowContext ctx )
+        {
+            super.handlePopup( opened, ctx );
+            _menuOpened = opened;
+        }
         this ()
         {
             super();
@@ -33,10 +38,12 @@ class SelectInputWidget : PanelWidget
 
     protected CustomPopupMenuWidget _menu;
     protected Widget                _selected;
+    protected bool                  _menuOpened;
 
     ///
     override @property Widget[] children ()
     {
+        if ( _menuOpened ) return [];
         return _selected? [_selected]: [];
     }
 
@@ -63,8 +70,9 @@ class SelectInputWidget : PanelWidget
     this ()
     {
         super();
-        _menu     = new CustomPopupMenuWidget;
-        _selected = null;
+        _menu       = new CustomPopupMenuWidget;
+        _selected   = null;
+        _menuOpened = false;
 
         parseColorSetsFromFile!"colorset/selectinput.yaml"( style );
         style.box.borderWidth = Rect(1.pixel);
@@ -76,7 +84,7 @@ class SelectInputWidget : PanelWidget
     void select ( MenuItemWidget s )
     {
         _selected = s.child;
-        requestLayout();
+        _selected.requestLayout();
     }
     /// Opens select menu.
     void openMenu ()
@@ -87,6 +95,8 @@ class SelectInputWidget : PanelWidget
         auto late = style.box.borderInsideLeftTop;
         late.y   += size.y;
         late     += style.translate;
+
+        if ( _selected ) _selected.requestLayout();
 
         _context.setPopup( _menu );
         _menu.move( late, vec2( size.x, 0 ) );
