@@ -27,6 +27,8 @@ struct WidgetStyleCalcContext
 /// Upper state is rarer to occur.
 enum WidgetState : uint
 {
+    Disabled = 0b1000000,
+
     Focused  = 0b0000001,
     Tracked  = 0b0000010,
     Pressed  = 0b0000100,
@@ -34,7 +36,6 @@ enum WidgetState : uint
 
     Selected = 0b0010000,
     Locked   = 0b0100000,
-    Disabled = 0b1000000,
 
     None     = 0b0000000,
 }
