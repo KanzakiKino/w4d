@@ -37,20 +37,26 @@ class TestRootWidget : RootWidget
         auto panel = new PanelWidget;
         panel.style.box.size.width  = Scalar.Auto;
         panel.style.box.size.height = Scalar.Auto;
-        panel.setLayout!( FillLayout, VerticalLineupPlacer );
+        panel.setLayout!( FillLayout, TablePlacer!(2,2) );
 
         auto button1 = new ButtonWidget;
         button1.loadText( "ButtonWidget - normal", face );
+        button1.text.style.box.size.width  = Scalar.None;
+        button1.text.style.box.size.height = Scalar.None;
         panel.addChild( button1 );
 
         auto button2 = new ButtonWidget;
         button2.loadText( "ButtonWidget - locked", face );
         button2.status.locked = true;
+        button2.text.style.box.size.width  = Scalar.None;
+        button2.text.style.box.size.height = Scalar.None;
         panel.addChild( button2 );
 
         auto button3 = new ButtonWidget;
         button3.loadText( "ButtonWidget - disabled", face );
         button3.status.disabled = true;
+        button3.text.style.box.size.width  = Scalar.None;
+        button3.text.style.box.size.height = Scalar.None;
         panel.addChild( button3 );
 
         return panel;

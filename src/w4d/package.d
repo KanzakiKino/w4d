@@ -11,6 +11,7 @@ public
     import w4d.layout.placer.lineup,
            w4d.layout.placer.monospaced,
            w4d.layout.placer.split,
+           w4d.layout.placer.table,
            w4d.layout.gravity,
            w4d.layout.fill;
     import w4d.task.window;
