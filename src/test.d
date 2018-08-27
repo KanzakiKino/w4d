@@ -15,7 +15,7 @@ class TestRootWidget : RootWidget
 
         auto btn = new ButtonWidget;
         btn.loadText( "add"d, fontface );
-        btn.style.box.size.width = Scalar.None;
+        btn.text.style.box.size.width = Scalar.None;
         addChild( btn );
 
         auto host = new MdiHostWidget;
