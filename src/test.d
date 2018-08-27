@@ -34,86 +34,26 @@ class TestRootWidget : RootWidget
 
     protected Widget createInputPage ( FontFace face )
     {
-        auto scroll = new VerticalScrollPanelWidget;
+        auto panel = new PanelWidget;
+        panel.style.box.size.width  = Scalar.Auto;
+        panel.style.box.size.height = Scalar.Auto;
+        panel.setLayout!( FillLayout, VerticalLineupPlacer );
 
-        auto page = scroll.contents;
+        auto button1 = new ButtonWidget;
+        button1.loadText( "ButtonWidget - normal", face );
+        panel.addChild( button1 );
 
-        foreach ( c; 0..30 ) {
-            {
-                auto line = new PanelWidget;
-                line.setLayout!( FillLayout, HorizontalLineupPlacer );
-                page.addChild( line );
+        auto button2 = new ButtonWidget;
+        button2.loadText( "ButtonWidget - locked", face );
+        button2.status.locked = true;
+        panel.addChild( button2 );
 
-                auto checkbox1 = new CheckBoxWidget;
-                checkbox1.style.box.margins = Rect(1.mm); // TODO
-                checkbox1.loadText( "CheckBoxWidget"d, face );
-                line.addChild( checkbox1 );
+        auto button3 = new ButtonWidget;
+        button3.loadText( "ButtonWidget - disabled", face );
+        button3.status.disabled = true;
+        panel.addChild( button3 );
 
-                auto checkbox2 = new CheckBoxWidget;
-                checkbox2.style.box.margins = Rect(1.mm); // TODO
-                checkbox2.loadText( "CheckBoxWidget"d, face );
-                line.addChild( checkbox2 );
-            }
-            {
-                auto line = new PanelWidget;
-                line.setLayout!( FillLayout, HorizontalMonospacedPlacer );
-                page.addChild( line );
-
-                auto input1 = new LineInputWidget;
-                input1.style.box.margins = Rect(1.mm); // TODO
-                input1.loadText( "normal - LineInputWidget"d, face );
-                line.addChild( input1 );
-
-                auto input2 = new LineInputWidget;
-                input2.style.box.margins = Rect(1.mm); // TODO
-                input2.loadText( "locked - LineInputWidget"d, face );
-                input2.status.locked = true;
-                line.addChild( input2 );
-            }
-            {
-                auto line = new PanelWidget;
-                line.setLayout!( FillLayout, HorizontalMonospacedPlacer );
-                page.addChild( line );
-
-                auto input1 = new LineInputWidget;
-                input1.style.box.margins = Rect(1.mm); // TODO
-                input1.loadText( "password - LineInputWidget"d, face );
-                input1.changePasswordChar( '*' );
-                line.addChild( input1 );
-
-                auto input2 = new LineInputWidget;
-                input2.style.box.margins = Rect(1.mm); // TODO
-                input2.loadText( input1.text, face );
-                input2.status.locked = true;
-                line.addChild( input2 );
-
-                input1.onTextChange = ((input2) => (dstring text) { input2.loadText(text); })(input2);
-            }
-            {
-                auto line = new PanelWidget;
-                line.setLayout!( FillLayout, HorizontalSplitPlacer );
-                page.addChild( line );
-
-                auto select = new SelectInputWidget;
-                foreach ( i; 0..5 ) {
-                    auto item = new MenuItemWidget;
-                    select.addItem( item );
-                    auto text = new TextWidget;
-                    item.setChild( text );
-
-                    if ( i == 0 ) {
-                        select.select( item );
-                    }
-                    text.loadText( "item to be selected (%d)"d.format(i), face );
-                }
-                line.addChild( select );
-
-                auto slider = new HorizontalSliderWidget;
-                line.addChild( slider );
-            }
-        }
-
-        return scroll;
+        return panel;
     }
 }
 

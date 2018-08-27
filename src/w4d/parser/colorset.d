@@ -20,6 +20,8 @@ private @property WidgetState toState ( string v )
         case "pressed" : return Pressed;
         case "hovered" : return Hovered;
         case "selected": return Selected;
+        case "locked"  : return Locked;
+        case "disabled": return Disabled;
         case "default" : return None;
 
         default:

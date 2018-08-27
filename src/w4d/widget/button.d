@@ -29,11 +29,11 @@ class ButtonWidget : TextWidget
         if ( super.handleMouseButton( btn, status, pos ) ) {
             return true;
         }
-        if ( !style.isPointInside(pos) ) {
+        if ( _status.disabled || !style.isPointInside(pos) ) {
             return false;
         }
         if ( btn == MouseButton.Left && !status ) {
-            handleButtonPress();
+            if ( !_status.locked ) handleButtonPress();
             return true;
         }
         return false;

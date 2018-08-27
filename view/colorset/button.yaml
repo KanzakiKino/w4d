@@ -6,3 +6,10 @@ default:
 
 hovered:
     background: [0.35]
+
+pressed:
+    background: [0.4]
+
+disabled:
+    foreground: [0.5]
+    background: [0.1]
